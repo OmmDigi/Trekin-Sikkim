@@ -47,7 +47,10 @@ export default function Category() {
     AxiosError<IResponse>
   >({
     queryKey: ["package-categories", searchParams.get("category_type")],
-    queryFn: () => getAllCategories(searchParams.get("category_type") || CATEGORY_TYPE[0].id.toString()),
+    queryFn: () =>
+      getAllCategories(
+        searchParams.get("category_type") || CATEGORY_TYPE[0].id.toString()
+      ),
   });
 
   if (error) {
@@ -76,11 +79,11 @@ export default function Category() {
 
   return (
     <>
-      {/* <CategoryDialog
+      <CategoryDialog
         isOpen={open}
         setOpen={setOpen}
         category_id={categoryId}
-      /> */}
+      />
       <main className="space-y-6">
         <div className="flex items-center">
           <Label className="font-semibold text-2xl flex-1">
