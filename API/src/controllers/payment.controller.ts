@@ -205,7 +205,7 @@ export const checkPhonepePaymentStatus = asyncErrorHandler(async (req, res) => {
 
     // console.log("USER");
 
-    if (orderInfo.addon_ids) {
+    if (orderInfo.addon_ids && orderInfo.addon_ids.length !== 0) {
       const createAddonPlaceholder = generatePlaceholders(
         orderInfo.addon_ids.length,
         2
