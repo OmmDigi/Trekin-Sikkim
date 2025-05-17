@@ -1,0 +1,96 @@
+version: "3.8"
+
+services:
+  frontend:
+    build: ./FRONTEND
+    container_name: frontend
+    expose:
+      - "3000"
+    env_file:
+      - ./FRONTEND/.env
+    depends_on:
+      - api
+
+  crm:
+    build: ./CRM
+    container_name: crm
+    expose:
+      - "3000"
+    env_file:
+      - ./CRM/.env
+    depends_on:
+      - api
+
+  api:
+    build: ./API
+    container_name: api
+    expose:
+      - "3000"
+    env_file:
+      - ./API/.env
+    depends_on:
+      - db
+
+  upload:
+    build: ./API_UPLOAD
+    container_name: upload
+    expose:
+      - "3000"
+    env_file:
+      - ./API_UPLOAD/.env
+    volumes:
+      - ./uploaded-files/uploads:/app/uploads
+      - ./uploaded-files/private:/app/private
+    depends_on:
+      - db
+
+  db:
+    image: postgres:17.4
+    container_name: postgres
+    environment:
+      POSTGRES_DB: trek_sikkim
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: trek123
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    depends_on:
+      - frontend
+      - crm
+      - api
+      - upload
+    restart: always
+
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    entrypoint: |
+      sh -c "certbot certonly --webroot \
+        --webroot-path=/var/www/certbot \
+        --email ommdigitalwebsite@gmail.com \
+        --agree-tos \
+        --no-eff-email \
+        -d frontend.trekinsikkim.in \
+        -d crm.trekinsikkim.in \
+        -d api.trekinsikkim.in \
+        -d upload.trekinsikkim.in"
+    depends_on:
+      - nginx
+
+volumes:
+  db_data:

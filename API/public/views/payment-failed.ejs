@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Failed</title>
+    <style>
+        /* Shared styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 40px;
+            text-align: center;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Failure specific styles */
+        .failure-icon {
+            font-size: 80px;
+            color: #ff4444;
+            margin-bottom: 20px;
+        }
+
+        h1.failed {
+            color: #ff4444;
+        }
+
+        .button.failed {
+            background-color: #ff4444;
+        }
+
+        .button.failed:hover {
+            background-color: #cc3636;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="failure-icon">!</div>
+        <h1 class="failed">Payment Failed</h1>
+        <p>We're sorry, your payment could not be processed. Please try again.</p>
+
+        <div class="transaction-details">
+            <!-- <p><strong>Error Code:</strong> DECLINED</p> -->
+            <p><strong>Amount:</strong> <%= failedAmount %></p>
+            <p><strong>Date:</strong> <%= purchaseDate %></p>
+        </div>
+
+        <p>Please check your payment information and try again. If the problem persists, contact your bank.</p>
+        <!-- <a href="#" class="button failed">Try Again</a> -->
+        <a href="mailto:kiran.yuksom@gmail.com" class="button" style="margin-left: 10px; background-color: #666">Contact Support</a>
+    </div>
+</body>
+
+</html>

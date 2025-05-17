@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trek Booking Confirmation</title>
+</head>
+
+<body style="margin: 0; padding: 0; font-family: Arial, sans-serif;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 600px; margin: 0 auto;">
+        <!-- Header -->
+        <tr>
+            <td style="padding: 20px; background-color: #1DC085; text-align: center;">
+                <h1 style="color: #ffffff; margin: 0;">Booking Confirmed!</h1>
+            </td>
+        </tr>
+
+        <!-- Main Content -->
+        <tr>
+            <td style="padding: 30px 20px;">
+                <h2 style="color: #1DC085; margin-top: 0;">Booking Confirmed! 🎉</h2>
+                <p>Hello <%= customerName %>,</p>
+                <p>Thank you for booking your trip adventure with us! We're excited to help you explore the trails.</p>
+
+                <!-- Trip Details -->
+                <div style="background-color: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                    <h3 style="color: #1DC085; margin-top: 0;">
+                        <%= packageName %>
+                    </h3>
+                    <!-- <p><strong>Trek Name:</strong></p> -->
+                    <p><strong>Date:</strong>
+                        <%= tripDate %>
+                    </p>
+                    <p><strong>Group Type:</strong>
+                        <%= groupType %>
+                    </p>
+                    <p><strong>Participants:</strong>
+                        <%= totalParticipants %>
+                    </p>
+                    <p><strong>Amount Paid:</strong>
+                        <%= amountPaid %>
+                    </p>
+                    <p><strong>Order ID:</strong>
+                        <%= orderId %>
+                    </p>
+                    <p><strong>Transaction ID:</strong>
+                        <%= transactionId %>
+                    </p>
+
+                    <!-- <p><strong>Meeting Point:</strong> [Meeting Location]</p> -->
+                </div>
+
+                <!-- CTA Button -->
+                <!-- <center style="margin: 25px 0;">
+                    <a href="#"
+                        style="background-color: #1DC085; color: #ffffff; padding: 12px 25px; text-decoration: none; border-radius: 5px; display: inline-block;">View
+                        Full Itinerary</a>
+                </center> -->
+
+                <!-- Next Steps -->
+                <h3 style="color: #1DC085;">Next Steps</h3>
+                <ol>
+                    <li>Check your packing list</li>
+                    <li>Review physical requirements</li>
+                    <li>Confirm meeting time 24hrs before departure</li>
+                </ol>
+            </td>
+        </tr>
+
+        <!-- Footer -->
+        <tr>
+            <td style="background-color: #1DC085; padding: 20px; text-align: center;">
+                <p style="color: #ffffff; margin: 5px 0;">Need Help?</p>
+                <p style="color: #ffffff; margin: 5px 0;">📧 kiran.yuksom@gmail.com</p>
+                <p style="color: #ffffff; margin: 5px 0;">📞 +917407248200</p>
+                <!-- <div style="margin-top: 15px;">
+                    <a href="#" style="color: #ffffff; margin: 0 10px; text-decoration: none;">Website</a>
+                    <a href="#" style="color: #ffffff; margin: 0 10px; text-decoration: none;">FAQ</a>
+                    <a href="#" style="color: #ffffff; margin: 0 10px; text-decoration: none;">Terms</a>
+                </div> -->
+                <p style="color: #ffffff; margin: 15px 0 0; font-size: 12px;">© 2025 Trek Sikkim. All rights reserved
+                </p>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>
