@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useTransition } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import {
   Form,
@@ -68,18 +68,22 @@ interface IProps {
   media_item_id: number;
 }
 
-interface IUploadMediaItem extends Omit<IGalleryItem, "media_item_id"> { }
-
+interface IUploadMediaItem extends Omit<IGalleryItem, "media_item_id"> {}
 
 const getSingleGalleryItem = async (media_item_id: number) => {
   const response = await api.get("/api/v1/media-item/" + media_item_id);
   return response.data;
-}
+};
 
-export default function AddMediaGalleryDialog({ isOpen, setOpen, media_item_id }: IProps) {
+export default function AddMediaGalleryDialog({
+  isOpen,
+  setOpen,
+  media_item_id,
+}: IProps) {
   const [uploadPercent, setUploadPercent] = useState(() => -1);
   const queryClient = useQueryClient();
 
+  const [isUploading, startUploading] = useTransition();
 
   const form = useForm<FormType>({
     resolver: zodResolver(formSchema),
@@ -118,85 +122,82 @@ export default function AddMediaGalleryDialog({ isOpen, setOpen, media_item_id }
     throw error;
   }
 
+  const { isLoading, mutate } = useDoMutation();
 
-  const { isLoading, mutate } = useDoMutation()
-
-  const onSubmit = async (values: FormType) => {
-
+  const onSubmit = (values: FormType) => {
     const valueToStore: IUploadMediaItem[] = [];
 
-    if (values.type === "image") {
-      const { data, error } = await uploadFiles({
-        files: media_item_id === 0 ? values.photos : [values.photos[0]],
-        folder: "media-gallery",
-        onUploading(percentage) {
-          setUploadPercent(percentage)
-        },
-        onUploaded() {
-          setUploadPercent(-1)
-        },
-      })
+    startUploading(async () => {
+      if (values.type === "image") {
+        const { data, error } = await uploadFiles({
+          files: media_item_id === 0 ? values.photos : [values.photos[0]],
+          folder: "media-gallery",
+          onUploading(percentage) {
+            setUploadPercent(percentage);
+          },
+          onUploaded() {
+            setUploadPercent(-1);
+          },
+        });
 
-      if (error) {
-        toast.error("Something went wrong while uploading files")
-        setUploadPercent(-1);
+        if (error) {
+          toast.error("Something went wrong while uploading files");
+          setUploadPercent(-1);
+          return;
+        }
+
+        const splitedAltTag = values.altTags.split(",");
+        data.forEach((blob, index) => {
+          valueToStore.push({
+            item_link: blob.downloadUrl,
+            alt_tag: splitedAltTag[index] || "",
+            media_type: values.type,
+          });
+        });
+      } else {
+        valueToStore.push({
+          alt_tag: values.altTags,
+          item_link: values.youtube_link || "",
+          media_type: "youtube-link",
+        });
+      }
+
+      if (media_item_id === 0) {
+        mutate({
+          apiPath: "/api/v1/media-item",
+          method: "post",
+          formData: valueToStore,
+          headers: {
+            "Content-Type": "application/json",
+          },
+          onSuccess() {
+            setOpen(false);
+            queryClient.invalidateQueries({ queryKey: ["get-gallery-items"] });
+          },
+        });
+
         return;
       }
 
-      const splitedAltTag = values.altTags.split(",");
-      data.forEach((blob, index) => {
-        valueToStore.push({
-          item_link: blob.downloadUrl,
-          alt_tag: splitedAltTag[index] || "",
-          media_type: values.type
-        })
-      })
-    } else {
-      valueToStore.push({
-        alt_tag: values.altTags,
-        item_link: values.youtube_link || "",
-        media_type: "youtube-link"
-      })
-    }
-
-    if (media_item_id === 0) {
       mutate({
         apiPath: "/api/v1/media-item",
-        method: "post",
-        formData: valueToStore,
+        method: "put",
+        formData: {
+          alt_tag: valueToStore[0].alt_tag,
+          item_link: valueToStore[0].item_link,
+          media_type: valueToStore[0].media_type,
+        },
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
         onSuccess() {
-          setOpen(false)
-          queryClient.invalidateQueries({ queryKey: ["get-gallery-items"] })
+          setOpen(false);
+          queryClient.invalidateQueries({ queryKey: ["get-gallery-items"] });
         },
-      })
 
-      return;
-    }
-
-
-    mutate({
-      apiPath: "/api/v1/media-item",
-      method: "put",
-      formData: {
-        alt_tag: valueToStore[0].alt_tag,
-        item_link: valueToStore[0].item_link,
-        media_type: valueToStore[0].media_type,
-      },
-      headers: {
-        "Content-Type": "application/json"
-      },
-      onSuccess() {
-        setOpen(false)
-        queryClient.invalidateQueries({ queryKey: ["get-gallery-items"] })
-      },
-
-      id: media_item_id
-    })
-
-
+        id: media_item_id,
+      });
+    });
   };
 
   return (
@@ -205,8 +206,10 @@ export default function AddMediaGalleryDialog({ isOpen, setOpen, media_item_id }
         <DialogHeader>
           <DialogTitle>Add Media Item</DialogTitle>
         </DialogHeader>
-        {
-          isFetching ? <LoadingLayout /> : <Form {...form}>
+        {isFetching ? (
+          <LoadingLayout />
+        ) : (
+          <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <div className="flex items-center gap-3">
                 <FormField
@@ -249,11 +252,14 @@ export default function AddMediaGalleryDialog({ isOpen, setOpen, media_item_id }
                           multiple
                           onChange={(e) => {
                             if ((e.target.files?.length || 0) > 10) {
-                              form.setError("photos", { message: "Not Allow To Upload More Than 10 Image Togather" });
-                              form.setValue("photos", [])
+                              form.setError("photos", {
+                                message:
+                                  "Not Allow To Upload More Than 10 Image Togather",
+                              });
+                              form.setValue("photos", []);
                               return;
                             }
-                            field.onChange(e.target.files)
+                            field.onChange(e.target.files);
                           }}
                         />
                         <FormMessage />
@@ -280,9 +286,7 @@ export default function AddMediaGalleryDialog({ isOpen, setOpen, media_item_id }
                   />
                 )}
               </div>
-              {
-                uploadPercent === -1 ? null : <Progress value={uploadPercent} />
-              }
+              {uploadPercent === -1 ? null : <Progress value={uploadPercent} />}
               {/* <FormField
               control={form.control}
               name="media_type"
@@ -325,11 +329,12 @@ export default function AddMediaGalleryDialog({ isOpen, setOpen, media_item_id }
                 )}
               />
 
-              <ButtonLoading loading={isLoading}>Save</ButtonLoading>
+              <ButtonLoading loading={isLoading || isUploading}>
+                Save
+              </ButtonLoading>
             </form>
           </Form>
-        }
-
+        )}
       </DialogContent>
     </Dialog>
   );

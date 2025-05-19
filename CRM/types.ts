@@ -32,3 +32,20 @@ export interface IUploadedFile {
   contentType?: string;
   contentDisposition: string;
 }
+
+export type BlogPost = {
+  blog_id: number; // SERIAL PRIMARY KEY
+  heading: string; // VARCHAR(255) NOT NULL
+  blog_content: string; // TEXT NOT NULL
+  thumbnail: string; // TEXT NOT NULL
+  meta_title: string; // VARCHAR(255) NOT NULL
+  meta_description: string; // TEXT NOT NULL
+  meta_keywords: string; // TEXT NOT NULL
+  meta_canonical_url: string; // VARCHAR(255) NOT NULL
+  created_at?: Date; // DATE DEFAULT CURRENT_DATE (optional)
+
+  visible: boolean; // BOOLEAN NOT NULL DEFAULT TRUE
+  thumbnail_alt_tag?: string; // VARCHAR(255) DEFAULT '' (optional)
+
+  slug: string; // TEXT NOT NULL
+};

@@ -2,6 +2,7 @@ import { pool } from "../config/db";
 import asyncErrorHandler from "../middlewares/asyncErrorHandler";
 import { CustomRequest } from "../types";
 import { ApiResponse } from "../utils/ApiResponse";
+import { createSlug } from "../utils/createSlug";
 import { ErrorHandler } from "../utils/ErrorHandler";
 import { filterToSql } from "../utils/filterToSql";
 import {
@@ -29,6 +30,11 @@ export const getBlogsList = asyncErrorHandler(
 
     const { filterQuery, filterValues } = filterToSql(query);
 
+    const { rows: totalBlogsCount } = await pool.query(
+      `SELECT COUNT(*) total_blogs FROM blogs ${filterQuery}`,
+      filterValues
+    );
+
     const { rows } = await pool.query(
       `
       SELECT 
@@ -51,7 +57,17 @@ export const getBlogsList = asyncErrorHandler(
       filterValues
     );
 
-    res.status(200).json(new ApiResponse(200, "Blogs List", rows));
+    res
+      .status(200)
+      .json(
+        new ApiResponse(
+          200,
+          "Blogs List",
+          rows,
+          undefined,
+          totalBlogsCount[0].total_blogs
+        )
+      );
   }
 );
 
@@ -128,8 +144,22 @@ export const getSingleBlog = asyncErrorHandler(
 );
 
 export const postNewBlog = asyncErrorHandler(async (req, res) => {
+  const slug = createSlug(req.body.heading);
+  req.body.slug = slug;
+
   const { error, value } = VPostNewBlog.validate(req.body);
   if (error) throw new ErrorHandler(400, error.message);
+
+  const mediaId = value.media_id;
+  delete value.media_id;
+
+  const { rows } = await pool.query(
+    "SELECT * FROM media_item WHERE media_item_id = $1",
+    [mediaId]
+  );
+
+  value.thumbnail = rows[0].item_link;
+  value.thumbnail_alt_tag = rows[0].alt_tag;
 
   const { params, values, columns } = objectToSqlInsert(value);
 
@@ -143,18 +173,35 @@ export const postNewBlog = asyncErrorHandler(async (req, res) => {
   );
 
   if (!rowCount || rowCount === 0) {
-    throw new ErrorHandler(400, "Duplicate Heading Please Change The Heading");
+    throw new ErrorHandler(
+      400,
+      "Duplicate Heading Please Change The Blog Heading"
+    );
   }
 
   res.status(201).json(new ApiResponse(201, "New Blog Added"));
 });
 
 export const updateSingleBlog = asyncErrorHandler(async (req, res) => {
+  const slug = createSlug(req.body.heading);
+  req.body.slug = slug;
+
   const { error, value } = VUpdateSingleBlog.validate({
     ...req.body,
     ...req.params,
   });
   if (error) throw new ErrorHandler(400, error.message);
+
+  const mediaId = value.media_id;
+  delete value.media_id;
+
+  const { rows } = await pool.query(
+    "SELECT * FROM media_item WHERE media_item_id = $1",
+    [mediaId]
+  );
+
+  value.thumbnail = rows[0].item_link;
+  value.thumbnail_alt_tag = rows[0].alt_tag;
 
   const { keys, values, paramsNum } = objectToSqlConverterUpdate(req.body);
   values.push(value.blog_id);

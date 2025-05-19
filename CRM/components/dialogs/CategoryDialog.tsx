@@ -156,6 +156,8 @@ export function CategoryDialog({ isOpen, setOpen, category_id }: IProps) {
     });
   }
 
+  
+
   return (
     <Dialog open={isOpen} onOpenChange={setOpen}>
       <DialogContent className="sm:max-w-md">

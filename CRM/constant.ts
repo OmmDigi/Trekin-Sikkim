@@ -46,6 +46,10 @@ export const SIDEBAR_DATA = {
           title: "Media Gallery",
           url: "/dashboard/media-gallery",
         },
+        // {
+        //   title: "Artical Management",
+        //   url: "/dashboard/articles",
+        // },
       ],
     },
     // {

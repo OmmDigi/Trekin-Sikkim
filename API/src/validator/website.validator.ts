@@ -16,6 +16,8 @@ export const VPostNewBlog = Joi.object({
   thumbnail_alt_tag: Joi.string().optional(),
 
   slug: Joi.string().required(),
+
+  media_id: Joi.number().required(),
 });
 
 export const VUpdateSingleBlog = Joi.object({
@@ -34,6 +36,8 @@ export const VUpdateSingleBlog = Joi.object({
   visible: Joi.boolean().required(),
 
   slug: Joi.string().required(),
+
+  media_id: Joi.number().required(),
 });
 
 export const VRelatedBlogs = Joi.object({

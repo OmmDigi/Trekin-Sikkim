@@ -1,9 +1,9 @@
 "use client";
 
-import { CategoryDialog } from "@/components/dialogs/CategoryDialog";
+// import { CategoryDialog } from "@/components/dialogs/CategoryDialog";
 import LinkButton from "@/components/link-button";
 import LoadingLayout from "@/components/LoadingLayout";
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
 import { ButtonLoading } from "@/components/ui/button-loading";
 import {
   Select,
@@ -30,9 +30,9 @@ import { IResponse } from "@/types";
 import { Label } from "@radix-ui/react-label";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { LayoutPanelTop, Pencil, Plus, Trash } from "lucide-react";
+import { Pencil, Plus, Trash } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { useState } from "react";
+import React, { useState, useTransition } from "react";
 import { toast } from "react-toastify";
 
 export default function Category() {
@@ -41,6 +41,7 @@ export default function Category() {
   const queryClient = useQueryClient();
   const searchParams = useSearchParams();
   const route = useRouter();
+  const [isPending, startTransition] = useTransition();
 
   const { data, error, isFetching } = useQuery<
     IResponse<ICategories[]>,
@@ -79,11 +80,11 @@ export default function Category() {
 
   return (
     <>
-      <CategoryDialog
+      {/* <CategoryDialog
         isOpen={open}
         setOpen={setOpen}
         category_id={categoryId}
-      />
+      /> */}
       <main className="space-y-6">
         <div className="flex items-center">
           <Label className="font-semibold text-2xl flex-1">
@@ -117,10 +118,17 @@ export default function Category() {
                 ))}
               </SelectContent>
             </Select>
-            <Button onClick={() => setOpen(!open)}>
+            <ButtonLoading
+              loading={isPending}
+              onClick={() => {
+                startTransition(() => {
+                  route.push("/dashboard/category/0");
+                });
+              }}
+            >
               <Plus />
               Add New Category
-            </Button>
+            </ButtonLoading>
           </div>
         </div>
 

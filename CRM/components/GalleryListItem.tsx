@@ -18,6 +18,7 @@ interface IProps {
   onDeleteBtnClick?: () => void;
   isDeleting?: boolean;
   editBtnVisible?: boolean;
+  chooseOnly?:number;
 }
 
 export default function GalleryListItem({
@@ -30,6 +31,7 @@ export default function GalleryListItem({
   onDeleteBtnClick,
   isDeleting = false,
   editBtnVisible = true,
+  chooseOnly = 1000
 }: IProps) {
   return (
     <li

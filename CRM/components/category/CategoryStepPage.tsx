@@ -53,7 +53,7 @@ export default function CategoryStepPage({ category_id, step }: IProps) {
           postEndPoint="/api/v1/category/gallery"
         />
       ) : step === 4 ? (
-        <EditCategoryPageContent currentStep={step}/>
+        <EditCategoryPageContent currentStep={step} />
       ) : null}
     </div>
   );

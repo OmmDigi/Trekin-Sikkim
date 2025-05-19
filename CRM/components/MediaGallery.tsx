@@ -22,13 +22,17 @@ import { AxiosError } from "axios";
 
 interface IProps {
   asChooser: boolean;
+  chooseOnly?: number;
 }
 
 const fetchGalleryItem = async (page = 1) => {
   return (await api.get("/api/v1/media-item?page=" + page)).data;
 };
 
-export default function MediaGallery({ asChooser = false }: IProps) {
+export default function MediaGallery({
+  asChooser = false,
+  chooseOnly = 1000,
+}: IProps) {
   const [isOpen, setOpen] = useState(false);
   const [currentGalleryItem, setGalleryItem] = useState(0);
   const [page, setPage] = useState(1);
@@ -83,6 +87,7 @@ export default function MediaGallery({ asChooser = false }: IProps) {
             {data?.data.map((item) => (
               <GalleryListItem
                 key={item.media_item_id}
+                chooseOnly={chooseOnly}
                 isDeleting={
                   isLoading && currentGalleryItem === item.media_item_id
                 }

@@ -306,3 +306,6 @@ CREATE TABLE package_and_seo (
 
     UNIQUE(package_id)
 );
+
+ALTER TABLE blogs DROP COLUMN meta_canonical_url;
+ALTER TABLE blogs ADD COLUMN meta_canonical_url TEXT;

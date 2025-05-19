@@ -76,7 +76,7 @@ export function CategoryBasicInfo({ category_id, currentStep }: IProps) {
   });
 
   const { mutate: postCategory, isLoading: isPosting } = useMutation<
-    IResponse,
+    IResponse<number>,
     AxiosError<IResponse>,
     TCategoryForm
   >({
@@ -85,7 +85,7 @@ export function CategoryBasicInfo({ category_id, currentStep }: IProps) {
       toast.success(data.message);
       startTransition(() => {
         route.push(
-          `/dashboard/category/${category_id}?category_id=${category_id}&step=${
+          `/dashboard/category/${data.data}?category_id=${data.data}&step=${
             currentStep + 1
           }`
         );

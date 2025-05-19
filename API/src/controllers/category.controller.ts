@@ -16,9 +16,7 @@ import {
   VUpdateCategoryGallery,
 } from "../validator/category.validator";
 
-import {
-  VSingle,
-} from "../validator/package.validator";
+import { VSingle } from "../validator/package.validator";
 
 export const getCategoryPageInfo = asyncErrorHandler(async (req, res) => {
   const { error, value } = VCategoryPageInfo.validate(req.params);
@@ -110,8 +108,8 @@ export const addNewCategory = asyncErrorHandler(async (req, res) => {
 
   const slug = createSlug(value.category_name);
 
-  await pool.query(
-    `INSERT INTO category (category_name, type_id, slug, meta_title, meta_description, meta_keywords, canonical) VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+  const { rows } = await pool.query(
+    `INSERT INTO category (category_name, type_id, slug, meta_title, meta_description, meta_keywords, canonical) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING category_id`,
     [
       value.category_name,
       value.category_type,
@@ -123,7 +121,9 @@ export const addNewCategory = asyncErrorHandler(async (req, res) => {
     ]
   );
 
-  res.status(201).json(new ApiResponse(201, "New category has added"));
+  res
+    .status(201)
+    .json(new ApiResponse(201, "New category has added", rows[0].category_id));
 });
 
 export const updateCategory = asyncErrorHandler(async (req, res) => {
