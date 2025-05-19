@@ -17,9 +17,7 @@ import {
 } from "../validator/category.validator";
 
 import {
-  VAddPackageGallery,
   VSingle,
-  VUpdatePackageGallery,
 } from "../validator/package.validator";
 
 export const getCategoryPageInfo = asyncErrorHandler(async (req, res) => {
@@ -31,6 +29,10 @@ export const getCategoryPageInfo = asyncErrorHandler(async (req, res) => {
     SELECT
       c.category_id,
       c.category_name,
+      c.meta_title,
+      c.meta_description,
+      c.meta_keywords,
+      c.canonical,
       MAX(cpc.page_content) AS page_content,
       COALESCE(JSON_AGG(mi) FILTER (WHERE mi.media_item_id IS NOT NULL), '[]') AS media_items,
       COALESCE(JSON_AGG(cpf) FILTER (WHERE cpf.id IS NOT NULL), '[]') AS faqs
@@ -91,7 +93,7 @@ export const getSingleCategory = asyncErrorHandler(async (req, res) => {
 
   const { rows } = await pool.query(
     `
-    SELECT c.category_id, c.category_name, t.type_id AS category_type_id, t.type_name AS category_type  FROM category c
+    SELECT c.category_id, c.category_name, t.type_id AS category_type_id, t.type_name AS category_type, c.meta_title, c.meta_description, c.meta_keywords, c.canonical  FROM category c
     LEFT JOIN types t ON t.type_id = c.type_id
     WHERE c.category_id = $1
       `,
@@ -109,8 +111,16 @@ export const addNewCategory = asyncErrorHandler(async (req, res) => {
   const slug = createSlug(value.category_name);
 
   await pool.query(
-    `INSERT INTO category (category_name, type_id, slug) VALUES ($1, $2, $3)`,
-    [value.category_name, value.category_type, slug]
+    `INSERT INTO category (category_name, type_id, slug, meta_title, meta_description, meta_keywords, canonical) VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+    [
+      value.category_name,
+      value.category_type,
+      slug,
+      value.meta_title,
+      value.meta_description,
+      value.meta_keywords,
+      value.canonical,
+    ]
   );
 
   res.status(201).json(new ApiResponse(201, "New category has added"));
@@ -127,8 +137,17 @@ export const updateCategory = asyncErrorHandler(async (req, res) => {
   const slug = createSlug(value.new_category_name);
 
   await pool.query(
-    "UPDATE category SET category_name = $1, type_id = $2, slug = $3 WHERE category_id = $4",
-    [value.new_category_name, value.new_category_type, slug, value.category_id]
+    "UPDATE category SET category_name = $1, type_id = $2, slug = $3, meta_title = $4, meta_description = $5, meta_keywords = $6, canonical = $7  WHERE category_id = $8",
+    [
+      value.new_category_name,
+      value.new_category_type,
+      slug,
+      value.new_meta_title,
+      value.new_meta_description,
+      value.new_meta_keywords,
+      value.new_canonical,
+      value.category_id,
+    ]
   );
 
   res.status(200).json(new ApiResponse(200, "Category has been updated"));

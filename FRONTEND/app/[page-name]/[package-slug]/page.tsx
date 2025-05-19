@@ -2,7 +2,7 @@
 import Tabs from "@/components/Tabs";
 import ImageSlider from "@/components/Utils/ImageSlider";
 // import Link from "next/link";
-import React from "react";
+import React, { cache } from "react";
 import { BsCurrencyRupee } from "react-icons/bs";
 import {
   DollarSign,
@@ -24,6 +24,15 @@ import OtherOptions from "@/components/Packages/OtherOptions";
 import AvilableDatesSection from "@/components/Packages/AvilableDatesSection";
 import AdditionalCheckbox from "@/components/Packages/AdditionalCheckbox";
 import PackageBookNowBtn from "@/components/Packages/PackageBookNowBtn";
+import { Metadata } from "next";
+
+const getSinglePackagePageInfo = cache(async (slug: string) => {
+  return (
+    await api.get<IResponse<IPackage>>(
+      `/api/v1/package/single-page-basic/${slug}`
+    )
+  ).data;
+});
 
 interface IProps {
   params: Promise<{ "package-slug": string }>;
@@ -84,16 +93,42 @@ const OVERVIEW_POINTS = [
   },
 ];
 
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ ["page-name"]: string; ["package-slug"]: string }>;
+}): Promise<Metadata> {
+  const categoryPageParam = (await params)["page-name"];
+  const packageSlug = (await params)["package-slug"];
+  const singlePackageInfo = await getSinglePackagePageInfo(packageSlug);
+  return {
+    title: singlePackageInfo.data.meta_title,
+    description: singlePackageInfo.data.meta_description,
+    keywords: singlePackageInfo.data.meta_keywords,
+    alternates: {
+      canonical: singlePackageInfo.data.canonical,
+    },
+    openGraph: {
+      title: singlePackageInfo.data.meta_title,
+      description: singlePackageInfo.data.meta_description,
+      images: [
+        singlePackageInfo.data.banner_info?.[0]?.item_link ||
+          "/placeholder_background.jpg",
+      ],
+      url: `/${categoryPageParam}/${packageSlug}`,
+      type: "website",
+      locale: "en_US",
+      siteName: "Glacier Treks And Adventure",
+    },
+  };
+}
+
 export default async function page({ params, searchParams }: IProps) {
   const packageSlug = (await params)["package-slug"];
   const urlSearchParams = await searchParams;
   const newUrlSearchParams = new URLSearchParams(urlSearchParams);
 
-  const data = (
-    await api.get<IResponse<IPackage>>(
-      `/api/v1/package/single-page-basic/${packageSlug}`
-    )
-  ).data;
+  const data = await getSinglePackagePageInfo(packageSlug);
 
   OVERVIEW_POINTS[0].value = data.data.region;
   OVERVIEW_POINTS[1].value = data.data.best_time;
@@ -213,10 +248,12 @@ export default async function page({ params, searchParams }: IProps) {
 
           <div className="w-full h-[1px] bg-gray-300"></div>
 
-          <AvilableDatesSection
-            package_id={data.data.id}
-            searchParams={urlSearchParams}
-          />
+          <React.Suspense fallback={<Loading />}>
+            <AvilableDatesSection
+              package_id={data.data.id}
+              searchParams={urlSearchParams}
+            />
+          </React.Suspense>
 
           <h2 className="font-medium font-primary relative text-xl">
             Additional
@@ -247,7 +284,7 @@ export default async function page({ params, searchParams }: IProps) {
             ))}
           </ul>
 
-          <div className="flex items-center justify-between h-[3rem]">
+          <div className="flex items-center justify-between h-[3rem] max-sm:h-auto max-sm:flex-wrap max-sm:gap-y-4.5">
             <span className="font-semibold space-x-2.5">
               Total:
               <span className="text-red-400 line-through text-xs ml-1.5">
@@ -260,7 +297,7 @@ export default async function page({ params, searchParams }: IProps) {
               </span>
               <span>${totalPrices.offerPriceUsd}</span>
             </span>
-            <PackageBookNowBtn package_id = {data.data.id}/>
+            <PackageBookNowBtn package_id={data.data.id} />
           </div>
 
           <div className="w-full h-[1px] bg-gray-300"></div>

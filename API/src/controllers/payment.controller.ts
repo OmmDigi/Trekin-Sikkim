@@ -253,7 +253,7 @@ export const checkPhonepePaymentStatus = asyncErrorHandler(async (req, res) => {
       orderId: value.order_id,
       paidAmount: `₹${paymentInfo.data.amount / 100}`,
       purchaseDate: formattedDate,
-      frontendPageLink: process.env.FRONTEND_HOST_URL,
+      frontendPageLink: `${process.env.FRONTEND_HOST_URL}/account`,
     });
   } catch (error: any) {
     await client.query("ROLLBACK");

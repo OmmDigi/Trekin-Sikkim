@@ -19,7 +19,8 @@ export type TDialogID =
   | "mobile_filter"
   | "gallery_view"
   | "enquiry-form"
-  | "view-booked-package-info";
+  | "view-booked-package-info"
+  | "view-booking-info";
 
 export type TBookingForms =
   | "personal-info"
@@ -108,6 +109,10 @@ export interface IPackage {
   slug: string;
   additional: IAdditional[];
   banner_info: IMediaItem[];
+  meta_title : string;
+  meta_description : string;
+  meta_keywords : string;
+  canonical : null | string;
   other_option_names: { id: number; option_name: string }[];
 }
 
@@ -155,29 +160,64 @@ export interface IBooking {
 }
 
 export interface IBlog {
-    blog_id: number;
-    heading: string;
-    meta_description: string;
-    meta_keywords: string;
-    created_at: string; // ISO 8601 format
-    thumbnail: string; // URL
-    visible: boolean;
-    thumbnail_alt_tag: string;
-    slug: string;
+  blog_id: number;
+  heading: string;
+  meta_description: string;
+  meta_keywords: string;
+  created_at: string; // ISO 8601 format
+  thumbnail: string; // URL
+  visible: boolean;
+  thumbnail_alt_tag: string;
+  slug: string;
 }
 
 export interface ISingleBlog {
-    blog_id: number;
-    heading: string;
-    blog_content: string; // HTML content of the blog
-    thumbnail: string; // URL to the thumbnail image
-    meta_title: string; // Title for SEO
-    meta_description: string; // Description for SEO
-    meta_keywords: string; // Keywords for SEO
-    meta_canonical_url: string; // Canonical URL for SEO
-    created_at: string; // ISO 8601 format date
-    visible: boolean; // Visibility status
-    thumbnail_alt_tag: string; // Alternative text for the thumbnail
-    slug: string; // URL-friendly version of the blog title
+  blog_id: number;
+  heading: string;
+  blog_content: string; // HTML content of the blog
+  thumbnail: string; // URL to the thumbnail image
+  meta_title: string; // Title for SEO
+  meta_description: string; // Description for SEO
+  meta_keywords: string; // Keywords for SEO
+  meta_canonical_url: string; // Canonical URL for SEO
+  created_at: string; // ISO 8601 format date
+  visible: boolean; // Visibility status
+  thumbnail_alt_tag: string; // Alternative text for the thumbnail
+  slug: string; // URL-friendly version of the blog title
 }
 
+export interface AdditionalInformation {
+  order_id: string;
+  additional_id: number;
+  additional_name: string;
+  price_inr: number;
+  price_usd: number;
+}
+
+export interface BookingDate {
+  order_id: string;
+  from_date: string; // ISO date string
+  to_date: string; // ISO date string
+}
+
+export interface IParticipantInfo {
+  order_id: string;
+  participant_name: string;
+  participant_email: string;
+  participant_number: string;
+}
+
+export interface IBookingDetails {
+  order_id: string;
+  trip_type: string;
+  user_name: string;
+  user_contact_number: string;
+  user_email: string;
+  package_name: string;
+  amount: string;
+  transactionid: string;
+  number_of_person: string;
+  additional_information: AdditionalInformation[] | null;
+  booking_dates: BookingDate[];
+  participant_info: IParticipantInfo[] | null;
+}

@@ -7,6 +7,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  FormRootError,
 } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -86,7 +87,7 @@ const formSchema = z.object({
   category_id: z.number().min(1, { message: "Please Choose The Category" }),
   is_active: z.number(),
 
-  additionals: z.array(z.number()),
+  additionals: z.array(z.number()).optional(),
 });
 
 type FormType = z.infer<typeof formSchema>;
@@ -161,6 +162,8 @@ export default function BasicInfo({ currentStep }: IProps) {
     ],
   });
 
+  console.log(apiResult);
+
   function onSubmit(values: FormType) {
     if (packageId === 0) {
       startTransition(() => {
@@ -200,6 +203,7 @@ export default function BasicInfo({ currentStep }: IProps) {
   useEffect(() => {
     const data = apiResult[0].data?.data;
     if (data) {
+      // console.log(data)
       form.reset({
         package_name: data.package_name,
         short_description: data.short_description,
@@ -215,7 +219,7 @@ export default function BasicInfo({ currentStep }: IProps) {
         trek_distance: data.trek_distance,
         category_id: data.category_id,
         is_active: data.is_active,
-        additionals : data.additionals
+        additionals:  data.additionals,
       });
     }
   }, [apiResult[0].isFetching]);
@@ -333,6 +337,7 @@ export default function BasicInfo({ currentStep }: IProps) {
               loading={apiResult[2].isFetching}
               error={apiResult[2].error}
               length={apiResult[2].data?.data.length}
+              noDataMsg="No Additional Item Found"
             >
               <FormField
                 control={form.control}
@@ -348,8 +353,10 @@ export default function BasicInfo({ currentStep }: IProps) {
                             value: item.additional_id,
                           })) || []
                         }
-                        onValueChange={(value) => field.onChange(value)}
-                        defaultValue={field.value}
+                        onValueChange={(value) => {
+                          field.onChange(value);
+                        }}
+                        defaultValue={field?.value || []}
                       />
                     </FormControl>
                     <FormMessage />
@@ -358,6 +365,7 @@ export default function BasicInfo({ currentStep }: IProps) {
               />
             </LoadingHandler>
           </div>
+          <FormRootError />
           <div className="flex items-center justify-between">
             <ButtonLoading loading={isPending}>Save & Next</ButtonLoading>
           </div>

@@ -8,4 +8,8 @@ export const categoryFormSchema = z.object({
     })
     .max(50),
   category_type: z.number().min(1),
+  meta_title: z.string().min(1),
+  meta_description: z.string().min(1),
+  meta_keywords: z.string().min(1),
+  canonical: z.string().optional(),
 });

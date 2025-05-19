@@ -1,8 +1,15 @@
 import { FOOTER_INFO, FOOTERSOCIALLINKS } from "@/constant";
+import api from "@/lib/axios";
 import { cn } from "@/lib/utils";
+import { ICategories, IResponse } from "@/types";
 import Link from "next/link";
+import CustomLink from "./CustomLink";
 
-export default function Footer() {
+export default async function Footer() {
+  const { data: categories } = await api.get<IResponse<ICategories[]>>(
+    "/api/v1/category"
+  );
+
   return (
     <footer className="w-full bg-primary font-primary text-background py-9 max-sm:text-white max-sm:py-0">
       {/* <section className="space-y-9 wrapper max-sm:max-w-[90%]">
@@ -30,7 +37,10 @@ export default function Footer() {
           {FOOTER_INFO.map((item, index) => (
             <li
               key={item.id}
-              className={cn("space-y-4", index === 0 ? "max-sm:col-span-2" : "")}
+              className={cn(
+                "space-y-4",
+                index === 0 ? "max-sm:col-span-2" : ""
+              )}
             >
               <h2 className="font-semibold text-2xl text-secondary">
                 {item.heading}
@@ -64,14 +74,14 @@ export default function Footer() {
             Category
           </h2>
           <ul className="flex items-center gap-6 flex-wrap justify-center max-sm:justify-start">
-            {[
-              1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
-              20,
-            ].map((index) => (
-              <li key={index}>
-                <Link className="text-sm text-gray-300 block" href={"#"}>
-                  Trekking in sikkim
-                </Link>
+            {categories.data.map((item) => (
+              <li key={item.category_id}>
+                <CustomLink
+                  className="text-sm text-gray-300 block"
+                  href={`/${item.slug}`}
+                >
+                  {item.category_name}
+                </CustomLink>
               </li>
             ))}
           </ul>

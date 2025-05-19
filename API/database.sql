@@ -289,3 +289,20 @@ CREATE TABLE blogs (
 );
 
 CREATE INDEX blog_slug_index ON blogs (slug);
+
+ALTER TABLE category ADD COLUMN meta_title VARCHAR(255) DEFAULT '',
+ADD COLUMN meta_description VARCHAR(255) DEFAULT '',
+ADD COLUMN meta_keywords VARCHAR(255) DEFAULT '',
+ADD COLUMN canonical VARCHAR(255);
+
+CREATE TABLE package_and_seo (
+    package_id INTEGER NOT NULL,
+    FOREIGN KEY (package_id) REFERENCES packages(id) ON DELETE CASCADE,
+
+    meta_title VARCHAR(255) DEFAULT '',
+    meta_description TEXT DEFAULT '',
+    meta_keywords TEXT,
+    canonical TEXT,
+
+    UNIQUE(package_id)
+);

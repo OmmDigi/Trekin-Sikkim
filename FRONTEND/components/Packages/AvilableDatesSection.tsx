@@ -84,33 +84,37 @@ export default async function AvilableDatesSection({
         {dateInfo.data.map((item) => (
           <li
             key={item.id}
-            className="text-xs py-1.5 cursor-pointer grid grid-cols-3"
+            className="text-xs py-1.5 cursor-pointer flex justify-between"
           >
-            <div className="flex items-center gap-2">
-              <span className="inline-block size-1.5 rounded-full bg-green-600 float-right"></span>
-              <span>
-                {formatDateToReadable(item.from_date)} -{" "}
-                {formatDateToReadable(item.to_date)}
-              </span>
-            </div>
+            <div className="flex justify-between flex-1">
+              <div className="flex items-center gap-2">
+                <span className="inline-block size-1.5 rounded-full bg-green-600 float-right"></span>
+                <span>
+                  {formatDateToReadable(item.from_date)} -{" "}
+                  {formatDateToReadable(item.to_date)}
+                </span>
+              </div>
 
-            <div className="flex items-center justify-center">
-              <span
-                className={cn(
-                  "font-semibold",
-                  item.avilibility_color === "Red"
-                    ? "text-red-600"
-                    : item.avilibility_color === "Green"
-                    ? "text-green-600"
-                    : "text-yellow-600"
-                )}
-              >
-                {item.avilibility_text}
-              </span>
+              <div className="flex items-center justify-center">
+                <span
+                  className={cn(
+                    "font-semibold",
+                    item.avilibility_color === "Red"
+                      ? "text-red-600"
+                      : item.avilibility_color === "Green"
+                      ? "text-green-600"
+                      : "text-yellow-600"
+                  )}
+                >
+                  {item.avilibility_text}
+                </span>
+              </div>
             </div>
 
             <div className="flex justify-end">
-              <AvilableDateCheckbox key={item.id} date_id={item.id} />
+              {item.avilibility_color === "Red" ? null : (
+                <AvilableDateCheckbox key={item.id} date_id={item.id} />
+              )}
             </div>
           </li>
         ))}

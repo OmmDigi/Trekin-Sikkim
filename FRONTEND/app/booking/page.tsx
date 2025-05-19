@@ -4,6 +4,11 @@ import { IResponse } from "@/types";
 import { AxiosError } from "axios";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Booking Page",
+};
 
 export default async function page() {
   const headersList = headers();

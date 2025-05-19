@@ -42,11 +42,11 @@ export default async function page({ searchParams }: IProps) {
   const currentTab = (await searchParams).tab;
 
   return (
-    <MainWrapper className="wrapper pb-7">
-      <div className="h-60 w-full aspect-[3/1] bg-gray-200 rounded-2xl max-sm:hidden overflow-hidden"></div>
+    <MainWrapper className="wrapper pb-7 space-y-5">
+      {/* <div className="h-60 w-full aspect-[3/1] bg-gray-200 rounded-2xl max-sm:hidden overflow-hidden"></div> */}
 
       <div className="flex items-start gap-6 pl-3.5 max-sm:flex-col max-sm:gap-y-0">
-        <div className="size-36 -translate-y-14 max-sm:size-[6.1rem] max-sm:translate-y-0">
+        <div className="size-36 max-sm:size-[6.1rem]">
           <ProfilePicker defaultImage={serverData.data.profile_image} />
         </div>
         <div className="pt-3.5 relative w-full space-y-2">
@@ -90,7 +90,7 @@ export default async function page({ searchParams }: IProps) {
       </div>
 
       {/* tabs */}
-      <ul className="flex items-center gap-6 px-3.5 -translate-y-3.5 max-sm:mt-7">
+      <ul className="flex items-center gap-6 px-3.5">
         {TABS.map((item) => (
           <li key={item.id}>
             <CustomLink

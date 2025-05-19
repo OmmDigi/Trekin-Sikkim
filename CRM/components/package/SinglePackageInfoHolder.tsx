@@ -9,6 +9,7 @@ import { useSearchParams } from "next/navigation";
 import OtherSteps from "./OtherSteps";
 import Overview from "./Overview";
 import AddGalleryItem from "./AddGalleryItem";
+import MangeSeoItem from "./MangeSeoItem";
 
 const STEPS = [
   { id: 1, label: "Basic Information", comp: <BasicInfo currentStep={1} /> },
@@ -46,7 +47,12 @@ const STEPS = [
       />
     ),
   },
-  { id: 7, label: "Other Options", comp: <OtherSteps currentStep={7} /> },
+  {
+    id: 7,
+    label: "SEO",
+    comp: <MangeSeoItem currentStep={7} />,
+  },
+  { id: 8, label: "Other Options", comp: <OtherSteps currentStep={8} /> },
 ];
 
 export default function SinglePackageInfoHolder() {

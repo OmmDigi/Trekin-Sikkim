@@ -4,13 +4,22 @@ import Button from "@/components/Button";
 import Link from "next/link";
 import ImageSlider from "@/components/Utils/ImageSlider";
 import api from "@/lib/axios";
-import { AxiosResponse } from "axios";
 import { IMediaItem, IResponse } from "@/types";
 import React from "react";
 import Loading from "@/components/Loading";
 import HeadingSubHeding from "@/components/HeadingSubHeding";
 import { Collapsible } from "@/components/Utils/Collapsible";
 import { CollapsibleItem } from "@/components/Utils/CollapsibleItem";
+import { cache } from "react";
+import type { Metadata } from "next";
+
+const getCategoryPageInfo = cache(async (slug: string) => {
+  return (
+    await api.get<IResponse<ICategoryPageInfo>>(
+      `/api/v1/category/page-info/${slug}`
+    )
+  ).data;
+});
 
 interface IProps {
   params: Promise<{ ["page-name"]: string }>;
@@ -20,6 +29,10 @@ interface IProps {
 interface ICategoryPageInfo {
   category_id: number;
   category_name: string;
+  meta_title: string;
+  meta_description: string;
+  meta_keywords: string;
+  canonical: string | null;
   page_content: string | null;
   media_items: IMediaItem[];
   faqs: {
@@ -31,13 +44,40 @@ interface ICategoryPageInfo {
   }[];
 }
 
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ ["page-name"]: string }>;
+}): Promise<Metadata> {
+  const categorySlug = (await params)["page-name"];
+  const categoryPageInfo = await getCategoryPageInfo(categorySlug);
+  return {
+    title: categoryPageInfo.data.meta_title,
+    description: categoryPageInfo.data.meta_description,
+    keywords: categoryPageInfo.data.meta_keywords,
+    alternates: {
+      canonical: categoryPageInfo.data.canonical,
+    },
+    openGraph: {
+      title: categoryPageInfo.data.meta_title,
+      description: categoryPageInfo.data.meta_description,
+      images: [
+        categoryPageInfo.data.media_items?.[0]?.item_link ||
+          "/placeholder_background.jpg",
+      ],
+      url: `/${categorySlug}`,
+      type: "website",
+      locale: "en_US",
+      siteName: "Glacier Treks And Adventure",
+    },
+  };
+}
+
 export default async function CategoryPage({ params, searchParams }: IProps) {
   const categorySlug = (await params)["page-name"];
   const currentPage = (await searchParams).page;
 
-  const [categoryPageInfo] = await Promise.all<
-    AxiosResponse<IResponse<ICategoryPageInfo>>
-  >([api.get(`/api/v1/category/page-info/${categorySlug}`)]);
+  const categoryPageInfo = await getCategoryPageInfo(categorySlug);
 
   return (
     <main className="space-y-5 mt-24">
@@ -58,7 +98,7 @@ export default async function CategoryPage({ params, searchParams }: IProps) {
             <div className="size-full relative flex flex-col justify-center max-w-[90%] mx-auto gap-1.5 max-sm:items-center">
               <h1 className="text-3xl font-semibold text-white tracking-widest mt-2.5 max-sm:text-center max-sm:text-2xl">
                 {/* Trekking In Sikkim */}
-                {categoryPageInfo.data.data.category_name}
+                {categoryPageInfo.data.category_name}
               </h1>
               {/* <p className="text-white text-sm font-montserrat max-sm:text-center">
                 Lorem ipsum dolor sit amet consectetur, adipisicing elit.
@@ -99,11 +139,11 @@ export default async function CategoryPage({ params, searchParams }: IProps) {
               <span className="!font-montserrat text-sm">See All Photos</span>
             </button>
           </div>
-          {categoryPageInfo.data.data.page_content ? (
+          {categoryPageInfo.data.page_content ? (
             <span
               className="!font-primary"
               dangerouslySetInnerHTML={{
-                __html: categoryPageInfo.data.data.page_content,
+                __html: categoryPageInfo.data.page_content,
               }}
             ></span>
           ) : null}
@@ -136,7 +176,7 @@ export default async function CategoryPage({ params, searchParams }: IProps) {
           {/* <ExpandCollapseFaq /> */}
           {/* <CategoryFaq category_id={categoryPageInfo.data.data.category_id}/> */}
           <Collapsible>
-            {categoryPageInfo.data.data.faqs.map((faq, index) => (
+            {categoryPageInfo.data.faqs.map((faq, index) => (
               <CollapsibleItem
                 key={faq.id}
                 heading={faq.faq_heading}

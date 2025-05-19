@@ -3,21 +3,53 @@ import HeadingSubHeding from "@/components/HeadingSubHeding";
 import Loading from "@/components/Loading";
 import { serverApi } from "@/lib/serverApi";
 import { IResponse, ISingleBlog } from "@/types";
+import { Metadata } from "next";
 import Image from "next/image";
-import React from "react";
+import React, { cache } from "react";
+
+const getSingleBlogInfo = cache(async (slug: string) => {
+  const api = await serverApi();
+  return (
+    await api.get<IResponse<ISingleBlog>>(`/api/v1/website/blogs/${slug}`)
+  ).data;
+});
 
 interface IProps {
   params: Promise<{ slug: string }>;
 }
 
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ ["slug"]: string }>;
+}): Promise<Metadata> {
+  const blogSlug = (await params)["slug"];
+  const categoryPageInfo = await getSingleBlogInfo(blogSlug);
+  return {
+    title: categoryPageInfo.data.meta_title,
+    description: categoryPageInfo.data.meta_description,
+    keywords: categoryPageInfo.data.meta_keywords,
+    alternates: {
+      canonical: categoryPageInfo.data.meta_canonical_url,
+    },
+    openGraph: {
+      title: categoryPageInfo.data.meta_title,
+      description: categoryPageInfo.data.meta_description,
+      images: [
+        categoryPageInfo?.data?.thumbnail || "/placeholder_background.jpg",
+      ],
+      url: `/articles/${blogSlug}`,
+      type: "website",
+      locale: "en_US",
+      siteName: "Glacier Treks And Adventure",
+    },
+  };
+}
+
 export default async function page({ params }: IProps) {
   const { slug } = await params;
 
-  const api = await serverApi();
-
-  const { data: singleBlog } = await api.get<IResponse<ISingleBlog>>(
-    "/api/v1/website/blogs/" + slug
-  );
+  const singleBlog = await getSingleBlogInfo(slug);
 
   return (
     <main className="wrapper space-y-10 py-10 pt-28">

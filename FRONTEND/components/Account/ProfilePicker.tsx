@@ -1,6 +1,6 @@
 "use client";
 
-import { ImageUp } from "lucide-react";
+import { ImageUp, Pencil } from "lucide-react";
 import Image from "next/image";
 import { ChangeEvent, useRef, useState } from "react";
 import { uploadFiles } from "../Utils/uploadFiles";
@@ -65,7 +65,7 @@ export default function ProfilePicker({ defaultImage }: IProps) {
   return (
     <button
       onClick={handlePickImage}
-      className="size-32 cursor-pointer card-shdow bg-white border border-green-400 rounded-[50%] overflow-hidden relative max-sm:size-24"
+      className="size-32 cursor-pointer card-shdow bg-white border border-green-400 rounded-xl overflow-hidden relative max-sm:size-24"
     >
       <input
         onChange={onImagePicked}
@@ -89,7 +89,8 @@ export default function ProfilePicker({ defaultImage }: IProps) {
           <SpinnerSvg size="28px" />
         ) : (
           <div className="p-2 bg-white shadow-lg rounded-full">
-            <ImageUp size={15} />
+            {/* <ImageUp size={15} /> */}
+            <Pencil size={15} />
           </div>
         )}
       </div>

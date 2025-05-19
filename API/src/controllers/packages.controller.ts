@@ -23,6 +23,7 @@ import {
   VGetPackageList,
   VGetSinglePackagePageInfo,
   VPackageAndOther,
+  VPackageAndSeo,
   VPackageOverview,
   VSingle,
   VSinglePackageInfo,
@@ -42,6 +43,10 @@ export const getSinglePackagePage = asyncErrorHandler(async (req, res) => {
     `
       SELECT
        p.*,
+       pseo.meta_title,
+       pseo.meta_description,
+       pseo.meta_keywords,
+       pseo.canonical,
        COALESCE(JSON_AGG(DISTINCT to_jsonb(a)) FILTER (WHERE a.additional_id IS NOT NULL), '[]') AS additional,
        COALESCE(JSON_AGG(DISTINCT to_jsonb(mi)) FILTER (WHERE mi.media_item_id IS NOT NULL), '[]') AS banner_info,
        COALESCE(JSON_AGG(DISTINCT JSONB_BUILD_OBJECT(
@@ -65,9 +70,12 @@ export const getSinglePackagePage = asyncErrorHandler(async (req, res) => {
       LEFT JOIN package_and_other po
       ON po.package_id = p.id
 
+      LEFT JOIN package_and_seo pseo
+      ON pseo.package_id = p.id
+
       WHERE p.slug = $1
 
-      GROUP BY p.id
+      GROUP BY p.id, pseo.meta_title, pseo.meta_description, pseo.meta_keywords, pseo.canonical
     `,
     [value.package_slug]
   );
@@ -203,7 +211,7 @@ export const getSinglePackageBasicInfo = asyncErrorHandler(async (req, res) => {
     `
      SELECT 
       pkg.*,
-      JSON_AGG(paa.additional_id) as additionals
+      COALESCE(JSON_AGG(paa) FILTER (WHERE paa.id IS NOT NULL), '[]'::json) as additionals
      FROM packages pkg
 
      LEFT JOIN package_and_additional paa
@@ -257,17 +265,19 @@ export const updateSinglePackageBasicInfo = asyncErrorHandler(
         values
       );
 
-      await client.query(
-        "DELETE FROM package_and_additional WHERE package_id = $1",
-        [packageID]
-      );
+      if (additionals.length !== 0) {
+        await client.query(
+          "DELETE FROM package_and_additional WHERE package_id = $1",
+          [packageID]
+        );
 
-      await client.query(
-        `INSERT INTO package_and_additional (package_id, additional_id) VALUES ${placeholdernum}
+        await client.query(
+          `INSERT INTO package_and_additional (package_id, additional_id) VALUES ${placeholdernum}
          ON CONFLICT (package_id, additional_id) DO NOTHING
         `,
-        additionals.flatMap((additional_id) => [packageID, additional_id])
-      );
+          additionals.flatMap((additional_id) => [packageID, additional_id])
+        );
+      }
 
       await client.query("COMMIT");
 
@@ -307,17 +317,19 @@ export const addPackageBasicInfo = asyncErrorHandler(async (req, res) => {
       values
     );
 
-    const placeholdernum = generatePlaceholders(additionals.length, 2);
+    if (additionals.length !== 0) {
+      const placeholdernum = generatePlaceholders(additionals.length, 2);
 
-    await client.query(
-      "DELETE FROM package_and_additional WHERE package_id = $1",
-      [rows[0].id]
-    );
+      await client.query(
+        "DELETE FROM package_and_additional WHERE package_id = $1",
+        [rows[0].id]
+      );
 
-    await client.query(
-      `INSERT INTO package_and_additional (package_id, additional_id) VALUES ${placeholdernum}`,
-      additionals.flatMap((additional_id) => [rows[0].id, additional_id])
-    );
+      await client.query(
+        `INSERT INTO package_and_additional (package_id, additional_id) VALUES ${placeholdernum}`,
+        additionals.flatMap((additional_id) => [rows[0].id, additional_id])
+      );
+    }
 
     await client.query("COMMIT");
     client.release();
@@ -369,13 +381,13 @@ export const getDepartureDates = asyncErrorHandler(async (req, res) => {
   let placeholdernum = 2;
 
   if (filterValue.for_month) {
-    filterQuery += ` AND for_month = $${placeholdernum}`
+    filterQuery += ` AND for_month = $${placeholdernum}`;
     filterValuesList.push(filterValue.for_month);
     placeholdernum++;
   }
 
-  if(filterValue.max_seats_is_not_zero) {
-    filterQuery += ` AND max_seats > 0`
+  if (filterValue.max_seats_is_not_zero) {
+    filterQuery += ` AND max_seats > 0`;
   }
 
   if (filterQuery === "WHERE") {
@@ -405,7 +417,6 @@ export const createDepartureDate = asyncErrorHandler(async (req, res) => {
     throw new ErrorHandler(400, error.message, error.details[0].context?.key);
 
   const { columns, params, values } = objectToSqlInsert(req.body);
-  console.log(values);
 
   await pool.query(
     `INSERT INTO packages_departure_date ${columns} VALUES ${params}`,
@@ -832,4 +843,47 @@ export const updateOtherOption = asyncErrorHandler(async (req, res) => {
   );
 
   res.status(200).json(new ApiResponse(200, "Other option has updated"));
+});
+
+// package and seo
+export const managePackageSeo = asyncErrorHandler(async (req, res) => {
+  const { error, value } = VPackageAndSeo.validate(req.body);
+  if (error) throw new ErrorHandler(400, error.message);
+
+  await pool.query(
+    `
+    INSERT INTO package_and_seo 
+      (package_id, meta_title, meta_description, meta_keywords, canonical) 
+    VALUES 
+      ($1, $2, $3, $4, $5)
+    ON CONFLICT (package_id) DO UPDATE SET
+      meta_title = EXCLUDED.meta_title,
+      meta_description = EXCLUDED.meta_description,
+      meta_keywords = EXCLUDED.meta_keywords,
+      canonical = EXCLUDED.canonical
+    `,
+    [
+      value.package_id,
+      value.meta_title,
+      value.meta_description,
+      value.meta_keywords,
+      value.canonical,
+    ]
+  );
+
+  res.status(201).json(new ApiResponse(201, "Package Seo Info Saved"));
+});
+
+export const getSinglePackageSeoInfo = asyncErrorHandler(async (req, res) => {
+  const { error, value } = VSinglePackageInfo.validate(req.params);
+  if (error) throw new ErrorHandler(400, error.message);
+
+  const { rows } = await pool.query(
+    "SELECT * FROM package_and_seo WHERE package_id = $1",
+    [value.package_id]
+  );
+
+  res
+    .status(200)
+    .json(new ApiResponse(200, "Single Package Seo Info", rows[0]));
 });

@@ -26,7 +26,9 @@ import {
   getSinglePackageBasicInfo,
   getSinglePackageItinerary,
   getSinglePackagePage,
+  getSinglePackageSeoInfo,
   getSinglePackgeFaq,
+  managePackageSeo,
   removePackageGallery,
   updateDepartureDateInfo,
   updateOtherOption,
@@ -83,4 +85,7 @@ packageRoute
   .get("/other/:package_id", getPackageOtherOptions)
   .post("/other", isAuthenticated, addOtherOption)
   .put("/other/:id", isAuthenticated, updateOtherOption)
-  .delete("/other/:id", isAuthenticated, deleteOtherOptionRow);
+  .delete("/other/:id", isAuthenticated, deleteOtherOptionRow)
+
+  .get("/seo/:package_id", getSinglePackageSeoInfo)
+  .post("/seo", isAuthenticated, managePackageSeo)

@@ -7,12 +7,20 @@ export const VCategoryPageInfo = Joi.object({
 export const VAddNewCategory = Joi.object({
   category_name: Joi.string().required(),
   category_type: Joi.number().required(),
+  meta_title: Joi.string().required().allow(""),
+  meta_description: Joi.string().required().allow(""),
+  meta_keywords: Joi.string().required().allow(""),
+  canonical: Joi.string().optional(),
 });
 
 export const VUpdateACategory = Joi.object({
   category_id: Joi.number().required(),
   new_category_name: Joi.string().required(),
   new_category_type: Joi.number().required(),
+  new_meta_title: Joi.string().required().allow(""),
+  new_meta_description: Joi.string().required().allow(""),
+  new_meta_keywords: Joi.string().required().allow(""),
+  new_canonical: Joi.string().optional(),
 });
 
 export const VSingleCategory = Joi.object({
@@ -54,5 +62,5 @@ export const VUpdateCategoryGallery = Joi.object({
 //category page content
 export const VManageCategoryPageContent = Joi.object({
   category_id: Joi.number().required(),
-  page_content : Joi.string().required()
-})
+  page_content: Joi.string().required(),
+});

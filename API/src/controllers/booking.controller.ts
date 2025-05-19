@@ -128,6 +128,9 @@ export const getBookings = asyncErrorHandler(async (req, res) => {
   } else if (value.transition_id) {
     filter += `AND pay.transactionId = $1`;
     filterValue.push(value.transition_id);
+  } else if (value.package_id) {
+    filter += `AND p.id = $1`;
+    filterValue.push(value.package_id);
   }
   
   const { rows } = await pool.query(
@@ -152,6 +155,20 @@ export const getBookings = asyncErrorHandler(async (req, res) => {
 
         LEFT JOIN packages_departure_date pdd
         ON pdd.id = oid.departure_date_id
+      ),
+
+      participant_info AS (
+        SELECT
+          ep.order_id,
+          u.user_name AS participant_name,
+          u.user_email AS participant_email,
+          u.user_contact_number AS participant_number
+        FROM enrolled_package ep
+
+        LEFT JOIN users u
+        ON u.user_id = ep.user_id
+
+        WHERE ep.as_type = 1
       )
 
       SELECT
@@ -165,7 +182,8 @@ export const getBookings = asyncErrorHandler(async (req, res) => {
         pay.transactionId,
         (SELECT COUNT(user_id) FROM enrolled_package WHERE order_id = ep.order_id) AS number_of_person,
         (SELECT JSON_AGG(ai) FROM addition_info ai WHERE ai.order_id = ep.order_id) AS additional_information,
-        (SELECT JSON_AGG(bd) FROM booking_dates bd WHERE bd.order_id = ep.order_id) AS booking_dates
+        (SELECT JSON_AGG(bd) FROM booking_dates bd WHERE bd.order_id = ep.order_id) AS booking_dates,
+        (SELECT JSON_AGG(pi) FROM participant_info pi WHERE pi.order_id = ep.order_id) AS participant_info
       FROM enrolled_package ep
 
       LEFT JOIN users u

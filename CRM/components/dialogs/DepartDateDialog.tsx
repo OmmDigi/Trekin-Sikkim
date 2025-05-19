@@ -1,4 +1,4 @@
-import React, { useEffect, useTransition } from "react";
+import React, { useEffect, useState, useTransition } from "react";
 import { Dialog, DialogContent, DialogTitle } from "../ui/dialog";
 import { ScrollArea } from "../ui/scroll-area";
 import { z } from "zod";
@@ -34,6 +34,7 @@ import LoadingLayout from "../LoadingLayout";
 import LoadingHandler from "../LoadingHandler";
 import { IResponse } from "@/types";
 import { AxiosError } from "axios";
+import { MONTH_LIST } from "@/constant";
 
 interface IProps {
   isOpen: boolean;
@@ -70,7 +71,7 @@ export default function DepartDateDialog({
     },
   });
 
-  const { error, data, isFetching } = useQuery<
+  const { error, isFetching } = useQuery<
     IResponse<IDepartureDateResponse>,
     AxiosError<IResponse>
   >({
@@ -140,6 +141,17 @@ export default function DepartDateDialog({
     });
   };
 
+  useEffect(() => {
+
+     const today = new Date();
+     const year = today.getFullYear();
+     const month = MONTH_LIST.indexOf(form.watch("for_month")) + 1;
+     const formattedDate = `${year}-${month.toString().padStart(2, '0')}-01`;
+     form.setValue("from_date", formattedDate);
+     form.setValue("to_date", formattedDate)
+
+  }, [form.watch("for_month")])
+
   return (
     <Dialog open={isOpen} onOpenChange={setOpen}>
       <DialogContent>
@@ -167,20 +179,7 @@ export default function DepartDateDialog({
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {[
-                            "January",
-                            "February",
-                            "March",
-                            "April",
-                            "May",
-                            "June",
-                            "July",
-                            "August",
-                            "September",
-                            "October",
-                            "November",
-                            "December",
-                          ].map((month) => (
+                          {MONTH_LIST.map((month) => (
                             <SelectItem key={month} value={month}>
                               {month}
                             </SelectItem>
@@ -196,6 +195,7 @@ export default function DepartDateDialog({
                   <FormField
                     control={form.control}
                     name="from_date"
+                    // defaultValue={currentMonthDate}
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>From Date *</FormLabel>
@@ -210,6 +210,7 @@ export default function DepartDateDialog({
                   <FormField
                     control={form.control}
                     name="to_date"
+                    // defaultValue={currentMonthDate}
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>To Date *</FormLabel>

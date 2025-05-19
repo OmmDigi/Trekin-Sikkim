@@ -67,6 +67,10 @@ export function CategoryBasicInfo({ category_id, currentStep }: IProps) {
       form.reset({
         category_name: data.data?.category_name || "",
         category_type: data.data?.category_type_id || 1,
+        meta_title: data.data?.meta_title || "",
+        meta_description: data.data?.meta_description || "",
+        meta_keywords: data.data?.meta_keywords || "",
+        canonical: data.data?.canonical || undefined,
       });
     },
   });
@@ -117,9 +121,23 @@ export function CategoryBasicInfo({ category_id, currentStep }: IProps) {
     },
   });
 
-  function onSubmit({ category_name, category_type }: TCategoryForm) {
+  function onSubmit({
+    category_name,
+    category_type,
+    meta_title,
+    meta_description,
+    meta_keywords,
+    canonical,
+  }: TCategoryForm) {
     if (category_id === 0) {
-      postCategory({ category_name, category_type });
+      postCategory({
+        category_name,
+        category_type,
+        meta_title,
+        meta_description,
+        meta_keywords,
+        canonical,
+      });
       return;
     }
 
@@ -127,6 +145,10 @@ export function CategoryBasicInfo({ category_id, currentStep }: IProps) {
       category_id,
       new_category_name: category_name,
       new_category_type: category_type,
+      new_meta_title: meta_title,
+      new_meta_description: meta_description,
+      new_meta_keywords: meta_keywords,
+      new_canonical: canonical || undefined,
     });
   }
 
@@ -144,7 +166,10 @@ export function CategoryBasicInfo({ category_id, currentStep }: IProps) {
                   <FormControl>
                     <Input
                       placeholder="Enter package category name"
-                      {...field}
+                      onChange={(event) =>
+                        field.onChange(event.currentTarget.value)
+                      }
+                      defaultValue={field.value}
                     />
                   </FormControl>
                   <FormMessage />
@@ -178,6 +203,83 @@ export function CategoryBasicInfo({ category_id, currentStep }: IProps) {
                       ))}
                     </SelectContent>
                   </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="meta_title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Meta Title</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Enter category page meta title"
+                      onChange={(event) =>
+                        field.onChange(event.currentTarget.value)
+                      }
+                      defaultValue={field.value}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="meta_description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Meta Description</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Enter category page meta description"
+                      onChange={(event) =>
+                        field.onChange(event.currentTarget.value)
+                      }
+                      defaultValue={field.value}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="meta_keywords"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Meta Keywords</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Enter category page meta keywords"
+                      onChange={(event) =>
+                        field.onChange(event.currentTarget.value)
+                      }
+                      defaultValue={field.value}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="canonical"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Canonical</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Enter category page canonical"
+                      onChange={(event) =>
+                        field.onChange(event.currentTarget.value)
+                      }
+                      defaultValue={field.value}
+                    />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}

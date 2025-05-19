@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import MediaGallery from "../MediaGallery";
 import {
   Dialog,
@@ -13,6 +13,7 @@ import { useDoMutation } from "@/hooks/useDoMutation";
 import { useSearchParams } from "next/navigation";
 import { ButtonLoading } from "../ui/button-loading";
 import { useQueryClient } from "@tanstack/react-query";
+import { clear } from "@/redux/slice/choose.gallery.slice";
 
 interface IProps {
   isOpen: boolean;
@@ -29,6 +30,7 @@ function AddPackageGalleryDialog({
 }: IProps) {
   const queryClient = useQueryClient();
   const searchParams = useSearchParams();
+  const dispatch = useDispatch();
   const currentId = parseInt(searchParams.get(keyName) || "0");
 
   const { selectedMedia } = useSelector(
@@ -47,6 +49,7 @@ function AddPackageGalleryDialog({
       onSuccess() {
         setOpen(false);
         queryClient.invalidateQueries({ queryKey: ["package-gallery"] });
+        dispatch(clear());
       },
     });
   };

@@ -79,7 +79,9 @@ export function CategoryDialog({ isOpen, setOpen, category_id }: IProps) {
   useEffect(() => {
     form.reset({
       category_name: "",
-      category_type: parseInt(searchParams.get("category_type") || `${CATEGORY_TYPE[0].id}`)
+      category_type: parseInt(
+        searchParams.get("category_type") || `${CATEGORY_TYPE[0].id}`
+      ),
     });
   }, [category_id]);
 
@@ -123,9 +125,23 @@ export function CategoryDialog({ isOpen, setOpen, category_id }: IProps) {
     },
   });
 
-  function onSubmit({ category_name, category_type }: TCategoryForm) {
+  function onSubmit({
+    category_name,
+    category_type,
+    meta_description,
+    meta_keywords,
+    meta_title,
+    canonical,
+  }: TCategoryForm) {
     if (category_id === 0) {
-      postCategory({ category_name, category_type });
+      postCategory({
+        category_name,
+        category_type,
+        meta_description,
+        meta_keywords,
+        meta_title,
+        canonical,
+      });
       return;
     }
 
@@ -133,6 +149,10 @@ export function CategoryDialog({ isOpen, setOpen, category_id }: IProps) {
       category_id,
       new_category_name: category_name,
       new_category_type: category_type,
+      new_meta_description: meta_description,
+      new_meta_title: meta_title,
+      new_meta_keywords: meta_keywords,
+      new_canonical: canonical,
     });
   }
 

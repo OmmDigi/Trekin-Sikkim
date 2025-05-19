@@ -318,3 +318,12 @@ export const VUpdatePackageAndOther = Joi.object({
   option_name: Joi.string().required(),
   option_content: Joi.string().required(),
 });
+
+// package and seo
+export const VPackageAndSeo = Joi.object({
+  package_id : Joi.number().required(),
+  meta_title: Joi.string().required(),
+  meta_description: Joi.string().required(),
+  meta_keywords: Joi.string().required(),
+  canonical: Joi.string().optional(),
+})

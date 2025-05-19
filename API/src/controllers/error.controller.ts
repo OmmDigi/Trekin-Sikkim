@@ -45,9 +45,10 @@ export const globalErrorController = (
   res: Response,
   next: NextFunction
 ) => {
-  // if(process.env.NODE_ENV === "development") {
-  //   console.log(err);
-  // }
-  console.log(err);
+  console.log({
+    error: err,
+    url: req.url,
+    method : req.method
+  });
   backErrorResponse(err, res, "prod");
 };

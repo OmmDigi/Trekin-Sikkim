@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
     config.optimization.minimize = false; // Disables all minification (JS + CSS)
     return config;
   },
-  
+
   eslint: {
     ignoreDuringBuilds: true,
   },

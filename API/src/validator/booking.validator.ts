@@ -14,4 +14,5 @@ export const VGetBookingListFilter = Joi.object({
   email: Joi.string().optional(),
   order_id: Joi.string().optional(),
   transition_id: Joi.string().optional(),
+  package_id : Joi.number().optional(),
 });
