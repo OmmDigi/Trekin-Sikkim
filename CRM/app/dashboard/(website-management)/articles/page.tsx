@@ -3,18 +3,19 @@
 import LoadingHandler from "@/components/LoadingHandler";
 import { PaginationComp } from "@/components/pagination";
 import { ButtonLoading } from "@/components/ui/button-loading";
+import { useDoMutation } from "@/hooks/useDoMutation";
 import api from "@/lib/axios";
 import { BlogPost, IResponse } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { Edit, Plus } from "lucide-react";
+import { Edit, Plus, Torus, Trash } from "lucide-react";
 import Image from "next/image";
 import {
   ReadonlyURLSearchParams,
   useRouter,
   useSearchParams,
 } from "next/navigation";
-import React, { useTransition } from "react";
+import React, { useRef, useTransition } from "react";
 
 const getArticles = async (searchParams: ReadonlyURLSearchParams) => {
   return (await api.get("/api/v1/website/blogs?" + searchParams.toString()))
@@ -25,9 +26,12 @@ export default function Articles() {
   const searchParams = useSearchParams();
   const routes = useRouter();
 
+  const currentClickedBlogId = useRef<number>(-1);
   const [isPending, startTransition] = useTransition();
+  const [isDeleteing, startIsDeleteing] = useTransition();
 
-  const { isFetching, error, data } = useQuery<
+  const { mutate } = useDoMutation();
+  const { isFetching, error, data, refetch } = useQuery<
     IResponse<BlogPost[]>,
     AxiosError<IResponse>
   >({
@@ -41,11 +45,12 @@ export default function Articles() {
         <h1 className="text-2xl font-semibold">Articles</h1>
         <ButtonLoading
           onClick={() => {
+            currentClickedBlogId.current = 0;
             startTransition(() => {
               routes.push("/dashboard/articles/0");
             });
           }}
-          loading={isPending}
+          loading={isPending && currentClickedBlogId.current === 0}
         >
           <Plus />
           Add New Article
@@ -57,7 +62,7 @@ export default function Articles() {
         length={data?.data.length}
         noDataMsg="No Articles Has Found"
       >
-        <ul className="size-full">
+        <ul className="size-full space-y-5">
           {data?.data.map((blog) => (
             <li
               key={blog.blog_id}
@@ -73,25 +78,47 @@ export default function Articles() {
                 />
               </div>
               <div className="flex-1 p-3.5 space-y-1.5">
-                <h2 className="font-semibold">This is the blog title</h2>
-                <p className="line-clamp-1">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem
-                  esse quos itaque. Aut excepturi cumque debitis dolorum numquam
-                  quibusdam accusamus cum, ea distinctio repellendus maiores
-                  officiis, nihil, labore dolor blanditiis!
-                </p>
+                <h2 className="font-semibold">{blog.heading}</h2>
+                <p className="line-clamp-1">{blog.meta_description}</p>
 
-                <div className="w-full">
+                <div className="w-full flex items-center gap-5">
                   <ButtonLoading
                     onClick={() => {
+                      currentClickedBlogId.current = blog.blog_id;
                       startTransition(() => {
                         routes.push(`/dashboard/articles/${blog.blog_id}`);
                       });
                     }}
-                    loading={isPending}
+                    loading={
+                      currentClickedBlogId.current === blog.blog_id && isPending
+                    }
                   >
                     <Edit />
                     Edit
+                  </ButtonLoading>
+
+                  <ButtonLoading
+                    loading={
+                      currentClickedBlogId.current === blog.blog_id &&
+                      isDeleteing
+                    }
+                    onClick={() => {
+                      if (!confirm("Are you sure you want to delete ?")) return;
+                      currentClickedBlogId.current = blog.blog_id;
+                      startIsDeleteing(() => {
+                        mutate({
+                          apiPath: "/api/v1/website/blogs",
+                          method: "delete",
+                          id: blog.blog_id,
+                          onSuccess() {
+                            refetch();
+                          },
+                        });
+                      });
+                    }}
+                    variant="destructive"
+                  >
+                    <Trash />
                   </ButtonLoading>
                 </div>
               </div>

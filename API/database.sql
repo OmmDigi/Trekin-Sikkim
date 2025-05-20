@@ -309,3 +309,5 @@ CREATE TABLE package_and_seo (
 
 ALTER TABLE blogs DROP COLUMN meta_canonical_url;
 ALTER TABLE blogs ADD COLUMN meta_canonical_url TEXT;
+
+ALTER TABLE blogs ADD COLUMN media_id INTEGER;

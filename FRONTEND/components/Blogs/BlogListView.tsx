@@ -1,12 +1,34 @@
+import { serverApi } from "@/lib/serverApi";
+import { IBlog, IResponse } from "@/types";
 import React from "react";
-// import BlogListItem from "./BlogListItem";
+import BlogListItem from "./BlogListItem";
+import Pagination from "../Pagination";
 
-export default function BlogListView() {
+interface IProps {
+  searchParams: { page?: string };
+}
+
+export default async function BlogListView({ searchParams }: IProps) {
+  const api = await serverApi();
+
+  const blogList = (
+    await api.get<IResponse<IBlog[]>>(
+      `/api/v1/website/blogs?page=${parseInt(searchParams?.page || "1")}`
+    )
+  ).data;
+
   return (
-    <ul className="grid grid-cols-4 gap-5 gap-y-10 max-sm:grid-cols-1">
-      {/* {[1, 2, 3, 4, 5, 6, 7, 8].map((_, index) => (
-        <BlogListItem key={index} />
-      ))} */}
-    </ul>
+    <>
+      <ul className="grid grid-cols-4 gap-5 gap-y-10 max-sm:grid-cols-1">
+        {blogList.data.map((blog) => (
+          <BlogListItem key={blog.blog_id} blog={blog} />
+        ))}
+      </ul>
+
+      <Pagination
+        page={parseInt(searchParams?.page || "1")}
+        totalPage={blogList.totalPage}
+      />
+    </>
   );
 }

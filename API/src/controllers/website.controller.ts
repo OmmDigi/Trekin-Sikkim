@@ -150,12 +150,9 @@ export const postNewBlog = asyncErrorHandler(async (req, res) => {
   const { error, value } = VPostNewBlog.validate(req.body);
   if (error) throw new ErrorHandler(400, error.message);
 
-  const mediaId = value.media_id;
-  delete value.media_id;
-
   const { rows } = await pool.query(
     "SELECT * FROM media_item WHERE media_item_id = $1",
-    [mediaId]
+    [value.media_id]
   );
 
   value.thumbnail = rows[0].item_link;
@@ -192,12 +189,9 @@ export const updateSingleBlog = asyncErrorHandler(async (req, res) => {
   });
   if (error) throw new ErrorHandler(400, error.message);
 
-  const mediaId = value.media_id;
-  delete value.media_id;
-
   const { rows } = await pool.query(
     "SELECT * FROM media_item WHERE media_item_id = $1",
-    [mediaId]
+    [value.media_id]
   );
 
   value.thumbnail = rows[0].item_link;

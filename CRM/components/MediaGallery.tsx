@@ -120,6 +120,8 @@ export default function MediaGallery({
                     setMediaItem({
                       media_id: item.media_item_id,
                       where_to_use: "gallery",
+                      item_link: item.item_link,
+                      alt_tag: item.alt_tag,
                     })
                   );
                 }}

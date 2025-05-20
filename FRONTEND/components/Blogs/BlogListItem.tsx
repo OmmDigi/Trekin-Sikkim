@@ -1,7 +1,6 @@
 import { CalendarFold, MoveRight } from "lucide-react";
 import Image from "next/image";
 import React from "react";
-// import { TransitionLink } from "../Utils/TransitionLink";
 import { IBlog } from "@/types";
 import { formatDateToReadable } from "../Utils/formatDateToReadable";
 import CustomLink from "../CustomLink";

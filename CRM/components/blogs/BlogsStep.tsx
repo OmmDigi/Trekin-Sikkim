@@ -9,10 +9,7 @@ interface IProps {
   step: number;
 }
 
-const STEPS: TSteps[] = [
-  { id: 1, label: "Basic Information" },
-  { id: 3, label: "Images" },
-];
+const STEPS: TSteps[] = [{ id: 1, label: "Basic Information" }];
 
 export default function BlogsStep({ blog_id, step }: IProps) {
   return (
