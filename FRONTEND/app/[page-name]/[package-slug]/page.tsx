@@ -255,9 +255,16 @@ export default async function page({ params, searchParams }: IProps) {
             />
           </React.Suspense>
 
-          <h2 className="font-medium font-primary relative text-xl">
+          <h3
+            id="Overview"
+            className="text-2xl font-semibold bg-accent text-white p-1.5 px-7 inline-block rounded-tr-lg rounded-bl-lg"
+          >
+            Additional :
+          </h3>
+
+          {/* <h2 className="font-medium font-primary relative text-xl">
             Additional
-          </h2>
+          </h2> */}
 
           <ul className="space-y-1.5 px-5">
             {data.data.additional.map((additionlInfo, index) => (
@@ -267,10 +274,10 @@ export default async function page({ params, searchParams }: IProps) {
               >
                 <div className="flex items-center gap-2">
                   <span className="inline-block size-1.5 rounded-full bg-green-600 float-right"></span>
-                  <span>{additionlInfo.additional_name}</span>
+                  <span className="text-lg underline">{additionlInfo.additional_name}</span>
                 </div>
 
-                <div className="text-center block">
+                <div className="text-center block text-lg underline">
                   ₹{additionlInfo.price_inr} / ${additionlInfo.price_usd}
                 </div>
 

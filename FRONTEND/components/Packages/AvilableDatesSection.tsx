@@ -54,10 +54,16 @@ export default async function AvilableDatesSection({
 
   return (
     <>
-      <h2 className="font-medium font-primary relative text-xl">
+      {/* <h2 className="font-medium font-primary relative text-xl">
         <span>Avaliable Dates</span>
         <span className="inline-block size-1.5 rounded-full bg-green-600 float-right absolute top-2 ml-2.5"></span>
-      </h2>
+      </h2> */}
+      <h3
+        id="Overview"
+        className="text-2xl font-semibold bg-accent text-white p-1.5 px-7 inline-block rounded-tr-lg rounded-bl-lg"
+      >
+        Avaliable Dates :
+      </h3>
 
       <span id="package-dates"></span>
       <Tabs
@@ -89,7 +95,7 @@ export default async function AvilableDatesSection({
             <div className="flex justify-between flex-1">
               <div className="flex items-center gap-2">
                 <span className="inline-block size-1.5 rounded-full bg-green-600 float-right"></span>
-                <span>
+                <span className="text-lg underline">
                   {formatDateToReadable(item.from_date)} -{" "}
                   {formatDateToReadable(item.to_date)}
                 </span>

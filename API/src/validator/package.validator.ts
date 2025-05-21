@@ -258,6 +258,8 @@ export const VAddPackageGallery = Joi.object({
     .items(
       Joi.object({
         media_id: Joi.number().required(),
+        item_link : Joi.string().optional(),
+        alt_tag : Joi.string().optional(),
         where_to_use: Joi.string().required(),
       })
     )

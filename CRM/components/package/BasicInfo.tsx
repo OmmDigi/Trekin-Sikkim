@@ -109,11 +109,27 @@ const getAdditionalList = async () => {
 };
 
 export default function BasicInfo({ currentStep }: IProps) {
+  const params = useParams<{ slug: string }>();
+  const packageId = parseInt(params.slug);
+
+  return (
+    <BasicInfoFunc
+      key={packageId}
+      packageId={packageId}
+      currentStep={currentStep}
+    />
+  );
+}
+
+interface IBasicInfoFunc {
+  packageId: number;
+  currentStep: number;
+}
+
+function BasicInfoFunc({ packageId, currentStep }: IBasicInfoFunc) {
   const [isPending, startTransition] = useTransition();
   const route = useRouter();
   const { mutate } = useDoMutation();
-  const params = useParams<{ slug: string }>();
-  const packageId = parseInt(params.slug);
 
   const form = useForm<FormType>({
     resolver: zodResolver(formSchema),
@@ -145,24 +161,22 @@ export default function BasicInfo({ currentStep }: IProps) {
   >({
     queries: [
       {
-        queryKey: ["get-one-package-basic-info"],
+        queryKey: ["get-one-package-basic-info", packageId],
         enabled: packageId !== 0,
         queryFn: () => getSingleBasicInfo(packageId),
       },
 
       {
-        queryKey: ["package-categories"],
+        queryKey: ["package-categories", packageId],
         queryFn: () => getAllCategories(),
       },
 
       {
-        queryKey: ["get-additionals"],
+        queryKey: ["get-additionals", packageId],
         queryFn: getAdditionalList,
       },
     ],
   });
-
-  console.log(apiResult);
 
   function onSubmit(values: FormType) {
     if (packageId === 0) {
@@ -203,7 +217,6 @@ export default function BasicInfo({ currentStep }: IProps) {
   useEffect(() => {
     const data = apiResult[0].data?.data;
     if (data) {
-      // console.log(data)
       form.reset({
         package_name: data.package_name,
         short_description: data.short_description,
@@ -219,10 +232,10 @@ export default function BasicInfo({ currentStep }: IProps) {
         trek_distance: data.trek_distance,
         category_id: data.category_id,
         is_active: data.is_active,
-        additionals:  data.additionals,
+        additionals: data.additionals,
       });
     }
-  }, [apiResult[0].isFetching]);
+  }, [apiResult[0].isSuccess, apiResult[2].isSuccess, apiResult[1].isSuccess]);
 
   return (
     <LoadingHandler

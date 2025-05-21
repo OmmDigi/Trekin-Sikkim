@@ -211,7 +211,7 @@ export const getSinglePackageBasicInfo = asyncErrorHandler(async (req, res) => {
     `
      SELECT 
       pkg.*,
-      COALESCE(JSON_AGG(paa) FILTER (WHERE paa.id IS NOT NULL), '[]'::json) as additionals
+      COALESCE(JSON_AGG(paa.additional_id) FILTER (WHERE paa.id IS NOT NULL), '[]'::json) as additionals
      FROM packages pkg
 
      LEFT JOIN package_and_additional paa
