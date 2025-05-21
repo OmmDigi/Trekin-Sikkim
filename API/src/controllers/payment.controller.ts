@@ -156,7 +156,7 @@ export const checkPhonepePaymentStatus = asyncErrorHandler(async (req, res) => {
     if (userRowCount === 0) throw new ErrorHandler(404, "User not found");
 
     // then if any Participants Info there create a new entry in users table with a default password
-    if (orderInfo.participant_info) {
+    if (orderInfo.participant_info && orderInfo.participant_info.length !== 0) {
       const createUserPlaceholder = generatePlaceholders(
         orderInfo.participant_info.length,
         4

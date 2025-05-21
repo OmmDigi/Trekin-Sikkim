@@ -5,6 +5,8 @@ import api from "@/lib/axios";
 import { formatDateToReadable } from "../Utils/formatDateToReadable";
 import { cn } from "@/lib/utils";
 import AvilableDateCheckbox from "./AvilableDateCheckbox";
+import Button from "../Button";
+import { Check } from "lucide-react";
 
 interface IProps {
   package_id: number;
@@ -51,6 +53,8 @@ export default async function AvilableDatesSection({
       `/api/v1/package/departure-date/${package_id}?${newSearchParams.toString()}`
     )
   ).data;
+
+  const selectedDates = newSearchParams.getAll("date_id");
 
   return (
     <>
@@ -101,7 +105,7 @@ export default async function AvilableDatesSection({
                 </span>
               </div>
 
-              <div className="flex items-center justify-center">
+              <div className="flex items-center justify-center flex-1">
                 <span
                   className={cn(
                     "font-semibold",
@@ -122,6 +126,28 @@ export default async function AvilableDatesSection({
                 <AvilableDateCheckbox key={item.id} date_id={item.id} />
               )}
             </div>
+
+            {/* <AvilableDateCheckbox key={item.id} date_id={item.id} /> */}
+
+            {/* <button className="p-3 outline ml-1.5 rounded-full flex items-center justify-center gap-2.5"> */}
+            {/* <input type="checkbox" /> */}
+
+            {/* <span>Choose Date</span>
+            </button> */}
+
+            {/* <button className="flex items-center gap-2">
+              <div
+                className={cn(
+                  "size-5 border rounded-md border-accent",
+                  selectedDates.includes(`${item.id}`)
+                    ? "bg-accent text-secondary flex items-center justify-center"
+                    : ""
+                )}
+              >
+                <Check color="#fff" className="size-3.5" />
+              </div>
+              <span>Choose Date</span>
+            </button> */}
           </li>
         ))}
       </ul>
