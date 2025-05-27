@@ -68,6 +68,7 @@ export default function Bookings() {
     queryFn: () => getBookingList(searchParams),
   });
 
+
   const onSubmit = (formValue: TSearch) => {
     const newSearchParams = new URLSearchParams(searchParams);
     newSearchParams.set(formValue.search_by, formValue.search_text);
@@ -167,7 +168,7 @@ export default function Bookings() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {data?.data.map((booking) => (
+              {data?.data.map?.((booking) => (
                 <TableRow key={booking.order_id}>
                   <TableCell className="font-medium sticky top-0 left-0 z-20 bg-white flex items-center gap-2.5">
                     {/* <TooltipProvider>

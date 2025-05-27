@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jodit Editor Demo</title>
+
+    <!-- Jodit CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jodit@3.24.2/build/jodit.min.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        .container {
+            /* max-width: 1200px; */
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        /* Custom font for editor */
+        /* body,
+        .jodit-wysiwyg {
+            font-family: 'Roboto', sans-serif;
+            font-size: 20px;
+            width: 100%;
+        } */
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            font-size: 3rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <textarea id="editor" name="content" style="width: 100%; min-height: 400px; font-size: 3rem;"></textarea>
+    </div>
+
+    <!-- Jodit JS -->
+    <script src="https://cdn.jsdelivr.net/npm/jodit@3.24.2/build/jodit.min.js"></script>
+
+    <script>
+        const editor = new Jodit('#editor', {
+            // Editor configuration
+            // uploader: {
+            //     url: 'http://localhost:8081/api/v1/upload/single',
+            //     prepareData: function (formData) {
+            //         const newForm = new FormData();
+            //         formData.forEach((value, key) => {
+            //             newForm.append(key, value);
+            //         });
+            //         newForm.append("folder", "my-name");
+            //         return newForm;
+            //     },
+            //     filesVariableName: () => 'file',
+            //     format: 'json',
+            //     method: 'POST',
+            //     withCredentials: false,
+            //     isSuccess: function (resp) {
+            //         console.log(resp)
+            //         return resp && resp.url; // Make sure your server returns this
+            //     },
+            //     defaultHandlerSuccess: function (resp) {
+            //         console.log("Uploaded:", resp);
+            //     },
+            //     error: function (e) {
+            //         console.error("Upload error", e);
+            //     }
+            // },
+
+            // uploader: {
+            //     insertImageAsBase64URI: false, // prevent base64 fallback
+            //     url: '', // disable default upload
+            // },
+
+            // filebrowser: {
+            //     ajax: {
+            //         url: '/api/files', // Your file browser endpoint
+            //         method: 'POST',
+            //     }
+            // },
+
+            fullsize: true, // Initialize editor in fullscreen mode
+            globalFullSize: false, // Maintain fullscreen across page changes
+            // enableDragAndDropFileToEditor: true,
+
+            // Font configuration
+            defaultFontSizePoints: 'pt',
+            font: {
+                list: {
+                    'Roboto, sans-serif': 'Roboto',
+                    'Arial, sans-serif': 'Arial',
+                    'Times New Roman, serif': 'Times New Roman'
+                }
+            },
+            buttons: [
+                'source', '|',
+                'bold', 'italic', 'underline', 'strikethrough', '|',
+                'ul', 'ol', '|',
+                'outdent', 'indent', '|',
+                'font', 'fontsize', 'brush', 'paragraph', '|',
+                'image', 'video', 'table', 'link', '|',
+                'left', 'center', 'right', 'justify', '|',
+                'undo', 'redo', '|',
+                'hr', 'eraser', 'fullsize', 'print'
+            ],
+            buttonsXS: [
+                'bold', 'italic', 'underline', '|',
+                'ul', 'ol', '|',
+                'undo', 'redo', '|',
+                'fullsize'
+            ],
+            autofocus: true,
+            spellcheck: true,
+            toolbarButtonSize: 'medium',
+            showCharsCounter: true,
+            showWordsCounter: true,
+            showXPathInStatusbar: true,
+            height: '100dvh',
+            width: "100%",
+            iframe: true,
+            statusbar: true,
+            toolbarAdaptive: true,
+            allowTabNavigation: true,
+            disablePlugins: ['mobile'],
+            enableDragAndDropFileToEditor: true
+        });
+
+        // Send content to parent
+        function sendEditorContent() {
+            const content = editor.value; // or editor.getEditorValue()
+            window.parent.postMessage({
+                type: 'EDITOR_CONTENT',
+                content
+            }, '*'); // Ideally, replace '*' with your parent domain for security
+        }
+
+        window.addEventListener('message', (event) => {
+            // Optionally check origin
+            if (event.data?.type === 'SET_EDITOR_CONTENT') {
+                const content = event.data.content;
+                if (typeof content === 'string') {
+                    editor.value = content; // ✅ sets content in Jodit
+                }
+            }
+        });
+
+
+        // Handle content change
+        editor.events.on('blur', () => {
+            sendEditorContent();
+        });
+
+        // Handle image upload response
+        editor.events.on('afterUpload', (resp) => {
+            console.log('Upload response:', resp);
+        });
+
+        window.addEventListener("submit", (e) => e.preventDefault(), true);
+
+        // Fullscreen event handlers
+        editor.events.on('toggleFullSize', (isFullSize) => {
+            console.log(`Fullscreen mode: ${isFullSize ? 'ON' : 'OFF'}`);
+            if (isFullSize) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+    </script>
+</body>
+
+</html>

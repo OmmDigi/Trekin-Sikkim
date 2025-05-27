@@ -4,16 +4,24 @@ import { TSteps } from "@/types";
 interface StepperProps {
   currentStep: number;
   steps: TSteps[];
+  onClick?: (clickedStep: number) => void;
 }
 
-export const Stepper: React.FC<StepperProps> = ({ currentStep, steps }) => {
+export const Stepper: React.FC<StepperProps> = ({
+  currentStep,
+  steps,
+  onClick,
+}) => {
   return (
     <div className="relative flex w-full items-center justify-between">
       {steps.map((step) => (
-        <div
+        <button
           key={step.id}
+          onClick={() => {
+            onClick?.(step.id);
+          }}
           className={cn(
-            "relative flex flex-col items-center text-sm",
+            "relative flex flex-col items-center text-sm cursor-pointer",
             currentStep > step.id && "text-primary",
             currentStep === step.id && "font-semibold text-yellow-500"
           )}
@@ -52,7 +60,7 @@ export const Stepper: React.FC<StepperProps> = ({ currentStep, steps }) => {
             )}
           </div>
           <div className="mt-2">{step.label}</div>
-        </div>
+        </button>
       ))}
       {/* <div className="h-0.5 left-10 w-[60%] bg-primary absolute top-4"></div> */}
     </div>

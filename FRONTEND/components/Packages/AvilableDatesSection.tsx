@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import AvilableDateCheckbox from "./AvilableDateCheckbox";
 import Button from "../Button";
 import { Check } from "lucide-react";
+import CheckBox from "../CheckBox";
 
 interface IProps {
   package_id: number;
@@ -121,11 +122,11 @@ export default async function AvilableDatesSection({
               </div>
             </div>
 
-            <div className="flex justify-end">
+            {/* <div className="flex justify-end">
               {item.avilibility_color === "Red" ? null : (
                 <AvilableDateCheckbox key={item.id} date_id={item.id} />
               )}
-            </div>
+            </div> */}
 
             {/* <AvilableDateCheckbox key={item.id} date_id={item.id} /> */}
 
@@ -135,19 +136,11 @@ export default async function AvilableDatesSection({
             {/* <span>Choose Date</span>
             </button> */}
 
-            {/* <button className="flex items-center gap-2">
-              <div
-                className={cn(
-                  "size-5 border rounded-md border-accent",
-                  selectedDates.includes(`${item.id}`)
-                    ? "bg-accent text-secondary flex items-center justify-center"
-                    : ""
-                )}
-              >
-                <Check color="#fff" className="size-3.5" />
-              </div>
-              <span>Choose Date</span>
-            </button> */}
+            <CheckBox
+              isChecked={selectedDates.includes(`${item.id}`)}
+              key="date_id"
+              value={`${item.id}`}
+            />
           </li>
         ))}
       </ul>

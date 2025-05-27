@@ -7,7 +7,6 @@ import dotenv from "dotenv";
 import { viewRoute } from "./routes/view.routes";
 import cors from "cors";
 
-
 // Load environment variables based on NODE_ENV
 if (process.env.NODE_ENV === "development") {
   dotenv.config({ path: ".env.local", override: true });
@@ -15,22 +14,28 @@ if (process.env.NODE_ENV === "development") {
   dotenv.config({ path: ".env", override: true });
 }
 
-
 const app = express();
 
 const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS
   ? process.env.ALLOWED_ORIGINS.split(",")
   : ["http://localhost:3000", "http://localhost:3001"];
 
+// app.use(
+//   cors({
+//     origin: function (origin, callback) {
+//       if (!origin || ALLOWED_ORIGINS.includes(origin)) {
+//         callback(null, true);
+//       } else {
+//         callback(null, false); // ✅ Deny, but no error thrown
+//       }
+//     },
+//     credentials: true,
+//   })
+// );
+
 app.use(
   cors({
-    origin: function (origin, callback) {
-      if (!origin || ALLOWED_ORIGINS.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(null, false); // ✅ Deny, but no error thrown
-      }
-    },
+    origin: "*",
     credentials: true,
   })
 );

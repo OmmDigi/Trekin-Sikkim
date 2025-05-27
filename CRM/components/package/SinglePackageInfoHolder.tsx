@@ -5,7 +5,7 @@ import { Stepper } from "../Stepper";
 import DepartureDate from "./DepartureDate";
 import FaqEditor from "./FaqEditor";
 import Itinerary from "./Itinerary";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import OtherSteps from "./OtherSteps";
 import Overview from "./Overview";
 import AddGalleryItem from "./AddGalleryItem";
@@ -57,12 +57,18 @@ const STEPS = [
 
 export default function SinglePackageInfoHolder() {
   const searchParams = useSearchParams();
+  const route = useRouter();
   const currentStep = parseInt(searchParams.get("step") || "1");
 
   return (
     <div className="space-y-10 relative">
       <Stepper
         currentStep={currentStep}
+        onClick={(clickedStep) => {
+          const newSearchParams = new URLSearchParams(searchParams);
+          newSearchParams.set("step", clickedStep.toString());
+          route.push(`?${newSearchParams.toString()}`);
+        }}
         steps={STEPS.map((item) => ({
           id: item.id,
           label: item.label,

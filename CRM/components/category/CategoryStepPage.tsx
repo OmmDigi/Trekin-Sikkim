@@ -6,6 +6,7 @@ import { Stepper } from "../Stepper";
 import { CategoryBasicInfo } from "./CategoryBasicInfo";
 import AddGalleryItem from "../package/AddGalleryItem";
 import EditCategoryPageContent from "./EditCategoryPageContent";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface IProps {
   category_id: number;
@@ -19,6 +20,9 @@ const STEPS: TSteps[] = [
 ];
 
 export default function CategoryStepPage({ category_id, step }: IProps) {
+  const searchParams = useSearchParams();
+  const route = useRouter();
+
   return (
     <div className="space-y-10 relative">
       <Stepper
@@ -27,6 +31,11 @@ export default function CategoryStepPage({ category_id, step }: IProps) {
           id: item.id,
           label: item.label,
         }))}
+        onClick={(clickedStep) => {
+          const newSearchParams = new URLSearchParams(searchParams);
+          newSearchParams.set("step", clickedStep.toString());
+          route.push(`?${newSearchParams.toString()}`);
+        }}
       />
 
       {step === 1 ? (

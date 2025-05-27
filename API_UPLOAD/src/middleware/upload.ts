@@ -8,18 +8,15 @@ import { extractFolderName } from "../utils/extractFolderName";
 
 const storage = multer.diskStorage({
   destination: (req: Request, file, cb) => {
-    if (!req.body.folder) {
-      cb(
-        new ErrorHandler(
-          400,
-          "Folder name is required ex : /images"
-        ) as any,
-        ""
-      );
-      return;
-    }
+    // if (!req.body.folder) {
+    //   cb(
+    //     new ErrorHandler(400, "Folder name is required ex : /images") as any,
+    //     ""
+    //   );
+    //   return;
+    // }
 
-    const folder = extractFolderName(req.body.folder); // user passed folder name
+    const folder = extractFolderName(req.body.folder || "/any"); // user passed folder name
     const access = req.body.access || "public";
 
     const UPLOADING_FOLDER_NAME =

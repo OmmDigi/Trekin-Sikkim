@@ -183,6 +183,7 @@ export default function CKEditorComponent({
     },
     extraPlugins: [uploadPlugin],
     plugins: [
+      Clipboard,
       AccessibilityHelp,
       Alignment,
       Autoformat,
@@ -246,8 +247,7 @@ export default function CKEditorComponent({
       TableToolbar,
       TextTransformation,
       Underline,
-      Undo,
-      Clipboard,
+      Undo
     ],
     balloonToolbar: ["bold", "italic", "|", "link", "insertImage"],
     blockToolbar: [
@@ -473,7 +473,8 @@ export default function CKEditorComponent({
                   onReady={onEditorReady}
                   onAfterDestroy={onEditorDestroy}
                   editor={DecoupledEditor}
-                  config={editorConfig}
+                  // config={editorConfig}
+                  config = {editorConfig}
                 />
               )}
             </div>
