@@ -72,50 +72,11 @@ export default async function page({ params }: IProps) {
         </div>
       </div>
 
-      <div
+      <article
         dangerouslySetInnerHTML={{ __html: singleBlog.data.blog_content }}
-        className="leading-8 tracking-wider text-sm font-primary space-y-8 bg-light-gray rounded-4xl p-10 pt-10 pb-10 max-sm:pb-8 max-sm:space-y-8 max-sm:px-2.5 max-sm:bg-transparent max-sm:pt-3.5"
-      >
-        {/* <p>
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aliquid,
-          accusamus suscipit. Nemo earum necessitatibus reprehenderit dicta nam
-          distinctio, quo iste tempore, perspiciatis laudantium libero
-          blanditiis neque molestiae veritatis harum rem!Lorem ipsum dolor, sit
-          amet consectetur adipisicing elit. Aliquid, accusamus suscipit. Nemo
-          earum necessitatibus reprehenderit dicta nam distinctio, quo iste
-          tempore, perspiciatis laudantium libero blanditiis neque molestiae
-          veritatis harum rem!Lorem ipsum dolor, sit amet consectetur
-          adipisicing elit. Aliquid, accusamus suscipit. harum rem!
-        </p>
-
-        <p>
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aliquid,
-          accusamus suscipit. Nemo earum necessitatibus reprehenderit dicta nam
-          distinctio, quo iste tempore, perspiciatis laudantium libero
-          blanditiis neque molestiae veritatis harum rem!Lorem ipsum dolor, sit
-          amet consectetur adipisicing elit.
-        </p>
-
-        <p>
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aliquid,
-          accusamus suscipit. Nemo earum necessitatibus reprehenderit dicta nam
-          distinctio, quo iste tempore, perspiciatis laudantium libero
-          blanditiis neque molestiae veritatis harum rem!Lorem ipsum dolor, sit
-          amet consectetur adipisicing elit. Aliquid, accusamus suscipit. Nemo
-          earum necessitatibus reprehenderit dicta nam distinctio, quo iste
-          tempore, perspiciatis laudantium libero blanditiis neque molestiae
-          veritatis harum rem!Lorem ipsum dolor, sit amet consectetur
-          adipisicing elit. Aliquid, accusamus suscipit. harum rem!
-        </p>
-
-        <p>
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aliquid,
-          accusamus suscipit. Nemo earum necessitatibus reprehenderit dicta nam
-          distinctio, quo iste tempore, perspiciatis laudantium libero
-          blanditiis neque molestiae veritatis harum rem!Lorem ipsum dolor, sit
-          amet consectetur adipisicing elit.
-        </p> */}
-      </div>
+        // className="!prose leading-8 tracking-wider text-sm font-primary space-y-8 bg-light-gray rounded-4xl p-10 pt-10 pb-10 max-sm:pb-8 max-sm:space-y-8 max-sm:px-2.5 max-sm:bg-transparent max-sm:pt-3.5"
+        className="prose min-w-full"
+      ></article>
 
       {/* <div className="flex items-center justify-between">
         <button className="flex items-center gap-2.5 hover:bg-[#ffd2308c] px-3 cursor-pointer">
