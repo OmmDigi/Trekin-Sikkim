@@ -128,6 +128,10 @@ export const getSingleBlog = asyncErrorHandler(
         visible: true,
         [search_with]: value.blog_id,
       };
+    } else {
+      query = {
+        [search_with]: value.blog_id,
+      };
     }
 
     const { filterQuery, filterValues } = filterToSql(query);

@@ -128,7 +128,7 @@ export default async function AvilableDatesSection({
               )}
             </div> */}
 
-            {/* <AvilableDateCheckbox key={item.id} date_id={item.id} /> */}
+            <AvilableDateCheckbox key={item.id} date_id={item.id} />
 
             {/* <button className="p-3 outline ml-1.5 rounded-full flex items-center justify-center gap-2.5"> */}
             {/* <input type="checkbox" /> */}
@@ -136,11 +136,11 @@ export default async function AvilableDatesSection({
             {/* <span>Choose Date</span>
             </button> */}
 
-            <CheckBox
+            {/* <CheckBox
               isChecked={selectedDates.includes(`${item.id}`)}
               key="date_id"
               value={`${item.id}`}
-            />
+            /> */}
           </li>
         ))}
       </ul>

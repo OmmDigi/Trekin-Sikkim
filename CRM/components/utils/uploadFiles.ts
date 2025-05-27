@@ -1,6 +1,7 @@
 import uploadApi from "@/lib/upload-api";
 import { IResponse, IUploadedFile } from "@/types";
 import { AxiosError } from "axios";
+import { convartImgToWebp } from "./convartImgToWebp";
 
 interface IProps<E = AxiosError<IResponse>> {
   files: File[];
@@ -19,7 +20,7 @@ export const uploadFiles = async ({
   onUploaded,
   onUploading,
   convartToWebp = false,
-  onError
+  onError,
 }: IProps) => {
   let data: IUploadedFile[] = [];
   let error: AxiosError<IResponse> | null = null;
@@ -30,10 +31,11 @@ export const uploadFiles = async ({
 
   formData.set("folder", folder);
 
-  fileArray.forEach((file) => {
-    formData.append("files", file);
-  });
-
+  for (const file of fileArray) {
+    const convartedData = await convartImgToWebp(file);
+    formData.append("files", convartedData);
+  }
+  
   try {
     const response = await uploadApi.post<IResponse<IUploadedFile[]>>(
       "/api/v1/upload/multiple",
@@ -54,7 +56,7 @@ export const uploadFiles = async ({
     data = response.data.data;
   } catch (error) {
     error = error as AxiosError<IResponse>;
-    onError?.(error as AxiosError<IResponse>)
+    onError?.(error as AxiosError<IResponse>);
   } finally {
     return { data, error };
   }
