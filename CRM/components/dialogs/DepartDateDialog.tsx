@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useTransition } from "react";
 import { Dialog, DialogContent, DialogTitle } from "../ui/dialog";
 import { ScrollArea } from "../ui/scroll-area";
-import { z } from "zod";
 import { useForm } from "react-hook-form";
 import {
   Form,
@@ -28,9 +27,8 @@ import {
   IDepartureDateResponse,
   TDepartureDate,
 } from "@/features/package/schemaAndTypes";
-import { useQueries, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import api from "@/lib/axios";
-import LoadingLayout from "../LoadingLayout";
 import LoadingHandler from "../LoadingHandler";
 import { IResponse } from "@/types";
 import { AxiosError } from "axios";
@@ -67,7 +65,8 @@ export default function DepartDateDialog({
       to_date: "",
       max_seats: 0,
       avilibility_text: "",
-      avilibility_color : "Green"
+      avilibility_color: "Green",
+      is_active : 1,
     },
   });
 
@@ -85,7 +84,7 @@ export default function DepartDateDialog({
         to_date: data.data.to_date,
         max_seats: data.data.max_seats,
         avilibility_text: data.data.avilibility_text,
-        avilibility_color : data.data.avilibility_color
+        avilibility_color: data.data.avilibility_color,
       });
     },
   });
@@ -98,7 +97,8 @@ export default function DepartDateDialog({
         to_date: "",
         max_seats: 0,
         avilibility_text: "Avilable",
-        avilibility_color : "Green"
+        avilibility_color: "Green",
+        is_active: 1,
       });
     }
   }, [departure_date_id]);
@@ -142,18 +142,16 @@ export default function DepartDateDialog({
   };
 
   useEffect(() => {
-
-     const today = new Date();
-     const year = today.getFullYear();
-     const month = MONTH_LIST.indexOf(form.watch("for_month")) + 1;
-     const formattedDate = `${year}-${month.toString().padStart(2, '0')}-01`;
-     form.setValue("from_date", formattedDate);
-     form.setValue("to_date", formattedDate)
-
-  }, [form.watch("for_month")])
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = MONTH_LIST.indexOf(form.watch("for_month")) + 1;
+    const formattedDate = `${year}-${month.toString().padStart(2, "0")}-01`;
+    form.setValue("from_date", formattedDate);
+    form.setValue("to_date", formattedDate);
+  }, [form.watch("for_month")]);
 
   return (
-    <Dialog open={isOpen} onOpenChange={setOpen}>
+    <Dialog key={`${isOpen}`} open={isOpen} onOpenChange={setOpen}>
       <DialogContent>
         <DialogTitle>Add New Item</DialogTitle>
         <LoadingHandler error={error} length={1} loading={isFetching}>
@@ -285,6 +283,33 @@ export default function DepartDateDialog({
                     )}
                   />
                 </div>
+
+                <FormField
+                  control={form.control}
+                  name="is_active"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Visible *</FormLabel>
+                      <Select
+                        value={field.value.toString()}
+                        onValueChange={(value) =>
+                          field.onChange(parseInt(value))
+                        }
+                      >
+                        <FormControl className="w-full">
+                          <SelectTrigger>
+                            <SelectValue placeholder="Choose Visibility" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value={`1`}>True</SelectItem>
+                          <SelectItem value={`0`}>False</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
                 <ButtonLoading loading={isPending} type="submit">
                   Submit

@@ -65,7 +65,7 @@ export default function PackageItem({
           <Button>
             <CustomLink
               className="flex items-center gap-3"
-              href={`/dashboard/packages/${packageItem.id}`}
+              href={`/dashboard/packages/${packageItem.id}?step=1&package_id=${packageItem.id}`}
             >
               <Pencil />
               Edit

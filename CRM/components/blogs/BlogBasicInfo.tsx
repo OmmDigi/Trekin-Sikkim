@@ -58,6 +58,8 @@ const blogSchema = z.object({
 
   thumbnail_alt_tag: z.string(),
 
+  slug: z.string().min(1),
+
   visible: z.boolean(),
 });
 
@@ -108,6 +110,7 @@ export default function BlogBasicInfo({ blog_id, currentStep }: IProps) {
         thumbnail: data.data.thumbnail,
         thumbnail_alt_tag: data.data.thumbnail_alt_tag,
         visible: data.data.visible,
+        slug: data.data.slug,
       });
     },
   });
@@ -180,10 +183,27 @@ export default function BlogBasicInfo({ blog_id, currentStep }: IProps) {
                 name="heading"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Choose Blog Heading</FormLabel>
+                    <FormLabel>Type Blog Heading</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="Enter blog heading"
+                        onChange={(e) => field.onChange(e.currentTarget.value)}
+                        defaultValue={field.value}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="slug"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Type Blog Slug</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter blog slug"
                         onChange={(e) => field.onChange(e.currentTarget.value)}
                         defaultValue={field.value}
                       />

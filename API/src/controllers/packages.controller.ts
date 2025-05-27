@@ -4,9 +4,7 @@ import { pool } from "../config/db";
 import asyncErrorHandler from "../middlewares/asyncErrorHandler";
 import { CustomRequest } from "../types";
 import { ApiResponse } from "../utils/ApiResponse";
-import { createSlug } from "../utils/createSlug";
 import { ErrorHandler } from "../utils/ErrorHandler";
-import { filterToSql } from "../utils/filterToSql";
 import { generatePlaceholders } from "../utils/generatePlaceholders";
 import {
   objectToSqlConverterUpdate,
@@ -62,7 +60,7 @@ export const getSinglePackagePage = asyncErrorHandler(async (req, res) => {
       ON a.additional_id = paa.additional_id
 
       LEFT JOIN package_and_media pm
-      ON pm.package_id = p.id AND pm.where_to_use = 'banner'
+      ON pm.package_id = p.id AND pm.where_to_use = 'thumbnail'
 
       LEFT JOIN media_item mi
       ON mi.media_item_id = pm.media_item_id
@@ -128,7 +126,7 @@ export const getPackageList = asyncErrorHandler(
             SELECT pam.*
             FROM package_and_media pam
             WHERE pam.package_id = pkg.id
-              AND pam.where_to_use = 'banner'
+              AND pam.where_to_use = 'thumbnail'
             ORDER BY pam.id
             LIMIT 1
           ) pam ON true
@@ -168,7 +166,7 @@ export const getPackageList = asyncErrorHandler(
       SELECT pam.*
       FROM package_and_media pam
       WHERE pam.package_id = pkg.id
-        AND pam.where_to_use = 'banner'
+        AND pam.where_to_use = 'thumbnail'
       ORDER BY pam.id
       LIMIT 1
     ) pam ON true
@@ -240,17 +238,14 @@ export const updateSinglePackageBasicInfo = asyncErrorHandler(
     if (error)
       throw new ErrorHandler(400, error.message, error.details[0].context?.key);
 
-    const packageSlug = createSlug(value.package_name);
+    // const packageSlug = createSlug(value.package_name);
 
     const additionals = value.additionals as number[];
     delete value.additionals;
     const packageID = value.package_id;
     delete value.package_id;
 
-    const { keys, values, paramsNum } = objectToSqlConverterUpdate({
-      ...value,
-      slug: packageSlug,
-    });
+    const { keys, values, paramsNum } = objectToSqlConverterUpdate(value);
     values.push(packageID);
 
     const placeholdernum = generatePlaceholders(additionals.length, 2);
@@ -259,6 +254,21 @@ export const updateSinglePackageBasicInfo = asyncErrorHandler(
 
     try {
       await client.query("BEGIN");
+
+      const result = await client.query(
+        'SELECT EXISTS (SELECT 1 FROM packages WHERE slug = $1 AND id <> $2) AS "isExist"',
+        [value.slug, packageID]
+      );
+
+      const isExist = result.rows[0].isExist;
+
+      if (isExist) {
+        throw new ErrorHandler(
+          400,
+          "Package Slug Is Already Exist Please Try Another Slug",
+          "slug"
+        );
+      }
 
       await client.query(
         `UPDATE packages SET ${keys} WHERE id = $${paramsNum}`,
@@ -301,16 +311,26 @@ export const addPackageBasicInfo = asyncErrorHandler(async (req, res) => {
   const additionals = value.additionals as number[];
   delete value.additionals;
 
-  const packageSlug = createSlug(value.package_name);
-
-  const { columns, params, values } = objectToSqlInsert({
-    ...value,
-    slug: packageSlug,
-  });
+  const { columns, params, values } = objectToSqlInsert(value);
 
   const client = await pool.connect();
   try {
     await client.query("BEGIN");
+
+    const result = await client.query(
+      'SELECT EXISTS (SELECT 1 FROM packages WHERE slug = $1) AS "isExist"',
+      [value.slug]
+    );
+
+    const isExist = result.rows[0].isExist;
+
+    if (isExist) {
+      throw new ErrorHandler(
+        400,
+        "Package Slug Is Already Exist Please Try Another Slug",
+        "slug"
+      );
+    }
 
     const { rows } = await client.query(
       `INSERT INTO packages ${columns} VALUES ${params} RETURNING id`,
@@ -366,50 +386,106 @@ export const getSingleDepartureDate = asyncErrorHandler(async (req, res) => {
   res.status(200).json(new ApiResponse(200, "Single Departure Date", rows[0]));
 });
 
-export const getDepartureDates = asyncErrorHandler(async (req, res) => {
-  const { error, value } = VSinglePackageInfo.validate(req.params || {});
-  if (error)
-    throw new ErrorHandler(400, error.message, error.details[0].context?.key);
+export const getDepartureDates = asyncErrorHandler(
+  async (req: CustomRequest, res) => {
+    const { error, value } = VSinglePackageInfo.validate(req.params || {});
+    if (error)
+      throw new ErrorHandler(400, error.message, error.details[0].context?.key);
 
-  const { error: filterError, value: filterValue } = VDepartureFilter.validate(
-    req.query
-  );
-  if (filterError) throw new ErrorHandler(400, filterError.message);
+    const { error: filterError, value: filterValue } =
+      VDepartureFilter.validate(req.query);
+    if (filterError) throw new ErrorHandler(400, filterError.message);
 
-  let filterQuery = "WHERE package_id = $1";
-  const filterValuesList: string[] = [value.package_id];
-  let placeholdernum = 2;
+    let filterQuery = "WHERE package_id = $1";
+    const filterValuesList: string[] = [value.package_id];
+    let placeholdernum = 2;
 
-  if (filterValue.for_month) {
-    filterQuery += ` AND for_month = $${placeholdernum}`;
-    filterValuesList.push(filterValue.for_month);
-    placeholdernum++;
-  }
+    if (filterValue.for_month) {
+      filterQuery += ` AND for_month = $${placeholdernum}`;
+      filterValuesList.push(filterValue.for_month);
+      placeholdernum++;
+    }
 
-  if (filterValue.max_seats_is_not_zero) {
-    filterQuery += ` AND max_seats > 0`;
-  }
+    if (filterValue.max_seats_is_not_zero) {
+      filterQuery += ` AND max_seats > 0`;
+    }
 
-  if (filterQuery === "WHERE") {
-    filterQuery = "";
-  }
+    if (req.user_info?.role !== "Admin") {
+      if (filterQuery === "WHERE") {
+        filterQuery += ` is_active = 1`;
+      } else {
+        filterQuery += ` AND is_active = 1`;
+      }
+    }
 
-  const { rows } = await pool.query(
-    `
-      SELECT 
-        * 
-      FROM 
-      packages_departure_date
-      ${filterQuery}
-      ORDER BY from_date ASC
+    if (filterQuery === "WHERE") {
+      filterQuery = "";
+    }
+
+    const client = await pool.connect();
+
+    const dataToReturn: { months: string[]; dates_info: any[] } = {
+      months: [],
+      dates_info: [],
+    };
+
+
+    try {
+      await client.query("BEGIN");
+
+      const { rows: avilableMonths } = await client.query(
+        `
+          SELECT for_month
+            FROM packages_departure_date
+            WHERE is_active = 1 AND package_id = $1
+            GROUP BY for_month
+            ORDER BY 
+              CASE for_month
+                WHEN 'January' THEN 1
+                WHEN 'February' THEN 2
+                WHEN 'March' THEN 3
+                WHEN 'April' THEN 4
+                WHEN 'May' THEN 5
+                WHEN 'June' THEN 6
+                WHEN 'July' THEN 7
+                WHEN 'August' THEN 8
+                WHEN 'September' THEN 9
+                WHEN 'October' THEN 10
+                WHEN 'November' THEN 11
+                WHEN 'December' THEN 12
+                ELSE 13
+              END;
       `,
-    filterValuesList
-  );
+      [value.package_id]
+      );
 
-  res
-    .status(200)
-    .json(new ApiResponse(200, "Departure Date Of A Package", rows));
-});
+      dataToReturn.months = avilableMonths.map((item) => item.for_month);
+
+      const { rows } = await client.query(
+        `
+        SELECT
+          *
+        FROM
+        packages_departure_date
+        ${filterQuery}
+        ORDER BY from_date ASC
+      `,
+        filterValuesList
+      );
+
+      dataToReturn.dates_info = rows;
+
+      await client.query("COMMIT");
+      client.release();
+
+      res.status(200).json(new ApiResponse(200, "Departure Date Of A Package", dataToReturn));
+    } catch (error: any) {
+      await client.query("ROLLBACK");
+      client.release();
+      throw new ErrorHandler(400, error.message);
+    }
+  }
+);
 
 export const createDepartureDate = asyncErrorHandler(async (req, res) => {
   const { error } = VCreateDepartureDate.validate(req.body || {});
@@ -520,8 +596,6 @@ export const getSingleGalleryInfo = asyncErrorHandler(async (req, res) => {
   if (error)
     throw new ErrorHandler(400, error.message, error.details[0].context?.key);
 
-  console.log(value);
-
   const { rows, rowCount } = await pool.query(
     "SELECT * FROM package_and_media WHERE id = $1",
     [value.id]
@@ -577,7 +651,10 @@ export const getPackageFaq = asyncErrorHandler(async (req, res) => {
       ${withContent ? "faq_detail," : ""}
       created_at 
     FROM package_faq 
-    WHERE package_id = $1`,
+    WHERE package_id = $1
+
+    ORDER BY created_at ASC
+    `,
     [value.package_id]
   );
 
@@ -651,7 +728,10 @@ export const getPackageItinerary = asyncErrorHandler(async (req, res) => {
       ${withContent ? "itinerary_details," : ""}
       created_at 
     FROM package_itinerary 
-    WHERE package_id = $1`,
+    WHERE package_id = $1
+
+    ORDER BY created_at ASC
+    `,
     [value.package_id]
   );
 

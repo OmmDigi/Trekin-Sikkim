@@ -16,7 +16,7 @@ function EnquireDialog() {
   return (
     <DialogBody
       theme="white"
-      className="!rounded-md relative !shadow-2xl p-10 font-primary w-[45rem] mt-10 bg-green-100 space-y-6"
+      className="!rounded-md relative !shadow-2xl p-10 font-primary w-[45rem] mt-10 bg-green-100 space-y-6 max-sm:w-full max-sm:h-full max-sm:mt-0 max-sm:overflow-y-auto"
     >
       <X
         onClick={() => {
@@ -38,7 +38,7 @@ function EnquireDialog() {
       />
 
       <form className="space-y-3">
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-3 max-sm:grid-cols-1">
           <Input label="Full Name" placeholder="Enter your name *" />
           <Input label="Email" placeholder="Enter your email id" />
           <Input
@@ -52,7 +52,7 @@ function EnquireDialog() {
           {/* <Input label="Arrival Date" type="date" />
           <Input label="Departure Date" type="date" /> */}
         </div>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-4 max-sm:grid-cols-1">
           <Dropdown
             onSelect={() => {}}
             label="Choose Trip Type"

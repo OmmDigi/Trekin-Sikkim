@@ -15,6 +15,8 @@ export const VAddPackageBasicInfo = Joi.object({
     })
     .required(),
 
+  slug: Joi.string().required(),
+
   duration: Joi.string()
     .min(1)
     .messages({
@@ -117,6 +119,8 @@ export const VUpdatePackageBasicInfo = Joi.object({
       "string.min": "Package Name must be at least 2 characters.",
     })
     .required(),
+
+  slug: Joi.string().required(),
 
   duration: Joi.string()
     .min(1)
@@ -222,9 +226,9 @@ export const VGetSinglePackagePageInfo = Joi.object({
 // Departure Date
 
 export const VDepartureFilter = Joi.object({
-  for_month : Joi.string().optional(),
-  max_seats_is_not_zero : Joi.boolean().optional()
-})
+  for_month: Joi.string().optional(),
+  max_seats_is_not_zero: Joi.boolean().optional(),
+});
 
 export const VSingle = Joi.object({
   id: Joi.number().required(),
@@ -238,6 +242,7 @@ export const VCreateDepartureDate = Joi.object({
   max_seats: Joi.number().required(),
   avilibility_text: Joi.string().optional().allow(""),
   avilibility_color: Joi.string().valid("Red", "Green", "Yellow"),
+  is_active: Joi.number().required(),
 });
 
 export const VUpdateDepartureDate = Joi.object({
@@ -249,6 +254,7 @@ export const VUpdateDepartureDate = Joi.object({
   max_seats: Joi.number().required(),
   avilibility_text: Joi.string().optional().allow(""),
   avilibility_color: Joi.string().valid("Red", "Green", "Yellow"),
+  is_active: Joi.number().required(),
 });
 
 // Gallery
@@ -258,8 +264,8 @@ export const VAddPackageGallery = Joi.object({
     .items(
       Joi.object({
         media_id: Joi.number().required(),
-        item_link : Joi.string().optional(),
-        alt_tag : Joi.string().optional(),
+        item_link: Joi.string().optional(),
+        alt_tag: Joi.string().optional(),
         where_to_use: Joi.string().required(),
       })
     )
@@ -323,9 +329,9 @@ export const VUpdatePackageAndOther = Joi.object({
 
 // package and seo
 export const VPackageAndSeo = Joi.object({
-  package_id : Joi.number().required(),
+  package_id: Joi.number().required(),
   meta_title: Joi.string().required(),
   meta_description: Joi.string().required(),
   meta_keywords: Joi.string().required(),
   canonical: Joi.string().optional(),
-})
+});

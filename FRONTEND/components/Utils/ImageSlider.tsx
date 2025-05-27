@@ -90,13 +90,6 @@ export default function ImageSlider({
       </Swiper>
 
       <div
-        // className={`absolute top-0 bottom-0 left-3.5 z-20 flex ${
-        //   controllerPosition === "middle"
-        //     ? "items-center"
-        //     : controllerPosition == "top"
-        //     ? "items-start !top-1.5"
-        //     : "items-end !bottom-2.5"
-        // } justify-center`}
         className={cn(
           "absolute top-0 bottom-0 left-3.5 z-20 flex",
           controllerPosition === "middle"
@@ -134,14 +127,6 @@ export default function ImageSlider({
           controllerClassName,
           "justify-center"
         )}
-
-        //   className = {`absolute top-0 bottom-0 right-3.5 z-20 flex ${
-        //   controllerPosition === "middle"
-        //     ? "items-center"
-        //     : controllerPosition == "top"
-        //     ? "items-start !top-1.5"
-        //     : "items-end !bottom-2.5"
-        // } justify-center`}
       >
         <Button
           disabled={sliderPosition === "end"}

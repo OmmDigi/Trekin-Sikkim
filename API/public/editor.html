@@ -156,14 +156,14 @@
 
         // Handle image upload response
         editor.events.on('afterUpload', (resp) => {
-            console.log('Upload response:', resp);
+            // console.log('Upload response:', resp);
         });
 
         window.addEventListener("submit", (e) => e.preventDefault(), true);
 
         // Fullscreen event handlers
         editor.events.on('toggleFullSize', (isFullSize) => {
-            console.log(`Fullscreen mode: ${isFullSize ? 'ON' : 'OFF'}`);
+            // console.log(`Fullscreen mode: ${isFullSize ? 'ON' : 'OFF'}`);
             if (isFullSize) {
                 document.body.style.overflow = 'hidden';
             } else {

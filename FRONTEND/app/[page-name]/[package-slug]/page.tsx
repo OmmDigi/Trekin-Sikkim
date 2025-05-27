@@ -166,38 +166,22 @@ export default async function page({ params, searchParams }: IProps) {
       <section className="w-full flex gap-x-10 gap-y-3.5 overflow-visible max-sm:flex-col">
         {/* Left Side */}
         <div className="flex-1 overflow-hidden space-y-5">
-          {/* <ul className="grid grid-cols-3 h-96 max-sm:grid-cols-2">
-              {post_images.map((image, index) => (
-                <li
-                  className={`${
-                    index === 0 ? "row-span-3 max-sm:row-span-2" : ""
-                  } overflow-hidden p-1.5`}
-                  key={index}
-                >
-                  <Image
-                    className="size-full object-cover rounded-2xl"
-                    src={image}
-                    alt="Image"
-                    width={1200}
-                    height={1200}
-                  />
-                </li>
-              ))}
-            </ul> */}
-
           <div className="relative group/package_banner rounded-3xl max-h-[25rem] max-sm:max-h-60 overflow-hidden">
-            <ImageSlider
-              wrapperCss="static"
-              images={data.data.banner_info.map((item) => ({
-                url: item.item_link,
-                alt_tag: item.alt_tag || "",
-              }))}
-              sliderPreview={1}
-              className="h-full w-full overflow-hidden rounded-2xl"
-              controllerClassName="z-30"
-            />
+            {data.data.banner_info && data.data.banner_info.length !== 0 ? (
+              <ImageSlider
+                wrapperCss="static"
+                images={data.data.banner_info.map((item) => ({
+                  url: item.item_link,
+                  alt_tag: item.alt_tag || "",
+                }))}
+                sliderPreview={1}
+                className="h-full w-full overflow-hidden rounded-2xl"
+                controllerClassName="z-30"
+              />
+            ) : null}
+
             <div className="absolute space-y-1 flex flex-col justify-end p-8 inset-0 fade-gradient-bottom z-20 opacity-100">
-              <h1 className="font-semibold font-primary text-white text-2xl select-none">
+              <h1 className="font-semibold font-primary text-white text-2xl select-none max-sm:text-lg">
                 {data.data.package_name}
               </h1>
 
@@ -222,7 +206,7 @@ export default async function page({ params, searchParams }: IProps) {
 
           <ul className="flex items-start gap-5 flex-wrap font-primary">
             {OVERVIEW_POINTS.map((item) => (
-              <li key={item.id} className="flex items-center gap-1.5">
+              <li key={item?.id} className="flex items-center gap-1.5">
                 <span className="size-[25px] flex items-center justify-center rounded-[50%] bg-accent text-white">
                   {item.icon}
                 </span>
@@ -266,19 +250,23 @@ export default async function page({ params, searchParams }: IProps) {
             Additional
           </h2> */}
 
-          <ul className="space-y-1.5 px-5">
+          <ul className="space-y-2.5">
             {data.data.additional.map((additionlInfo, index) => (
               <li
                 key={additionlInfo.additional_id}
-                className="text-xs py-1.5 cursor-pointer grid grid-cols-3"
+                className="text-xs py-3.5 max-sm:py-1.5 cursor-pointer flex justify-between border px-3.5 bg-red-50 border-gray-300"
               >
-                <div className="flex items-center gap-2">
-                  <span className="inline-block size-1.5 rounded-full bg-green-600 float-right"></span>
-                  <span className="text-lg underline">{additionlInfo.additional_name}</span>
-                </div>
+                <div className="flex justify-between flex-1 max-sm:flex-col max-sm:items-start">
+                  <div className="flex items-center gap-2">
+                    <span className="inline-block size-1.5 rounded-full bg-green-600 float-right"></span>
+                    <span className="text-lg">
+                      {additionlInfo.additional_name}
+                    </span>
+                  </div>
 
-                <div className="text-center block text-lg underline">
-                  ₹{additionlInfo.price_inr} / ${additionlInfo.price_usd}
+                  <div className="text-center block text-lg max-sm:pl-2.5 max-sm:text-sm">
+                    ₹{additionlInfo.price_inr} / ${additionlInfo.price_usd}
+                  </div>
                 </div>
 
                 <div className="flex justify-end">
@@ -368,23 +356,6 @@ export default async function page({ params, searchParams }: IProps) {
             </React.Suspense>
 
             <h3
-              id="faq"
-              className="text-2xl font-semibold bg-accent text-white p-1.5 px-7 inline-block rounded-tr-lg rounded-bl-lg mb-5"
-            >
-              Frequently Asked Question :{" "}
-            </h3>
-            <React.Suspense
-              fallback={
-                <Loading
-                  className="py-6"
-                  loadertext="Loading Trip Itinerary..."
-                />
-              }
-            >
-              <Faqs package_id={data.data.id} />
-            </React.Suspense>
-
-            <h3
               id="photo-gallery"
               className="text-2xl font-semibold bg-accent text-white p-1.5 px-7 inline-block rounded-tr-lg rounded-bl-lg my-5"
             >
@@ -413,6 +384,23 @@ export default async function page({ params, searchParams }: IProps) {
               }
             >
               <PhotoGallery package_id={data.data.id} />
+            </React.Suspense>
+
+            <h3
+              id="faq"
+              className="text-2xl font-semibold bg-accent text-white p-1.5 px-7 inline-block rounded-tr-lg rounded-bl-lg mb-5 mt-10"
+            >
+              Frequently Asked Question :{" "}
+            </h3>
+            <React.Suspense
+              fallback={
+                <Loading
+                  className="py-6"
+                  loadertext="Loading Trip Itinerary..."
+                />
+              }
+            >
+              <Faqs package_id={data.data.id} />
             </React.Suspense>
           </section>
 

@@ -12,4 +12,5 @@ export const categoryFormSchema = z.object({
   meta_description: z.string().min(1),
   meta_keywords: z.string().min(1),
   canonical: z.string().optional(),
+  category_slug: z.string().min(1),
 });

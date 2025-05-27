@@ -82,7 +82,7 @@ export default function PackageItem({ fromWhere, singlePackageInfo }: IProps) {
         {/* </div> */}
         <div className="p-3 space-y-2">
           <div>
-            <h2 className="font-semibold text-base line-clamp-2">
+            <h2 className="font-semibold text-base line-clamp-1">
               {singlePackageInfo.package_name}
             </h2>
 
@@ -91,7 +91,7 @@ export default function PackageItem({ fromWhere, singlePackageInfo }: IProps) {
             </p>
           </div>
           {/* <div className="h-[1px] w-full bg-slate-200"></div> */}
-          <div className="flex items-center gap-1 flex-wrap">
+          <div className="flex items-start gap-2.5 flex-col">
             {/* <button className="text-[12px] rounded-full  font-semibold px-2 py-[3px]">
             4 Days 3 Nights
           </button>

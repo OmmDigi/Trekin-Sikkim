@@ -42,6 +42,8 @@ const formSchema = z.object({
     })
     .max(255),
 
+  slug: z.string().min(1, { message: "Package Slug Is Required" }),
+
   duration: z.string().min(1, {
     message: "Duration must be at least 2 characters.",
   }),
@@ -129,12 +131,11 @@ interface IBasicInfoFunc {
 function BasicInfoFunc({ packageId, currentStep }: IBasicInfoFunc) {
   const [isPending, startTransition] = useTransition();
   const route = useRouter();
-  const { mutate } = useDoMutation();
-
   const form = useForm<FormType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       package_name: "",
+      slug: "",
       short_description: "",
       duration: "",
       best_time: "",
@@ -151,6 +152,17 @@ function BasicInfoFunc({ packageId, currentStep }: IBasicInfoFunc) {
       additionals: [],
     },
   });
+  const { mutate } = useDoMutation(
+    () => {},
+    (error) => {
+      const key = error.response?.data.key;
+      if (!key) {
+        form.setError("root", { message: error.response?.data.message });
+      } else {
+        form.setError(key as any, { message: error.response?.data.message });
+      }
+    }
+  );
 
   const apiResult = useQueries<
     [
@@ -163,6 +175,7 @@ function BasicInfoFunc({ packageId, currentStep }: IBasicInfoFunc) {
       {
         queryKey: ["get-one-package-basic-info", packageId],
         enabled: packageId !== 0,
+        refetchOnMount: true,
         queryFn: () => getSingleBasicInfo(packageId),
       },
 
@@ -233,6 +246,7 @@ function BasicInfoFunc({ packageId, currentStep }: IBasicInfoFunc) {
         category_id: data.category_id,
         is_active: data.is_active,
         additionals: data.additionals,
+        slug: data.slug,
       });
     }
   }, [apiResult[0].isSuccess, apiResult[2].isSuccess, apiResult[1].isSuccess]);

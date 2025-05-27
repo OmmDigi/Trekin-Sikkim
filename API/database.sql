@@ -311,3 +311,10 @@ ALTER TABLE blogs DROP COLUMN meta_canonical_url;
 ALTER TABLE blogs ADD COLUMN meta_canonical_url TEXT;
 
 ALTER TABLE blogs ADD COLUMN media_id INTEGER;
+
+-- new today 27-05-2025
+ALTER TABLE packages ADD CONSTRAINT unique_package_slug UNIQUE (slug);
+ALTER TABLE category ADD CONSTRAINT unique_category_slug UNIQUE (slug);
+ALTER TABLE blogs ADD CONSTRAINT unique_blogs_slug UNIQUE (slug);
+
+ALTER TABLE packages_departure_date ADD COLUMN INTEGER DEFAULT 1;

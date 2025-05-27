@@ -22,10 +22,15 @@ export const loginUser = asyncErrorHandler(async (req, res) => {
   if (error)
     throw new ErrorHandler(400, error.message, error.details[0].context?.key);
 
+  const origin = req.get("Origin") || req.get("Referer");
+
+  const accountRole = origin === process.env.CRM_HOST_URL ? "Admin" : "User";
+
   const { rowCount, rows } = await pool.query(
-    "SELECT user_id, user_name, user_role, user_password, is_verified FROM users WHERE user_email = $1 AND account_type = 'Normal'",
-    [value.user_email]
+    "SELECT user_id, user_name, user_role, user_password, is_verified FROM users WHERE user_email = $1 AND account_type = 'Normal' AND user_role = $2",
+    [value.user_email, accountRole]
   );
+
   if (rowCount === 0)
     throw new ErrorHandler(404, "Account does not exist", "user_email");
 
@@ -72,7 +77,7 @@ export const loginUser = asyncErrorHandler(async (req, res) => {
     secure: process.env.NODE_ENV === "production",
     sameSite: process.env.NODE_ENV === "production" ? "lax" : "lax",
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    domain : process.env.DOMAIN
+    domain: process.env.DOMAIN,
   });
 
   //update last login

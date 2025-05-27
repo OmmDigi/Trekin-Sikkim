@@ -21,6 +21,7 @@ export default async function Faqs({ package_id }: IProps) {
         <CollapsibleItem key={faq.id} index={index} heading={faq.faq_heading}>
           <span
             dangerouslySetInnerHTML={{ __html: faq.faq_detail || "no" }}
+            className="prose min-w-full"
           ></span>
         </CollapsibleItem>
       ))}

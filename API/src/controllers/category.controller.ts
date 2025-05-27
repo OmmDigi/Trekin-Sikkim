@@ -32,8 +32,8 @@ export const getCategoryPageInfo = asyncErrorHandler(async (req, res) => {
       c.meta_keywords,
       c.canonical,
       MAX(cpc.page_content) AS page_content,
-      COALESCE(JSON_AGG(mi) FILTER (WHERE mi.media_item_id IS NOT NULL), '[]') AS media_items,
-      COALESCE(JSON_AGG(cpf) FILTER (WHERE cpf.id IS NOT NULL), '[]') AS faqs
+      COALESCE(JSON_AGG(DISTINCT mi) FILTER (WHERE mi.media_item_id IS NOT NULL), '[]') AS media_items,
+      COALESCE(JSON_AGG(DISTINCT cpf) FILTER (WHERE cpf.id IS NOT NULL), '[]') AS faqs
     FROM category c
 
     LEFT JOIN categorypage_page_content cpc
@@ -91,7 +91,7 @@ export const getSingleCategory = asyncErrorHandler(async (req, res) => {
 
   const { rows } = await pool.query(
     `
-    SELECT c.category_id, c.category_name, t.type_id AS category_type_id, t.type_name AS category_type, c.meta_title, c.meta_description, c.meta_keywords, c.canonical  FROM category c
+    SELECT c.category_id, c.category_name, t.type_id AS category_type_id, t.type_name AS category_type, c.meta_title, c.meta_description, c.meta_keywords, c.canonical, slug  FROM category c
     LEFT JOIN types t ON t.type_id = c.type_id
     WHERE c.category_id = $1
       `,
@@ -106,14 +106,27 @@ export const addNewCategory = asyncErrorHandler(async (req, res) => {
   if (error)
     throw new ErrorHandler(400, error.message, error.details[0].context?.key);
 
-  const slug = createSlug(value.category_name);
+  const result = await pool.query(
+    'SELECT EXISTS (SELECT 1 FROM category WHERE slug = $1) AS "isExist"',
+    [value.slug]
+  );
+
+  const isExist = result.rows[0].isExist;
+
+  if (isExist) {
+    throw new ErrorHandler(
+      400,
+      "Category Slug Is Already Exist Please Try Another Slug",
+      "slug"
+    );
+  }
 
   const { rows } = await pool.query(
     `INSERT INTO category (category_name, type_id, slug, meta_title, meta_description, meta_keywords, canonical) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING category_id`,
     [
       value.category_name,
       value.category_type,
-      slug,
+      value.category_slug,
       value.meta_title,
       value.meta_description,
       value.meta_keywords,
@@ -134,14 +147,27 @@ export const updateCategory = asyncErrorHandler(async (req, res) => {
   if (error)
     throw new ErrorHandler(400, error.message, error.details[0].context?.key);
 
-  const slug = createSlug(value.new_category_name);
+  const result = await pool.query(
+    'SELECT EXISTS (SELECT 1 FROM category WHERE slug = $1 AND category_id <> $2) AS "isExist"',
+    [value.slug, value.category_id]
+  );
+
+  const isExist = result.rows[0].isExist;
+
+  if (isExist) {
+    throw new ErrorHandler(
+      400,
+      "Category Slug Is Already Exist Please Try Another Slug",
+      "slug"
+    );
+  }
 
   await pool.query(
     "UPDATE category SET category_name = $1, type_id = $2, slug = $3, meta_title = $4, meta_description = $5, meta_keywords = $6, canonical = $7  WHERE category_id = $8",
     [
       value.new_category_name,
       value.new_category_type,
-      slug,
+      value.new_category_slug,
       value.new_meta_title,
       value.new_meta_description,
       value.new_meta_keywords,
@@ -292,8 +318,6 @@ export const getSingleCategoryGalleryInfo = asyncErrorHandler(
     const { error, value } = VSingle.validate(req.params);
     if (error)
       throw new ErrorHandler(400, error.message, error.details[0].context?.key);
-
-    console.log(value);
 
     const { rows, rowCount } = await pool.query(
       "SELECT * FROM categorypage_media WHERE id = $1",

@@ -20,10 +20,11 @@ export default async function Overview({ package_id }: IProps) {
 
   return (
     <>
-      <p
+      <article
         dangerouslySetInnerHTML={{ __html: overview.data.overview }}
-        className="text-sm leading-7 mt-4"
-      ></p>
+        // className="text-sm leading-7 mt-4"
+        className="prose min-w-full"
+      ></article>
     </>
   );
 }

@@ -12,7 +12,8 @@ export const departureDateSchema = z.object({
   to_date: z.string().min(1, { message: "To Date Is Required" }),
   max_seats: z.number().min(1),
   avilibility_text: z.string().optional(),
-  avilibility_color : z.enum(["Red", "Green", "Yellow"])
+  avilibility_color: z.enum(["Red", "Green", "Yellow"]),
+  is_active: z.number(),
   // additional_ids: z.array(z.number()).optional(),
 });
 
@@ -58,13 +59,12 @@ export interface IPackageOtherOption {
   option_content?: string;
 }
 
-
 export interface IPackageList {
   id: number;
   package_name: string;
   duration: string;
   short_description: string;
   thumbnail: string | null;
-  highest_altitude : string;
+  highest_altitude: string;
   alt_tag: string | null;
 }

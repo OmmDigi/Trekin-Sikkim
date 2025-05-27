@@ -24,8 +24,8 @@ export default async function TripItinerary({ package_id }: IProps) {
   return (
     <ol className="border-accent border-s-2 dark:border-gray-700">
       {tripItinerary.data.map((itinerary) => (
-        <li key={itinerary.id} className="mb-10 ms-4">
-          <div className="bg-accent text-white text-primary font-semibold text-xs p-1.5 px-5 inline-block">
+        <li key={itinerary.id} className="ms-4">
+          <div className="bg-accent text-white font-semibold text-xs p-1.5 px-5 inline-block">
             <span>{itinerary.itinerary_heading}</span>
           </div>
 
@@ -34,7 +34,8 @@ export default async function TripItinerary({ package_id }: IProps) {
           </h3>
           <p
             dangerouslySetInnerHTML={{ __html: itinerary.itinerary_details }}
-            className="mb-4 font-normal text-gray-500 text-sm leading-7"
+            // className="mb-4 font-normal text-gray-500 text-sm leading-7"
+            className="prose min-w-full"
           ></p>
         </li>
       ))}

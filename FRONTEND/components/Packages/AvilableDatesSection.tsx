@@ -50,7 +50,9 @@ export default async function AvilableDatesSection({
   }
 
   const dateInfo = (
-    await api.get<IResponse<IDepartureDate[]>>(
+    await api.get<
+      IResponse<{ months: string[]; dates_info: IDepartureDate[] }>
+    >(
       `/api/v1/package/departure-date/${package_id}?${newSearchParams.toString()}`
     )
   ).data;
@@ -59,91 +61,69 @@ export default async function AvilableDatesSection({
 
   return (
     <>
-      {/* <h2 className="font-medium font-primary relative text-xl">
-        <span>Avaliable Dates</span>
-        <span className="inline-block size-1.5 rounded-full bg-green-600 float-right absolute top-2 ml-2.5"></span>
-      </h2> */}
-      <h3
-        id="Overview"
-        className="text-2xl font-semibold bg-accent text-white p-1.5 px-7 inline-block rounded-tr-lg rounded-bl-lg"
-      >
-        Avaliable Dates :
-      </h3>
+      {dateInfo.data.months.length === 0 ? null : (
+        <h3
+          id="Overview"
+          className="text-2xl font-semibold bg-accent text-white p-1.5 px-7 inline-block rounded-tr-lg rounded-bl-lg"
+        >
+          Avaliable Dates :
+        </h3>
+      )}
 
       <span id="package-dates"></span>
-      <Tabs
-        selectedTabCss="bg-accent !text-white !font-semibold"
-        scroll={false}
-        selectedItemId={searchParams.month}
-        options={[
-          { id: "January", text: "January", slug: "?month=January" },
-          { id: "February", text: "February", slug: "?month=February" },
-          { id: "March", text: "March", slug: "?month=March" },
-          { id: "April", text: "April", slug: "?month=April" },
-          { id: "May", text: "May", slug: "?month=May" },
-          { id: "June", text: "June", slug: "?month=June" },
-          { id: "July", text: "July", slug: "?month=July" },
-          { id: "August", text: "August", slug: "?month=August" },
-          { id: "September", text: "September", slug: "?month=September" },
-          { id: "October", text: "October", slug: "?month=October" },
-          { id: "November", text: "November", slug: "?month=November" },
-          { id: "December", text: "December", slug: "?month=December" },
-        ]}
-      />
+      {dateInfo.data.months.length === 0 ? null : (
+        <Tabs
+          selectedTabCss="bg-[#333333] !text-white !font-semibold"
+          scroll={false}
+          selectedItemId={searchParams.month}
+          options={dateInfo.data.months.map((avilableMonth) => ({
+            id: avilableMonth,
+            text: avilableMonth,
+            slug: `?month=${avilableMonth}`,
+          }))}
+        />
+      )}
 
-      <ul className="space-y-1.5 px-5">
-        {dateInfo.data.map((item) => (
-          <li
-            key={item.id}
-            className="text-xs py-1.5 cursor-pointer flex justify-between"
-          >
-            <div className="flex justify-between flex-1">
-              <div className="flex items-center gap-2">
-                <span className="inline-block size-1.5 rounded-full bg-green-600 float-right"></span>
-                <span className="text-lg underline">
-                  {formatDateToReadable(item.from_date)} -{" "}
-                  {formatDateToReadable(item.to_date)}
-                </span>
+      {dateInfo.data.months.length === 0 ? null : (
+        <ul className="space-y-2.5">
+          {dateInfo.data.dates_info.map((item) => (
+            <li
+              key={item.id}
+              className="text-xs py-3.5 max-sm:py-1.5 cursor-pointer flex justify-between border px-3.5 bg-red-50 border-gray-300"
+            >
+              <div className="flex justify-between flex-1 max-sm:flex-col max-sm:items-start">
+                <div className="flex items-center gap-2">
+                  <span className="inline-block size-1.5 rounded-full bg-green-600 float-right max-sm:hidden"></span>
+                  <span className="text-lg">
+                    {formatDateToReadable(item.from_date)} -{" "}
+                    {formatDateToReadable(item.to_date)}
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-center flex-1">
+                  <span
+                    className={cn(
+                      "font-semibold text-xl animate-pulse max-sm:text-sm",
+                      item.avilibility_color === "Red"
+                        ? "text-red-600"
+                        : item.avilibility_color === "Green"
+                        ? "text-green-600"
+                        : "text-yellow-600"
+                    )}
+                  >
+                    {item.avilibility_text}
+                  </span>
+                </div>
               </div>
 
-              <div className="flex items-center justify-center flex-1">
-                <span
-                  className={cn(
-                    "font-semibold",
-                    item.avilibility_color === "Red"
-                      ? "text-red-600"
-                      : item.avilibility_color === "Green"
-                      ? "text-green-600"
-                      : "text-yellow-600"
-                  )}
-                >
-                  {item.avilibility_text}
-                </span>
-              </div>
-            </div>
-
-            {/* <div className="flex justify-end">
-              {item.avilibility_color === "Red" ? null : (
+              <div className="flex items-center gap-1.5">
                 <AvilableDateCheckbox key={item.id} date_id={item.id} />
-              )}
-            </div> */}
-
-            <AvilableDateCheckbox key={item.id} date_id={item.id} />
-
-            {/* <button className="p-3 outline ml-1.5 rounded-full flex items-center justify-center gap-2.5"> */}
-            {/* <input type="checkbox" /> */}
-
-            {/* <span>Choose Date</span>
-            </button> */}
-
-            {/* <CheckBox
-              isChecked={selectedDates.includes(`${item.id}`)}
-              key="date_id"
-              value={`${item.id}`}
-            /> */}
-          </li>
-        ))}
-      </ul>
+                <span className="max-sm:hidden">Choose Date</span>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
     </>
   );
 }

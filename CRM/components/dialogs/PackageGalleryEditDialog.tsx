@@ -66,6 +66,7 @@ export default function PackageGalleryEditDialog({
 
   return (
     <Dialog
+      key={`${info.isOpen}`}
       open={info.isOpen}
       onOpenChange={(open) => setInfo({ isOpen: open, id: 0 })}
     >
@@ -93,6 +94,7 @@ export default function PackageGalleryEditDialog({
 
               <SelectContent className="w-full">
                 <SelectGroup className="w-full">
+                  <SelectItem value="thumbnail">Thumbnail Item</SelectItem>
                   <SelectItem value="gallery">Gallery Item</SelectItem>
                   <SelectItem value="banner">Banner</SelectItem>
                 </SelectGroup>

@@ -71,6 +71,7 @@ export function CategoryBasicInfo({ category_id, currentStep }: IProps) {
         meta_description: data.data?.meta_description || "",
         meta_keywords: data.data?.meta_keywords || "",
         canonical: data.data?.canonical || undefined,
+        category_slug: data.data?.slug || "",
       });
     },
   });
@@ -128,6 +129,7 @@ export function CategoryBasicInfo({ category_id, currentStep }: IProps) {
     meta_description,
     meta_keywords,
     canonical,
+    category_slug,
   }: TCategoryForm) {
     if (category_id === 0) {
       postCategory({
@@ -137,6 +139,7 @@ export function CategoryBasicInfo({ category_id, currentStep }: IProps) {
         meta_description,
         meta_keywords,
         canonical,
+        category_slug,
       });
       return;
     }
@@ -149,6 +152,7 @@ export function CategoryBasicInfo({ category_id, currentStep }: IProps) {
       new_meta_description: meta_description,
       new_meta_keywords: meta_keywords,
       new_canonical: canonical || undefined,
+      new_category_slug: category_slug,
     });
   }
 
@@ -166,6 +170,26 @@ export function CategoryBasicInfo({ category_id, currentStep }: IProps) {
                   <FormControl>
                     <Input
                       placeholder="Enter package category name"
+                      onChange={(event) =>
+                        field.onChange(event.currentTarget.value)
+                      }
+                      defaultValue={field.value}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="category_slug"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Category Slug</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Enter category slug"
                       onChange={(event) =>
                         field.onChange(event.currentTarget.value)
                       }

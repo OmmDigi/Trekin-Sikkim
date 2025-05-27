@@ -65,7 +65,6 @@ export default function DepartureDate({ onNext, onPrevious }: IProps) {
   });
 
   const onSubmit = (values: FormType) => {
-    console.log(values);
     onNext(); // move to next step
   };
 

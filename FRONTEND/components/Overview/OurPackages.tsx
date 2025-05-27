@@ -73,8 +73,8 @@ export default async function OurPackages({ searchParams }: IProps) {
           variants={parentVariant}
           initial="hidden"
           whileInView="visible"
-          viewport={{ amount: 0.2, once : true }}
-          className="grid grid-cols-4 gap-10 w-full max-sm:grid-cols-1"
+          viewport={{ amount: 0.2, once: true }}
+          className="grid grid-cols-4 gap-5 w-full max-sm:grid-cols-1"
         >
           {packageinfo.data.map((packageInfo) => (
             <motion.li

@@ -12,6 +12,8 @@ import FooterHolder from "@/components/FooterHolder";
 import DialogWrapper from "@/components/Dialogs/DialogWrapper";
 import EnquireDialog from "@/components/Dialogs/EnquireDialog";
 import AuthProvider from "@/components/AuthProvider";
+import Link from "next/link";
+import { ArrowUp } from "lucide-react";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -37,11 +39,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <div id="top-layout" className="bg-amber-300"></div>
       <body
         className={`${poppins.variable} ${montserrat.variable} antialiased !overflow-y-visible`}
       >
         <ScrollProgress />
         <Constant />
+        <Link
+          href={"#top-layout"}
+          className="size-9 flex items-center justify-center rounded-full fixed z-30 bg-accent right-4 bottom-4"
+        >
+          <ArrowUp size={18} color="#fff" />
+        </Link>
         <AuthProvider>
           <ReduxProvider>
             <DialogWrapper

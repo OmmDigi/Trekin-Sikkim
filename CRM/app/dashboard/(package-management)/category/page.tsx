@@ -157,7 +157,7 @@ export default function Category() {
                     </Button> */}
                     <LinkButton
                       icon={<Pencil size={13} />}
-                      href={`/dashboard/category/${info.category_id}`}
+                      href={`/dashboard/category/${info.category_id}?step=1&category_id=${info.category_id}`}
                     >
                       Edit
                     </LinkButton>

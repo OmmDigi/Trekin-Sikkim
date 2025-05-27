@@ -90,7 +90,7 @@ function Banner() {
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
         // className="w-full overflow-hidden relative aspect-[3.17/1] max-sm:aspect-[16/9]"
-        className="w-full overflow-hidden relative h-[90vh] max-sm:h-[45vh] max-sm:mt-[3.6rem]"
+        className="w-full overflow-hidden relative h-[90vh] max-sm:h-[45vh] max-sm:mt-[4.5rem]"
       >
         {banner_info.map((item, index) => (
           <div

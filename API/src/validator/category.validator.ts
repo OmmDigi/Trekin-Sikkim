@@ -10,6 +10,7 @@ export const VAddNewCategory = Joi.object({
   meta_title: Joi.string().required().allow(""),
   meta_description: Joi.string().required().allow(""),
   meta_keywords: Joi.string().required().allow(""),
+  category_slug: Joi.string().required(),
   canonical: Joi.string().optional(),
 });
 
@@ -20,6 +21,7 @@ export const VUpdateACategory = Joi.object({
   new_meta_title: Joi.string().required().allow(""),
   new_meta_description: Joi.string().required().allow(""),
   new_meta_keywords: Joi.string().required().allow(""),
+  new_category_slug: Joi.string().required(),
   new_canonical: Joi.string().optional(),
 });
 
@@ -48,6 +50,8 @@ export const VAddCategoryGallery = Joi.object({
     .items(
       Joi.object({
         media_id: Joi.number().required(),
+        item_link: Joi.string().optional(),
+        alt_tag: Joi.string().optional(),
         where_to_use: Joi.string().required(),
       })
     )

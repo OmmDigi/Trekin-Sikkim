@@ -86,11 +86,10 @@ export default async function CategoryPage({ params, searchParams }: IProps) {
           <ImageSlider
             controllerPosition="bottom"
             className="aspect-[3.17/1] max-sm:aspect-video"
-            // images={[
-            //   "/dynamic-page/trek-in-shikim.jpg",
-            //   "/dynamic-page/trek-in-shikim.jpg",
-            // ]}
-            images={[]}
+            images={categoryPageInfo.data.media_items.map((media) => ({
+              alt_tag: media.alt_tag || "",
+              url: media.item_link,
+            }))}
             sliderPreview={1}
           />
 
@@ -140,12 +139,13 @@ export default async function CategoryPage({ params, searchParams }: IProps) {
             </button>
           </div>
           {categoryPageInfo.data.page_content ? (
-            <span
-              className="!font-primary"
+            <article
+              // className="!font-primary"
+              className="prose min-w-full"
               dangerouslySetInnerHTML={{
                 __html: categoryPageInfo.data.page_content,
               }}
-            ></span>
+            ></article>
           ) : null}
         </section>
       </div>
@@ -178,11 +178,12 @@ export default async function CategoryPage({ params, searchParams }: IProps) {
           <Collapsible>
             {categoryPageInfo.data.faqs.map((faq, index) => (
               <CollapsibleItem
-                key={faq.id}
+                key={index}
                 heading={faq.faq_heading}
                 index={index}
               >
                 <span
+                  className="prose min-w-full"
                   dangerouslySetInnerHTML={{ __html: faq.faq_detail }}
                 ></span>
               </CollapsibleItem>

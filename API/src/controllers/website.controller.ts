@@ -2,7 +2,6 @@ import { pool } from "../config/db";
 import asyncErrorHandler from "../middlewares/asyncErrorHandler";
 import { CustomRequest } from "../types";
 import { ApiResponse } from "../utils/ApiResponse";
-import { createSlug } from "../utils/createSlug";
 import { ErrorHandler } from "../utils/ErrorHandler";
 import { filterToSql } from "../utils/filterToSql";
 import {
@@ -148,11 +147,23 @@ export const getSingleBlog = asyncErrorHandler(
 );
 
 export const postNewBlog = asyncErrorHandler(async (req, res) => {
-  const slug = createSlug(req.body.heading);
-  req.body.slug = slug;
-
   const { error, value } = VPostNewBlog.validate(req.body);
   if (error) throw new ErrorHandler(400, error.message);
+
+  const result = await pool.query(
+    'SELECT EXISTS (SELECT 1 FROM blogs WHERE slug = $1) AS "isExist"',
+    [value.slug]
+  );
+
+  const isExist = result.rows[0].isExist;
+
+  if (isExist) {
+    throw new ErrorHandler(
+      400,
+      "Blog Slug Is Already Exist Please Try Another Slug",
+      "slug"
+    );
+  }
 
   const { rows } = await pool.query(
     "SELECT * FROM media_item WHERE media_item_id = $1",
@@ -184,14 +195,26 @@ export const postNewBlog = asyncErrorHandler(async (req, res) => {
 });
 
 export const updateSingleBlog = asyncErrorHandler(async (req, res) => {
-  const slug = createSlug(req.body.heading);
-  req.body.slug = slug;
-
   const { error, value } = VUpdateSingleBlog.validate({
     ...req.body,
     ...req.params,
   });
   if (error) throw new ErrorHandler(400, error.message);
+
+  const result = await pool.query(
+    'SELECT EXISTS (SELECT 1 FROM blogs WHERE slug = $1 AND blog_id <> $2) AS "isExist"',
+    [value.slug, value.blog_id]
+  );
+
+  const isExist = result.rows[0].isExist;
+
+  if (isExist) {
+    throw new ErrorHandler(
+      400,
+      "Blog Slug Is Already Exist Please Try Another Slug",
+      "slug"
+    );
+  }
 
   const { rows } = await pool.query(
     "SELECT * FROM media_item WHERE media_item_id = $1",

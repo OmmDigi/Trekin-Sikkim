@@ -68,7 +68,7 @@ export default function DepartureDate({ currentStep }: IProps) {
   const packageId = parseInt(searchParams.get("package_id") || "0");
 
   const { data, isFetching, error, refetch } = useQuery<
-    IResponse<IDepartureDateResponse[]>,
+    IResponse<{ months: string[]; dates_info: IDepartureDateResponse[] }>,
     AxiosError<IResponse>
   >({
     queryKey: ["get-departure-dates", searchParams.toString()],
@@ -109,20 +109,7 @@ export default function DepartureDate({ currentStep }: IProps) {
               <SelectValue placeholder="Filter by month" />
             </SelectTrigger>
             <SelectContent>
-              {[
-                "January",
-                "February",
-                "March",
-                "April",
-                "May",
-                "June",
-                "July",
-                "August",
-                "September",
-                "October",
-                "November",
-                "December",
-              ].map((month) => (
+              {data?.data.months.map((month) => (
                 <SelectItem key={month} value={month}>
                   {month}
                 </SelectItem>
@@ -143,7 +130,7 @@ export default function DepartureDate({ currentStep }: IProps) {
         <LoadingHandler
           error={error}
           loading={isFetching}
-          length={data?.data.length}
+          length={data?.data.dates_info.length}
           noDataMsg="No Dates Has Found"
         >
           <Table>
@@ -158,7 +145,7 @@ export default function DepartureDate({ currentStep }: IProps) {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {data?.data.map((departureDate) => (
+              {data?.data.dates_info.map((departureDate) => (
                 <TableRow key={departureDate.id}>
                   <TableCell className="font-medium">
                     {departureDate.for_month}

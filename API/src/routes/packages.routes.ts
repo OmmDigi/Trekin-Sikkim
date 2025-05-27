@@ -43,7 +43,6 @@ import { checkUser } from "../middlewares/checkUser";
 export const packageRoute = Router();
 
 packageRoute
-  
   .get("/single-page-basic/:package_slug", getSinglePackagePage)
 
   .get("/", checkUser, getPackageList)
@@ -54,7 +53,7 @@ packageRoute
   .put("/basic/:package_id", isAuthenticated, updateSinglePackageBasicInfo)
 
   .get("/departure-date-one/:id", getSingleDepartureDate)
-  .get("/departure-date/:package_id", getDepartureDates)
+  .get("/departure-date/:package_id", checkUser, getDepartureDates)
   .post("/departure-date", isAuthenticated, createDepartureDate)
   .put("/departure-date/:id", isAuthenticated, updateDepartureDateInfo)
   .delete("/departure-date/:id", isAuthenticated, deleteDepartureDate)
@@ -88,4 +87,4 @@ packageRoute
   .delete("/other/:id", isAuthenticated, deleteOtherOptionRow)
 
   .get("/seo/:package_id", getSinglePackageSeoInfo)
-  .post("/seo", isAuthenticated, managePackageSeo)
+  .post("/seo", isAuthenticated, managePackageSeo);
