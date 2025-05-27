@@ -132,6 +132,7 @@ export function CategoryDialog({ isOpen, setOpen, category_id }: IProps) {
     meta_keywords,
     meta_title,
     canonical,
+    category_slug,
   }: TCategoryForm) {
     if (category_id === 0) {
       postCategory({
@@ -141,6 +142,7 @@ export function CategoryDialog({ isOpen, setOpen, category_id }: IProps) {
         meta_keywords,
         meta_title,
         canonical,
+        category_slug,
       });
       return;
     }
@@ -153,10 +155,9 @@ export function CategoryDialog({ isOpen, setOpen, category_id }: IProps) {
       new_meta_title: meta_title,
       new_meta_keywords: meta_keywords,
       new_canonical: canonical,
+      new_category_slug: category_slug,
     });
   }
-
-  
 
   return (
     <Dialog open={isOpen} onOpenChange={setOpen}>
