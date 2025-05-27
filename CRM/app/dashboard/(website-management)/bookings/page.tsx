@@ -78,6 +78,7 @@ export default function Bookings() {
     });
   };
 
+
   return (
     <div className="space-y-5">
       <div className="flex items-center justify-between">
@@ -168,7 +169,7 @@ export default function Bookings() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {data?.data.map?.((booking) => (
+              {data?.data?.map((booking) => (
                 <TableRow key={booking.order_id}>
                   <TableCell className="font-medium sticky top-0 left-0 z-20 bg-white flex items-center gap-2.5">
                     {/* <TooltipProvider>
@@ -198,7 +199,7 @@ export default function Bookings() {
                     </span>
                   </TableCell>
                   <TableCell>
-                    {booking.booking_dates.map((eachDate, index) => (
+                    {booking.booking_dates?.map((eachDate, index) => (
                       <span>
                         {index !== 0 ? ", " : ""}
                         {formatDateToReadable(eachDate.from_date)} -{" "}
@@ -220,7 +221,7 @@ export default function Bookings() {
                     </span>
                   </TableCell> */}
                   <TableCell>
-                    {booking.additional_information.map((eachDate, index) => (
+                    {booking.additional_information?.map((eachDate, index) => (
                       <span>
                         {index !== 0 ? " + " : ""} {eachDate.additional_name}
                       </span>
