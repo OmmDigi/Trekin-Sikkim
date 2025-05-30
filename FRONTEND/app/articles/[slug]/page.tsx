@@ -52,8 +52,23 @@ export default async function page({ params }: IProps) {
   const singleBlog = await getSingleBlogInfo(slug);
 
   return (
-    <main className="wrapper space-y-10 py-10 pt-28">
-      <div className="aspect-[3.17/1] font-montserrat w-full overflow-hidden max-sm:aspect-video rounded-3xl relative">
+    <main className="wrapper py-10 space-y-5 pt-28">
+      <div>
+        <h1 className="font-semibold text-2xl">{singleBlog.data.heading}</h1>
+        <h2 className="text-sm text-gray-600 line-clamp-2">
+          {singleBlog.data.meta_description}
+        </h2>
+      </div>
+      <div>
+        <Image
+          className="aspect-[4/1.8] object-cover rounded-3xl"
+          src={singleBlog.data.thumbnail}
+          alt="Blog 1"
+          height={1200}
+          width={1200}
+        />
+      </div>
+      {/* <div className="aspect-[3.17/1] font-montserrat w-full overflow-hidden max-sm:aspect-video rounded-3xl relative">
         <Image
           className="size-full object-cover"
           src={singleBlog.data.thumbnail}
@@ -70,7 +85,7 @@ export default async function page({ params }: IProps) {
             {singleBlog.data.meta_description}
           </h2>
         </div>
-      </div>
+      </div> */}
 
       <article
         dangerouslySetInnerHTML={{ __html: singleBlog.data.blog_content }}

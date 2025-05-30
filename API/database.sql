@@ -317,4 +317,4 @@ ALTER TABLE packages ADD CONSTRAINT unique_package_slug UNIQUE (slug);
 ALTER TABLE category ADD CONSTRAINT unique_category_slug UNIQUE (slug);
 ALTER TABLE blogs ADD CONSTRAINT unique_blogs_slug UNIQUE (slug);
 
-ALTER TABLE packages_departure_date ADD COLUMN INTEGER DEFAULT 1;
+ALTER TABLE packages_departure_date ADD COLUMN is_active INTEGER DEFAULT 1;

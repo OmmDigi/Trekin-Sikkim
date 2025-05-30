@@ -13,10 +13,16 @@ interface IProps {
   totalPage: number | undefined;
   page: number;
   onPageChange?: (page: number) => void;
+  onPageClick?: (page: number) => void;
 }
 
 const MAX_PAGE = 5;
-export function PaginationComp({ totalPage = -1, page, onPageChange }: IProps) {
+export function PaginationComp({
+  totalPage = -1,
+  page,
+  onPageChange,
+  onPageClick,
+}: IProps) {
   const [array, setArray] = useState<number[]>([]);
 
   useEffect(() => {
@@ -49,6 +55,7 @@ export function PaginationComp({ totalPage = -1, page, onPageChange }: IProps) {
             <PaginationBtn
               onClick={() => {
                 onPageChange?.(item);
+                onPageClick?.(item);
               }}
               isActive={item === page}
             >

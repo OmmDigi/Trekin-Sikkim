@@ -40,7 +40,7 @@ export default function Articles() {
   });
 
   return (
-    <div className="size-full space-y-3.5">
+    <div className="space-y-3.5">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-semibold">Articles</h1>
         <ButtonLoading
@@ -128,6 +128,11 @@ export default function Articles() {
         <PaginationComp
           page={parseInt(searchParams.get("page") || "1")}
           totalPage={data?.totalPage}
+          onPageChange={(page) => {
+            const urlSearchParams = new URLSearchParams(searchParams);
+            urlSearchParams.set("page", page.toString());
+            routes.push(`?${urlSearchParams.toString()}`);
+          }}
         />
       </LoadingHandler>
     </div>

@@ -18,8 +18,6 @@ import {
 
 export const getBlogsList = asyncErrorHandler(
   async (req: CustomRequest, res) => {
-    const { LIMIT, OFFSET } = parsePagination(req);
-
     let query: any = {};
     if (req.user_info?.role !== "Admin") {
       query = {
@@ -33,6 +31,9 @@ export const getBlogsList = asyncErrorHandler(
       `SELECT COUNT(*) total_blogs FROM blogs ${filterQuery}`,
       filterValues
     );
+
+    const { LIMIT, OFFSET } = parsePagination(req);
+    const totalPages = Math.ceil(totalBlogsCount[0].total_blogs / LIMIT);
 
     const { rows } = await pool.query(
       `
@@ -58,15 +59,7 @@ export const getBlogsList = asyncErrorHandler(
 
     res
       .status(200)
-      .json(
-        new ApiResponse(
-          200,
-          "Blogs List",
-          rows,
-          undefined,
-          totalBlogsCount[0].total_blogs
-        )
-      );
+      .json(new ApiResponse(200, "Blogs List", rows, undefined, totalPages));
   }
 );
 
@@ -102,10 +95,11 @@ export const getRelatedBlogs = asyncErrorHandler(
             thumbnail_alt_tag,
             slug 
         FROM blogs
-        WHERE ${likeClauses.join(" OR ")} AND blog_id != $${
+        WHERE (${likeClauses.join(" OR ")}) AND blog_id <> $${
       keywordList.length + 1
     }
   `;
+
     const { rows } = await pool.query(sql, values);
 
     res.status(200).json(new ApiResponse(200, "Blog List", rows));

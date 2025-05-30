@@ -13,7 +13,7 @@ export default async function BlogListView({ searchParams }: IProps) {
 
   const blogList = (
     await api.get<IResponse<IBlog[]>>(
-      `/api/v1/website/blogs?page=${parseInt(searchParams?.page || "1")}`
+      `/api/v1/website/blogs?page=${parseInt(searchParams?.page || "1")}&limit=12`
     )
   ).data;
 
