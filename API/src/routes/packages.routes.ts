@@ -87,4 +87,6 @@ packageRoute
   .delete("/other/:id", isAuthenticated, deleteOtherOptionRow)
 
   .get("/seo/:package_id", getSinglePackageSeoInfo)
-  .post("/seo", isAuthenticated, managePackageSeo);
+  .post("/seo", isAuthenticated, managePackageSeo)
+
+

@@ -124,8 +124,12 @@
   }
 }
 
-.fade-gradient-bottom {
+/* .fade-gradient-bottom {
   background-image: linear-gradient(to top, #131313e0, rgba(255, 0, 0, 0));
+} */
+
+.fade-gradient-bottom {
+  background-image: linear-gradient(to top, #13131367, rgba(255, 0, 0, 0));
 }
 
 /* input[type="date"]::-webkit-calendar-picker-indicator {

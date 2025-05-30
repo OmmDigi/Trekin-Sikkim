@@ -318,3 +318,13 @@ ALTER TABLE category ADD CONSTRAINT unique_category_slug UNIQUE (slug);
 ALTER TABLE blogs ADD CONSTRAINT unique_blogs_slug UNIQUE (slug);
 
 ALTER TABLE packages_departure_date ADD COLUMN is_active INTEGER DEFAULT 1;
+
+-- new today 30-05-2025
+CREATE TABLE upcoming_treks (
+    id SERIAL PRIMARY KEY,
+
+    package_id INTEGER NOT NULL,
+    FOREIGN KEY (package_id) REFERENCES packages(id) ON DELETE CASCADE,
+
+    UNIQUE(package_id)
+);

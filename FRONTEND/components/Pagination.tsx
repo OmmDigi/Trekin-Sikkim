@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState, useTransition } from "react";
+import CustomLink from "./CustomLink";
 
 interface IProps {
   totalPage: number | undefined;
@@ -65,7 +66,7 @@ export default function Pagination({
   return (
     <div key={page} className="flex items-center justify-between">
       <button
-        disabled={array[0] === 1}
+        disabled={array[0] === 1 || page === 1}
         onClick={handlePrevBtn}
         className={cn(
           "flex items-center gap-2.5 px-3",

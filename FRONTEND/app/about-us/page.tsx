@@ -71,7 +71,7 @@ const WHY_CHOOSE_US = [
 
 export default function page() {
   return (
-    <main className="wrapper mx-auto pt-16 space-y-3 overflow-visible">
+    <main className="wrapper mx-auto pt-3.5 space-y-3 overflow-visible">
       <section className="wrapper font-primary rounded-4xl p-10 pb-10 max-sm:pb-8 max-sm:space-y-8 max-sm:px-2.5">
         <section className="wrapper space-y-10 font-primary rounded-4xl pt-0 pb-10 max-sm:pb-8 max-sm:space-y-8 max-sm:px-2.5">
           <HeadingSubHeding

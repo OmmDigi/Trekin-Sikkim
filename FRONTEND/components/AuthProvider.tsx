@@ -20,14 +20,14 @@ async function AuthProvider({ children }: IProps) {
   );
 
   if (!response.ok) {
-    NAV_OPTIONS[7] = {
+    NAV_OPTIONS[8] = {
       id: 8,
       icon: <LogIn size={14} />,
       text: "Sign In",
       pathname: "/auth/login",
     };
   } else {
-    NAV_OPTIONS[7] = {
+    NAV_OPTIONS[8] = {
       id: 8,
       pathname: "/account",
       text: "Account",

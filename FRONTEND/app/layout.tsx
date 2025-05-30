@@ -14,6 +14,7 @@ import EnquireDialog from "@/components/Dialogs/EnquireDialog";
 import AuthProvider from "@/components/AuthProvider";
 import Link from "next/link";
 import { ArrowUp } from "lucide-react";
+import NewHeader from "@/components/Headers/NewHeader";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -61,7 +62,8 @@ export default function RootLayout({
             </DialogWrapper>
             {/* <HeaderHolder> */}
             <HeaderHolder>
-              <Header />
+              {/* <Header /> */}
+              <NewHeader />
             </HeaderHolder>
             {/* </HeaderHolder> */}
             {/* <ReactLenis root>{children}</ReactLenis> */}

@@ -84,13 +84,13 @@ function Banner() {
   }, [currentBannerIndex]);
 
   return (
-    <div className="group/banner relative max-sm:pt-2">
+    <div className="group/banner relative">
       <div
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
         // className="w-full overflow-hidden relative aspect-[3.17/1] max-sm:aspect-[16/9]"
-        className="w-full overflow-hidden relative h-[90vh] max-sm:h-[45vh] max-sm:mt-[4.5rem]"
+        className="w-full overflow-hidden relative h-[90vh] max-sm:h-[45vh]"
       >
         {banner_info.map((item, index) => (
           <div

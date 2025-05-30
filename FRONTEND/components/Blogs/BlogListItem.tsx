@@ -9,6 +9,8 @@ interface IProps {
   blog: IBlog;
 }
 
+// from-cyan-500 to-blue-500
+
 export default function BlogListItem({ blog }: IProps) {
   return (
     <li className="space-y-2 card-shdow rounded-2xl overflow-hidden">
@@ -38,7 +40,7 @@ export default function BlogListItem({ blog }: IProps) {
 
           <CustomLink
             href={"/articles/" + blog.slug}
-            className="flex items-center gap-2 justify-end bg-gradient-to-r text-xs from-cyan-500 to-blue-500 text-white font-semibold py-2 px-4 rounded-full hover:from-cyan-600 hover:to-blue-600 transition-all duration-300"
+            className="flex items-center gap-2 justify-end bg-gradient-to-r text-xs bg-accent text-white font-semibold py-2 px-4 rounded-full hover:from-cyan-600 hover:to-blue-600 transition-all duration-300"
             // className="flex items-center justify-end gap-2 text-xs bg-red-500 text-white py-3 px-4 rounded-full"
           >
             <span>Read More</span>

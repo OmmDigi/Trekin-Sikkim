@@ -23,6 +23,10 @@ export const SIDEBAR_DATA = {
           url: "/dashboard/packages",
         },
         {
+          title: "Upcoming Treks",
+          url: "/dashboard/upcoming-treks",
+        },
+        {
           title: "Additional",
           url: "/dashboard/additional",
         },

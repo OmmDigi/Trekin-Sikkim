@@ -8,10 +8,16 @@ import { NavOptions } from "./types";
 import { GoHome } from "react-icons/go";
 import { TbTrekking } from "react-icons/tb";
 import { TiContacts } from "react-icons/ti";
-import { LogIn, MessageCircleQuestion, Rss, Telescope } from "lucide-react";
+import { LogIn, Rss, Star, Telescope } from "lucide-react";
 
 export const NAV_OPTIONS: NavOptions[] = [
   { id: 1, icon: <GoHome />, text: "Home", pathname: "/" },
+  {
+    id: 9,
+    icon: <Star size={13}/>,
+    text: "Upcoming Trek",
+    pathname: "#",
+  },
   {
     id: 2,
     icon: <TbTrekking />,

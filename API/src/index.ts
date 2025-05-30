@@ -16,6 +16,7 @@ import { websiteRoute } from "./routes/website.routes";
 import asyncErrorHandler from "./middlewares/asyncErrorHandler";
 import { ApiResponse } from "./utils/ApiResponse";
 import fs from "fs";
+import { upcomingPackageRoutes } from "./routes/upcoming.package.routes";
 
 const app: Application = express();
 
@@ -42,8 +43,8 @@ app.use(
 app.use(express.static("public"));
 app.set("view engine", "ejs");
 app.set("views", path.resolve(__dirname, "../public/views"));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: "100mb" }));
+app.use(express.urlencoded({ extended: true, limit: "100mb" }));
 app.use(cookieParser());
 
 //modules
@@ -54,7 +55,8 @@ app.use("/api/v1/media-item", mediaItem);
 app.use("/api/v1/package", packageRoute);
 app.use("/api/v1/payment", paymentRouter);
 app.use("/api/v1/booking", bookingRoute);
-app.use("/api/v1/website", websiteRoute)
+app.use("/api/v1/website", websiteRoute);
+app.use("/api/v1/upcoming", upcomingPackageRoutes)
 
 app.post(
   "/init-db",

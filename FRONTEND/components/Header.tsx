@@ -8,16 +8,33 @@ import HandleDialogBtn from "./Dialogs/HandleDialogBtn";
 import api from "@/lib/axios";
 import { ICategories, IResponse, NavOptions } from "@/types";
 
+interface UpcomingTrekPackage {
+  id: number;
+  package_name: string;
+  category_slug: string;
+  package_slug: string;
+  thumbnail: string;
+  duration: string;
+  short_description: string;
+  highest_altitude: string;
+  alt_tag: string;
+}
+
 export default async function Header() {
-  const { data: categoriesInfo } = await api.get<IResponse<ICategories[]>>(
-    "/api/v1/category"
-  );
+  // const { data: categoriesInfo } = await api.get<IResponse<ICategories[]>>(
+  //   "/api/v1/category"
+  // );
+
+  const [categoriesInfo, upcomingPackageInfo] = await Promise.all([
+    api.get<IResponse<ICategories[]>>("/api/v1/category"),
+    api.get<IResponse<UpcomingTrekPackage[]>>("/api/v1/upcoming"),
+  ]);
 
   const trekHeadings: NavOptions[] = [];
   const tourHeadings: NavOptions[] = [];
   const expeditionHeadings: NavOptions[] = [];
 
-  categoriesInfo.data.forEach((item) => {
+  categoriesInfo.data.data.forEach((item) => {
     if (item.category_type === "Tour") {
       tourHeadings.push({
         id: item.category_id,
@@ -39,14 +56,23 @@ export default async function Header() {
     }
   });
 
+  upcomingPackageInfo.data.data.forEach((item) => {
+    console.log(item)
+    NAV_OPTIONS[1].submenu?.push({
+      id: item.id,
+      pathname: `/${item.category_slug}/${item.package_slug}`,
+      text: item.package_name,
+    });
+  });
+
   if (trekHeadings.length !== 0) {
-    NAV_OPTIONS[1].submenu = trekHeadings;
+    NAV_OPTIONS[2].submenu = trekHeadings;
   }
   if (tourHeadings.length !== 0) {
-    NAV_OPTIONS[2].submenu = tourHeadings;
+    NAV_OPTIONS[3].submenu = tourHeadings;
   }
   if (expeditionHeadings.length !== 0) {
-    NAV_OPTIONS[3].submenu = expeditionHeadings;
+    NAV_OPTIONS[4].submenu = expeditionHeadings;
   }
 
   return (

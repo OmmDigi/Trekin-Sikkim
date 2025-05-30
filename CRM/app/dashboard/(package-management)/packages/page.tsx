@@ -32,6 +32,7 @@ import {
 import { IPackageList } from "@/features/package/schemaAndTypes";
 import { useDoMutation } from "@/hooks/useDoMutation";
 import LoadingHandler from "@/components/LoadingHandler";
+import { PaginationComp } from "@/components/pagination";
 
 const getPackageList = async (searchParams: ReadonlyURLSearchParams) => {
   const newSearchParams = new URLSearchParams(searchParams);
@@ -179,6 +180,15 @@ export default function Packages() {
             </li>
           ))}
         </ul>
+        <PaginationComp
+          page={parseInt(searchParams.get("page") || "1")}
+          totalPage={apiResult[0].data?.totalPage}
+          onPageClick={(page) => {
+            const urlSearchParams = new URLSearchParams(searchParams);
+            urlSearchParams.set("page", page.toString());
+            route.push(`?${urlSearchParams.toString()}`);
+          }}
+        />
       </LoadingHandler>
     </main>
   );

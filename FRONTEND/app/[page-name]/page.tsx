@@ -80,12 +80,12 @@ export default async function CategoryPage({ params, searchParams }: IProps) {
   const categoryPageInfo = await getCategoryPageInfo(categorySlug);
 
   return (
-    <main className="space-y-5 mt-24">
+    <main className="space-y-5 pt-3.5">
       <div className="wrapper space-y-10 max-sm:space-y-5">
-        <section className="relative overflow-hidden object-cover rounded-t-3xl">
+        <section className="relative overflow-hidden object-cover rounded-tl-4xl rounded-br-4xl">
           <ImageSlider
             controllerPosition="bottom"
-            className="aspect-[3.17/1] max-sm:aspect-video"
+            className="aspect-[2.8/1] max-sm:aspect-video"
             images={categoryPageInfo.data.media_items.map((media) => ({
               alt_tag: media.alt_tag || "",
               url: media.item_link,

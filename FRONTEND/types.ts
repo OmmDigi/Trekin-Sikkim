@@ -221,3 +221,16 @@ export interface IBookingDetails {
   booking_dates: BookingDate[];
   participant_info: IParticipantInfo[] | null;
 }
+
+
+export interface UpcomingTrekPackage {
+  id: number;
+  package_name: string;
+  category_slug: string;
+  package_slug: string;
+  thumbnail: string;
+  duration: string;
+  short_description: string;
+  highest_altitude: string;
+  alt_tag: string;
+}

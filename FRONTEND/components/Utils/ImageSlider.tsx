@@ -53,6 +53,8 @@ export default function ImageSlider({
     }
   }, []);
 
+  // const imageRefs = useRef<(HTMLImageElement | null)[]>([]);
+
   return (
     <div
       // className={`relative ${wrapperCss ? wrapperCss : ""}`}
@@ -89,6 +91,30 @@ export default function ImageSlider({
         ))}
       </Swiper>
 
+      {/* <div
+        className={cn(
+          "absolute top-3.5 right-3.5 z-30 flex items-center justify-center"
+        )}
+      >
+        <button
+          onClick={() => {
+            const elem = imageRefs.current[];
+            if (!document.fullscreenElement && elem) {
+              elem.requestFullscreen().catch((err) => {
+                console.error(
+                  `Error trying to enable full-screen mode: ${err.message}`
+                );
+              });
+            } else if (document.fullscreenElement) {
+              document.exitFullscreen();
+            }
+          }}
+          className="flex items-center justify-center bg-white cursor-pointer active:scale-90 rounded-full size-10"
+        >
+          <Maximize size={12} />
+        </button>
+      </div> */}
+
       <div
         className={cn(
           "absolute top-0 bottom-0 left-3.5 z-20 flex",
@@ -106,11 +132,16 @@ export default function ImageSlider({
             swiperRef.current?.slidePrev();
           }}
           disabled={sliderPosition === "start"}
-          className={`!p-0 !size-8 !bg-accent !text-white ${
+          // className={`!p-0 !size-8 !bg-accent !text-white ${
+          //   sliderPosition === "start"
+          //     ? "opacity-0"
+          //     : "active:scale-75 opacity-100"
+          // }`}
+          className={cn(
             sliderPosition === "start"
               ? "opacity-0"
               : "active:scale-75 opacity-100"
-          }`}
+          )}
         >
           <IoIosArrowBack size={12} />
         </Button>
@@ -133,11 +164,16 @@ export default function ImageSlider({
           onClick={() => {
             swiperRef.current?.slideNext();
           }}
-          className={`!p-0 !size-8 !bg-accent !text-white ${
+          className={cn(
             sliderPosition === "end"
               ? "opacity-0"
               : "active:scale-75 opacity-100"
-          }`}
+          )}
+          // className={`!p-0 !size-8 !bg-accent !text-white ${
+          //   sliderPosition === "end"
+          //     ? "opacity-0"
+          //     : "active:scale-75 opacity-100"
+          // }`}
         >
           <IoIosArrowBack size={12} className="rotate-180" />
         </Button>

@@ -162,7 +162,7 @@ export default async function page({ params, searchParams }: IProps) {
   });
 
   return (
-    <main className="wrapper mx-auto pb-10 space-y-3 overflow-visible pt-28 max-sm:pt-24">
+    <main className="wrapper mx-auto pb-10 space-y-3 overflow-visible pt-3.5">
       <section className="w-full flex gap-x-10 gap-y-3.5 overflow-visible max-sm:flex-col">
         {/* Left Side */}
         <div className="flex-1 overflow-hidden space-y-5">
@@ -175,7 +175,7 @@ export default async function page({ params, searchParams }: IProps) {
                   alt_tag: item.alt_tag || "",
                 }))}
                 sliderPreview={1}
-                className="h-full w-full overflow-hidden rounded-2xl"
+                className="h-full w-full overflow-hidden rounded-2xl aspect-[2.8/1]"
                 controllerClassName="z-30"
               />
             ) : null}

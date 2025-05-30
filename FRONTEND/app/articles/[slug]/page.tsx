@@ -52,7 +52,7 @@ export default async function page({ params }: IProps) {
   const singleBlog = await getSingleBlogInfo(slug);
 
   return (
-    <main className="wrapper py-10 space-y-5 pt-28">
+    <main className="wrapper py-10 space-y-5 pt-3.5">
       <div>
         <h1 className="font-semibold text-2xl">{singleBlog.data.heading}</h1>
         <h2 className="text-sm text-gray-600 line-clamp-2">

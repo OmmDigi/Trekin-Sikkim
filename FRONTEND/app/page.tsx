@@ -25,13 +25,6 @@ import React from "react";
 import { BiBookContent } from "react-icons/bi";
 import { FaCaretDown } from "react-icons/fa6";
 
-// const ABOUT_US_IMAGES = [
-//   "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1600&h=800",
-//   "https://images.unsplash.com/photo-1482938289607-e9573fc25ebb",
-//   "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9",
-//   "https://images.unsplash.com/photo-1472396961693-142e6e269027",
-// ];
-
 const ABOUT_US_IMAGES = [
   "/about/about-image-1.jpg",
   "/about/about-image-2.webp",
@@ -203,81 +196,16 @@ export default function Home({ searchParams }: IProps) {
                 alt_tag: "About US Image",
               }))}
               sliderPreview={1}
-              className="h-full w-full overflow-hidden rounded-bl-[4rem] rounded-tr-[4rem] max-sm:rounded-none"
+              className="h-full w-full overflow-hidden rounded-tl-2xl rounded-br-2xl max-sm:rounded-none"
             />
           </div>
         </ReadMore>
       </section>
 
-      {/* gap */}
-      <div className="h-10 max-sm:h-7" />
-
-      <section className="wrapper space-y-10 font-primary">
-        {/* <HeadingSubHeding
-          // withIcon
-          heading="Upcoming Trek"
-          subheading="Explore Our Upcoming Treks"
-        /> */}
-
-        {/* <div className="grid grid-cols-2 max-sm:grid-cols-1">
-          <div className="space-y-1.5">
-            <motion.h2
-              variants={fadeUpVarient(0.05)}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              className="font-semibold font-primary text-4xl max-sm:text-3xl text-accent-2"
-            >
-              Our Upcoming Trek
-            </motion.h2>
-            <motion.p
-              variants={fadeUpVarient(0.06)}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              className="text-sm text-accent-2"
-            >
-              Explore Our Upcoming Treks Which Will Feel You Gental
-            </motion.p>
-          </div> */}
-
-        {/* <div className="flex items-center justify-end text-accent-2 mt-1.5">
-            <Link
-              href={"/trekking-in-sikkim"}
-              className="border-b flex items-center justify-center"
-            >
-              Explore More
-              <GoArrowDownLeft className="rotate-180 ml-1.5" />
-            </Link>
-          </div> */}
-        {/* </div> */}
-
+      <React.Suspense fallback={<Loading />}>
         <UpcommingPackages />
+      </React.Suspense>
 
-        {/* <div className="flex items-center justify-center">
-          <Button theme="accent">
-            Load More
-            <FaCaretDown />
-          </Button>
-        </div> */}
-      </section>
-
-      {/* gap */}
-      {/* <div className="h-5 max-sm:h-7" /> */}
-
-      {/* <section className="wrapper">
-        <div className="overflow-hidden max-h-96 rounded-4xl relative">
-          <Image
-            className="size-full object-cover"
-            src={"/new-images/promo-section.jpg"}
-            alt="Promo Section Image"
-            height={1200}
-            width={1200}
-          />
-
-          <div className="absolute inset-0 fade-gradient-left"></div>
-        </div>
-      </section> */}
 
       <div className="h-20 max-sm:h-7" />
 

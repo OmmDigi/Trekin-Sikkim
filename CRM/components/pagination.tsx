@@ -46,7 +46,8 @@ export function PaginationComp({
       <PaginationContent>
         <PaginationItem>
           <PaginationPreviousBtn
-            disabled={array[0] === 1}
+            // disabled={array[0] === 1 && page !== 1}
+            disabled={array[0] === 1 || page === 1}
             onClick={handlePrevBtn}
           />
         </PaginationItem>
