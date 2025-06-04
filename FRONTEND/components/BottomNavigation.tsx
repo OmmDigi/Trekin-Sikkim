@@ -2,15 +2,14 @@
 
 import { TransitionLink } from "@/components/Utils/TransitionLink";
 import { useOutsideClick } from "@/hooks/useOutsideClick";
-import { X } from "lucide-react";
+import { Blocks, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { FaWhatsapp } from "react-icons/fa6";
 import { GoHome } from "react-icons/go";
 import { IoMdCall } from "react-icons/io";
-import { TbCategory, TbTrekking } from "react-icons/tb";
-
+import { TbCategory } from "react-icons/tb";
 
 const OPTIONS = [
   {
@@ -19,9 +18,9 @@ const OPTIONS = [
     pathname: "/",
   },
   {
-    icon: <TbTrekking size={20} />,
-    text: "Trek Packages",
-    pathname: "/trekking",
+    icon: <Blocks size={20} />,
+    text: "Packages",
+    pathname: "#our-packages-section",
   },
   {
     icon: <FaWhatsapp size={20} />,

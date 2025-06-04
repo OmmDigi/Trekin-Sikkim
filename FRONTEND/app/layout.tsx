@@ -15,6 +15,8 @@ import AuthProvider from "@/components/AuthProvider";
 import Link from "next/link";
 import { ArrowUp } from "lucide-react";
 import NewHeader from "@/components/Headers/NewHeader";
+import AiHeader from "@/components/AiComponents/AiHeader";
+import ChildrenHolder from "@/components/ChildrenHolder";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -63,12 +65,13 @@ export default function RootLayout({
             {/* <HeaderHolder> */}
             <HeaderHolder>
               {/* <Header /> */}
-              <NewHeader />
+              {/* <NewHeader /> */}
+              <AiHeader />
             </HeaderHolder>
             {/* </HeaderHolder> */}
             {/* <ReactLenis root>{children}</ReactLenis> */}
             <BottomNavigation />
-            {children}
+            <ChildrenHolder>{children}</ChildrenHolder>
             <FooterHolder>
               <Footer />
             </FooterHolder>

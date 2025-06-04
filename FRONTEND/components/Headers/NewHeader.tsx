@@ -85,20 +85,29 @@ export default async function NewHeader() {
               <h1 className="font-montserrat font-semibold text-subheading text-center max-sm:text-sm transition-none">
                 Glacier Treks And Adventure™
               </h1>
-              <span className="text-sm block text-center">
+              {/* <span className="text-sm block text-center">
                 Registered & Recognised By Sikkim Tourism
               </span>
               <span className="text-xs block text-center">
                 (Reg No 14/TD/W/11/TA (Yuksom West Sikkim))
-              </span>
+              </span> */}
             </div>
-            <Image
+            {/* <Image
               className="w-16"
               src={"/logo.webp"}
               alt="Glacier Treks And Adventure"
               height={512}
               width={512}
-            />
+            /> */}
+            <HandleDialogBtn id="enquiry-form" action_type="OPEN">
+              <Button
+                //   theme="white"
+                className="flex items-center gap-2 text-black"
+              >
+                <MessageCircleQuestion size={15} />
+                <span>Enquiry</span>
+              </Button>
+            </HandleDialogBtn>
           </div>
         </div>
       </div>
@@ -131,16 +140,6 @@ export default async function NewHeader() {
               ))}
             </ul>
           </nav>
-
-          <HandleDialogBtn id="enquiry-form" action_type="OPEN">
-            <Button
-              //   theme="white"
-              className="flex items-center gap-2 text-black"
-            >
-              <MessageCircleQuestion size={15} />
-              <span>Enquiry</span>
-            </Button>
-          </HandleDialogBtn>
         </div>
       </div>
     </>

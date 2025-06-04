@@ -60,7 +60,7 @@ export const getSinglePackagePage = asyncErrorHandler(async (req, res) => {
       ON a.additional_id = paa.additional_id
 
       LEFT JOIN package_and_media pm
-      ON pm.package_id = p.id AND pm.where_to_use = 'thumbnail'
+      ON pm.package_id = p.id AND pm.where_to_use != 'thumbnail' AND pm.where_to_use = 'banner'
 
       LEFT JOIN media_item mi
       ON mi.media_item_id = pm.media_item_id
@@ -852,7 +852,9 @@ export const getPackageOtherOptions = asyncErrorHandler(async (req, res) => {
       option_name
       ${withContent ? ",option_content" : ""}
     FROM package_and_other 
-    WHERE package_id = $1`,
+    WHERE package_id = $1
+    ORDER BY id
+    `,
     [value.package_id]
   );
   res
@@ -891,7 +893,7 @@ export const getOneOtherOptions = asyncErrorHandler(async (req, res) => {
   if (error)
     throw new ErrorHandler(400, error.message, error.details[0].context?.key);
   const { rows, rowCount } = await pool.query(
-    "SELECT * FROM package_and_other WHERE id = $1",
+    "SELECT * FROM package_and_other WHERE id = $1 ORDER BY id",
     [value.id]
   );
   if (rowCount === 0)

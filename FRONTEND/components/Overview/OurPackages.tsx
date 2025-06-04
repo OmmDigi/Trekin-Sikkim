@@ -25,12 +25,12 @@ export default async function OurPackages({ searchParams }: IProps) {
   const [category, packageinfo] = await Promise.all<
     [IResponse<ICategories[]>, IResponse<IPackageListInfo[]>]
   >([
-    (await api.get("/api/v1/category")).data,
+    (await api.get("/api/v1/category?inhome=true")).data,
     (await api.get("/api/v1/package?" + newUrlSearchParams.toString())).data,
   ]);
 
   return (
-    <section className="wrapper space-y-10">
+    <section id="our-packages-section" className="wrapper space-y-10">
       <div className="grid grid-cols-2 font-primary max-sm:grid-cols-1">
         <div className="space-y-1.5">
           <motion.h2
@@ -53,6 +53,7 @@ export default async function OurPackages({ searchParams }: IProps) {
           </motion.p>
         </div>
       </div>
+      
       <Tabs
         scroll={false}
         options={[
@@ -71,7 +72,7 @@ export default async function OurPackages({ searchParams }: IProps) {
         <motion.ul
           key={keyForMotionList}
           variants={parentVariant}
-          initial="hidden"
+          initial="visible"
           whileInView="visible"
           viewport={{ amount: 0.2, once: true }}
           className="grid grid-cols-4 gap-5 w-full max-sm:grid-cols-1"

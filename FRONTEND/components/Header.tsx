@@ -30,6 +30,7 @@ export default async function Header() {
     api.get<IResponse<UpcomingTrekPackage[]>>("/api/v1/upcoming"),
   ]);
 
+  const upcomingPackage: NavOptions[] = [];
   const trekHeadings: NavOptions[] = [];
   const tourHeadings: NavOptions[] = [];
   const expeditionHeadings: NavOptions[] = [];
@@ -57,8 +58,7 @@ export default async function Header() {
   });
 
   upcomingPackageInfo.data.data.forEach((item) => {
-    console.log(item)
-    NAV_OPTIONS[1].submenu?.push({
+    upcomingPackage.push({
       id: item.id,
       pathname: `/${item.category_slug}/${item.package_slug}`,
       text: item.package_name,
@@ -75,11 +75,15 @@ export default async function Header() {
     NAV_OPTIONS[4].submenu = expeditionHeadings;
   }
 
+  if (upcomingPackage.length !== 0) {
+    NAV_OPTIONS[1].submenu = upcomingPackage;
+  }
+
   return (
     <StickyHeaderHolder>
       <div className="flex items-center justify-between py-5 wrapper">
         <h1 className="font-montserrat font-semibold text-subheading max-sm:text-xl transition-none">
-          TrekInSikkim.
+          Glacier Treks And Adventure™
         </h1>
 
         <MobileNavSlider>

@@ -1,7 +1,6 @@
 import { pool } from "../config/db";
 import asyncErrorHandler from "../middlewares/asyncErrorHandler";
 import { ApiResponse } from "../utils/ApiResponse";
-import { createSlug } from "../utils/createSlug";
 import { ErrorHandler } from "../utils/ErrorHandler";
 import { generatePlaceholders } from "../utils/generatePlaceholders";
 import {
@@ -60,6 +59,7 @@ export const getCategoryPageInfo = asyncErrorHandler(async (req, res) => {
 
 export const getAllCategories = asyncErrorHandler(async (req, res) => {
   const category_type = req.query.category_type?.toString();
+  const inhome = req.query.inhome === "true";
 
   let filter = "";
   const filterValues: string[] = [];
@@ -70,6 +70,14 @@ export const getAllCategories = asyncErrorHandler(async (req, res) => {
 
     filterValues.push(category_type);
     placeholdernum++;
+  }
+
+  if(inhome) {
+    if(filter === "") {
+      filter += `WHERE c.showinhomepage = true`
+    } else {
+      filter += ` AND c.showinhomepage = true`
+    }
   }
 
   const { rows } = await pool.query(
@@ -91,7 +99,7 @@ export const getSingleCategory = asyncErrorHandler(async (req, res) => {
 
   const { rows } = await pool.query(
     `
-    SELECT c.category_id, c.category_name, t.type_id AS category_type_id, t.type_name AS category_type, c.meta_title, c.meta_description, c.meta_keywords, c.canonical, slug  FROM category c
+    SELECT c.category_id, c.category_name, c.showinhomepage, t.type_id AS category_type_id, t.type_name AS category_type, c.meta_title, c.meta_description, c.meta_keywords, c.canonical, slug  FROM category c
     LEFT JOIN types t ON t.type_id = c.type_id
     WHERE c.category_id = $1
       `,
@@ -122,7 +130,7 @@ export const addNewCategory = asyncErrorHandler(async (req, res) => {
   }
 
   const { rows } = await pool.query(
-    `INSERT INTO category (category_name, type_id, slug, meta_title, meta_description, meta_keywords, canonical) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING category_id`,
+    `INSERT INTO category (category_name, type_id, slug, meta_title, meta_description, meta_keywords, canonical, showinhomepage) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING category_id`,
     [
       value.category_name,
       value.category_type,
@@ -131,6 +139,7 @@ export const addNewCategory = asyncErrorHandler(async (req, res) => {
       value.meta_description,
       value.meta_keywords,
       value.canonical,
+      value.showinhomepage
     ]
   );
 
@@ -162,8 +171,10 @@ export const updateCategory = asyncErrorHandler(async (req, res) => {
     );
   }
 
+  console.log(value)
+
   await pool.query(
-    "UPDATE category SET category_name = $1, type_id = $2, slug = $3, meta_title = $4, meta_description = $5, meta_keywords = $6, canonical = $7  WHERE category_id = $8",
+    "UPDATE category SET category_name = $1, type_id = $2, slug = $3, meta_title = $4, meta_description = $5, meta_keywords = $6, canonical = $7, showinhomepage = $8  WHERE category_id = $9",
     [
       value.new_category_name,
       value.new_category_type,
@@ -172,6 +183,7 @@ export const updateCategory = asyncErrorHandler(async (req, res) => {
       value.new_meta_description,
       value.new_meta_keywords,
       value.new_canonical,
+      value.showinhomepage,
       value.category_id,
     ]
   );

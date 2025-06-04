@@ -1,7 +1,6 @@
 "use client";
 
 import { NavOptions } from "@/types";
-// import { usePathname } from "next/navigation";
 import React, { useState } from "react";
 import { useOutsideClick } from "@/hooks/useOutsideClick";
 import { motion } from "motion/react";
@@ -11,7 +10,6 @@ import { useDispatch } from "react-redux";
 import { setVisibility } from "@/redux/slices/mobileNav.slice";
 import { cn } from "@/lib/utils";
 import { NAV_OPTIONS } from "@/constant";
-import { setDialog } from "@/redux/slices/dialog.slice";
 
 interface IProps {
   option: NavOptions;
@@ -37,10 +35,10 @@ export default function NavItem({ option, className, index }: IProps) {
     >
       <Link
         onClick={() => {
-          if (option.id === 9) {
-            dispatch(setDialog({ id: "enquiry-form", type: "OPEN" }));
-            return;
-          }
+          // if (option.id === 9) {
+          //   dispatch(setDialog({ id: "enquiry-form", type: "OPEN" }));
+          //   return;
+          // }
 
           if (!option.submenu) {
             dispatch(setVisibility(false));
@@ -100,12 +98,9 @@ export default function NavItem({ option, className, index }: IProps) {
                 </li>
               ))}
             </ul>
-            {/* <div className="h-1 w-full bg-primary max-sm:hidden"></div> */}
           </motion.div>
         </div>
       ) : null}
-
-      <div className="h-[1px] w-full -bottom-2 bg-gray-300 absolute right-0 hidden max-sm:block"></div>
     </li>
   );
 }

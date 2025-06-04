@@ -126,6 +126,7 @@ export interface IFaq {
 
 export interface IPackageInfoSearchParams {
   month: string;
+  date_id : string;
 }
 
 type UserInfo = {

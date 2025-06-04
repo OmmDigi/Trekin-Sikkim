@@ -10,6 +10,7 @@ import {
 
 interface IProps {
   children: React.ReactNode;
+  initIsOpen?: boolean;
 }
 
 interface IContext {
@@ -19,8 +20,8 @@ interface IContext {
 
 const ReadMoreContext = createContext<IContext | null>(null);
 
-export default function ReadMore({ children }: IProps) {
-  const [isOpen, setIsOpen] = useState(false);
+export default function ReadMore({ children, initIsOpen = false }: IProps) {
+  const [isOpen, setIsOpen] = useState(initIsOpen);
 
   return (
     <ReadMoreContext.Provider value={{ isOpen, setIsOpen }}>

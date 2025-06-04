@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import CheckBox from "../Utils/CheckBox";
 import { useTransition } from "react";
 import SpinnerSvg from "../SpinnerSvg";
@@ -12,7 +12,7 @@ interface IProps {
 export default function AvilableDateCheckbox({ date_id }: IProps) {
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
-  // const route = useRouter();
+  const route = useRouter();
   const pathname = usePathname();
 
   const checked = searchParams.get("date_id") == date_id.toString();
@@ -33,10 +33,10 @@ export default function AvilableDateCheckbox({ date_id }: IProps) {
         }
 
         startTransition(() => {
-          window.location.href = `${pathname}?${newSearchParams.toString()}`;
-          //   route.push(`${pathname}?${newSearchParams.toString()}`, {
-          //     scroll: false,
-          //   });
+          // window.location.href = `${pathname}?${newSearchParams.toString()}`;
+          route.push(`${pathname}?${newSearchParams.toString()}`, {
+            scroll: false,
+          });
         });
       }}
       checkBoxColor="#007C00"

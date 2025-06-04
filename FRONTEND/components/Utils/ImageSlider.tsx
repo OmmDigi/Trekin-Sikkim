@@ -62,7 +62,7 @@ export default function ImageSlider({
     >
       <Swiper
         // className={`wrapper cursor-grab ${className ? className : ""} z-10`}
-        className={cn("wrapper cursor-grab", className, "z-10")}
+        className={cn("cursor-grab size-full", className, "z-10")}
         spaceBetween={0}
         slidesPerView={slidesPerView}
         navigation
@@ -77,7 +77,7 @@ export default function ImageSlider({
         }}
       >
         {images.map((info, index) => (
-          <SwiperSlide key={index}>
+          <SwiperSlide key={index} className="size-full">
             <Image
               placeholder="blur"
               blurDataURL="/placeholder_background.jpg"

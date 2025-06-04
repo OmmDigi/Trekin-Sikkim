@@ -206,7 +206,6 @@ export default function Home({ searchParams }: IProps) {
         <UpcommingPackages />
       </React.Suspense>
 
-
       <div className="h-20 max-sm:h-7" />
 
       {/* Top Values For You */}

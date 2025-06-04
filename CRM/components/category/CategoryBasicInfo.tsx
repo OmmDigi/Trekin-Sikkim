@@ -64,15 +64,18 @@ export function CategoryBasicInfo({ category_id, currentStep }: IProps) {
     queryFn: () => getSingleCategory(category_id),
     enabled: category_id !== 0,
     onSuccess(data) {
-      form.reset({
-        category_name: data.data?.category_name || "",
-        category_type: data.data?.category_type_id || 1,
-        meta_title: data.data?.meta_title || "",
-        meta_description: data.data?.meta_description || "",
-        meta_keywords: data.data?.meta_keywords || "",
-        canonical: data.data?.canonical || undefined,
-        category_slug: data.data?.slug || "",
-      });
+      if (data.data) {
+        form.reset({
+          category_name: data.data?.category_name || "",
+          category_type: data.data?.category_type_id || 1,
+          meta_title: data.data?.meta_title || "",
+          meta_description: data.data?.meta_description || "",
+          meta_keywords: data.data?.meta_keywords || "",
+          canonical: data.data?.canonical || undefined,
+          showinhomepage: data.data?.showinhomepage,
+          category_slug: data.data?.slug || "",
+        });
+      }
     },
   });
 
@@ -130,6 +133,7 @@ export function CategoryBasicInfo({ category_id, currentStep }: IProps) {
     meta_keywords,
     canonical,
     category_slug,
+    showinhomepage,
   }: TCategoryForm) {
     if (category_id === 0) {
       postCategory({
@@ -140,6 +144,7 @@ export function CategoryBasicInfo({ category_id, currentStep }: IProps) {
         meta_keywords,
         canonical,
         category_slug,
+        showinhomepage,
       });
       return;
     }
@@ -153,11 +158,17 @@ export function CategoryBasicInfo({ category_id, currentStep }: IProps) {
       new_meta_keywords: meta_keywords,
       new_canonical: canonical || undefined,
       new_category_slug: category_slug,
+      showinhomepage: showinhomepage,
     });
   }
 
   return (
-    <LoadingHandler error={error} loading={isFetching} length={1}>
+    <LoadingHandler
+      key={`${isFetching}`}
+      error={error}
+      loading={isFetching}
+      length={1}
+    >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <div className="grid grid-cols-2 gap-6">
@@ -225,6 +236,33 @@ export function CategoryBasicInfo({ category_id, currentStep }: IProps) {
                           {category.name}
                         </SelectItem>
                       ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="showinhomepage"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Show In Home Page ?</FormLabel>
+                  <Select
+                    onValueChange={(value) => {
+                      field.onChange(value === "true" ? true : false);
+                    }}
+                    defaultValue={field.value === true ? "true" : "false"}
+                  >
+                    <FormControl className="w-full">
+                      <SelectTrigger>
+                        <SelectValue placeholder="Show In Home Page ?" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="true">true</SelectItem>
+                      <SelectItem value="false">false</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />

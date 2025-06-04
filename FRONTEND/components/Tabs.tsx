@@ -30,27 +30,18 @@ function Tabs({
   const routes = useRouter();
 
   return (
-    <div className="flex items-center gap-3 flex-wrap">
+    <div className="flex items-center gap-3 flex-wrap max-sm:flex-nowrap max-sm:overflow-x-scroll">
       {options.map((option, index) => (
         <Link
           scroll={scroll}
           href={option.slug || "#"}
           className={cn(
-            "flex items-center gap-1.5 text-xs font-semibold py-2.5 rounded-full px-3 cursor-pointer transition-all duration-500 border-1 border-gray-300",
+            "flex items-center max-sm:shrink-0 gap-1.5 text-xs font-semibold py-2.5 rounded-full px-3 cursor-pointer transition-all duration-500 border-1 border-gray-300",
             option.icon ? "pr-5" : "px-5",
             selectedId === option.id
               ? selectedTabCss || "bg-primary text-white"
               : "bg-light-gray text-primary"
           )}
-          // className={`flex items-center gap-1.5 ${
-          //   option.icon ? "pr-5" : "px-5"
-          // }  text-body py-2.5 ${
-          //   selectedId === option.id
-          //     ? selectedTabCss
-          //       ? selectedTabCss
-          //       : "bg-primary text-white"
-          //     : "bg-light-gray text-primary"
-          // } rounded-full px-3 cursor-pointer transition-all duration-500 border-1 border-gray-300`}
           onClick={(e) => {
             e.preventDefault();
 

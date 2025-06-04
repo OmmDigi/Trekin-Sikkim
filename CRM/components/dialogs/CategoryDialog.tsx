@@ -133,6 +133,7 @@ export function CategoryDialog({ isOpen, setOpen, category_id }: IProps) {
     meta_title,
     canonical,
     category_slug,
+    showinhomepage
   }: TCategoryForm) {
     if (category_id === 0) {
       postCategory({
@@ -143,6 +144,7 @@ export function CategoryDialog({ isOpen, setOpen, category_id }: IProps) {
         meta_title,
         canonical,
         category_slug,
+        showinhomepage
       });
       return;
     }
@@ -156,6 +158,7 @@ export function CategoryDialog({ isOpen, setOpen, category_id }: IProps) {
       new_meta_keywords: meta_keywords,
       new_canonical: canonical,
       new_category_slug: category_slug,
+      showinhomepage : showinhomepage
     });
   }
 

@@ -328,3 +328,5 @@ CREATE TABLE upcoming_treks (
 
     UNIQUE(package_id)
 );
+
+ALTER TABLE category ADD COLUMN showinhomepage BOOLEAN DEFAULT true;

@@ -11,6 +11,7 @@ export const VAddNewCategory = Joi.object({
   meta_description: Joi.string().required().allow(""),
   meta_keywords: Joi.string().required().allow(""),
   category_slug: Joi.string().required(),
+  showinhomepage: Joi.boolean().required(),
   canonical: Joi.string().optional(),
 });
 
@@ -22,6 +23,7 @@ export const VUpdateACategory = Joi.object({
   new_meta_description: Joi.string().required().allow(""),
   new_meta_keywords: Joi.string().required().allow(""),
   new_category_slug: Joi.string().required(),
+  showinhomepage: Joi.boolean().required(),
   new_canonical: Joi.string().optional(),
 });
 

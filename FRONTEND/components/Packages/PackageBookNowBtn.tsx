@@ -2,14 +2,20 @@
 
 import Button from "../Button";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useTransition } from "react";
+import React, { useTransition } from "react";
 import { cn } from "@/lib/utils";
 
 interface IProps {
   package_id: number;
+  className?: string;
+  children?: React.ReactNode;
 }
 
-export default function PackageBookNowBtn({ package_id }: IProps) {
+export default function PackageBookNowBtn({
+  package_id,
+  className,
+  children,
+}: IProps) {
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
   const route = useRouter();
@@ -43,10 +49,12 @@ export default function PackageBookNowBtn({ package_id }: IProps) {
           loading={isPending}
           className={cn(
             !isDateSelected ? "opacity-20 active:!scale-100" : "",
-            "!bg-red-500 !text-white font-primary !font-medium min-w-[20rem] !shadow-[0px_0px_0px_1px_rgba(0,0,0,0.06),0px_1px_1px_-0.5px_rgba(0,0,0,0.06),0px_3px_3px_-1.5px_rgba(0,0,0,0.06),_0px_6px_6px_-3px_rgba(0,0,0,0.06),0px_12px_12px_-6px_rgba(0,0,0,0.06),0px_24px_24px_-12px_rgba(0,0,0,0.06)] max-sm:min-w-full"
+            "!bg-red-500 !text-white font-primary !font-medium min-w-[20rem] !shadow-[0px_0px_0px_1px_rgba(0,0,0,0.06),0px_1px_1px_-0.5px_rgba(0,0,0,0.06),0px_3px_3px_-1.5px_rgba(0,0,0,0.06),_0px_6px_6px_-3px_rgba(0,0,0,0.06),0px_12px_12px_-6px_rgba(0,0,0,0.06),0px_24px_24px_-12px_rgba(0,0,0,0.06)] max-sm:min-w-full",
+            className
           )}
         >
           Book Now
+          {children}
         </Button>
       </div>
     </>

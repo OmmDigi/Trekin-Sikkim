@@ -10,6 +10,7 @@ export interface ICategories {
   meta_title: string;
   meta_description: string;
   meta_keywords: string;
+  showinhomepage : boolean;
   canonical?: string;
 }
 
@@ -23,5 +24,7 @@ export interface ICategoryUpdate {
   new_meta_description: string;
   new_meta_keywords: string;
   new_category_slug: string;
+  showinhomepage : boolean;
   new_canonical?: string;
+  
 }
