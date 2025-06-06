@@ -85,9 +85,11 @@ export default function DepartDateDialog({
         max_seats: data.data.max_seats,
         avilibility_text: data.data.avilibility_text,
         avilibility_color: data.data.avilibility_color,
+        is_active : data.data.is_active
       });
     },
   });
+
 
   useEffect(() => {
     if (departure_date_id === 0) {
@@ -141,14 +143,14 @@ export default function DepartDateDialog({
     });
   };
 
-  useEffect(() => {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = MONTH_LIST.indexOf(form.watch("for_month")) + 1;
-    const formattedDate = `${year}-${month.toString().padStart(2, "0")}-01`;
-    form.setValue("from_date", formattedDate);
-    form.setValue("to_date", formattedDate);
-  }, [form.watch("for_month")]);
+  // useEffect(() => {
+  //   const today = new Date();
+  //   const year = today.getFullYear();
+  //   const month = MONTH_LIST.indexOf(form.watch("for_month")) + 1;
+  //   const formattedDate = `${year}-${month.toString().padStart(2, "0")}-01`;
+  //   form.setValue("from_date", formattedDate);
+  //   form.setValue("to_date", formattedDate);
+  // }, [form.watch("for_month")]);
 
   return (
     <Dialog key={`${isOpen}`} open={isOpen} onOpenChange={setOpen}>

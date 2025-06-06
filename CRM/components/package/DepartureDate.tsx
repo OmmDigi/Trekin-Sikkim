@@ -88,6 +88,8 @@ export default function DepartureDate({ currentStep }: IProps) {
     });
   };
 
+  console.log(data)
+
   return (
     <>
       <DepartDateDialog
