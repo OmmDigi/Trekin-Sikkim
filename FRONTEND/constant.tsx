@@ -14,7 +14,7 @@ export const NAV_OPTIONS: NavOptions[] = [
   { id: 1, icon: <GoHome />, text: "Home", pathname: "/" },
   {
     id: 9,
-    icon: <Star size={13}/>,
+    icon: <Star size={13} />,
     text: "Upcoming Trek",
     pathname: "#",
   },
@@ -612,3 +612,58 @@ export const GROUP_TYPES = [
 export default function Constant() {
   return <></>;
 }
+
+export const HOME_FAQS = [
+  {
+    id: 1,
+    question: "Why do I choose Glacier Treks & Adventure for trekking?",
+    answer:
+      "Glacier Treks & Adventure is the most reputed company. We will provide you the best destination for trekking. Among all the other companies for trekking we will be going to provide you the best value. At any point of time before our trekking date you will get the booking confirmation. The staffs whoa are providing services to us will take care of your booking plans and will also confirm you about the schedules with the overall information. ",
+  },
+
+  {
+    id: 2,
+    question: "What are the reasons for choosing Glacier Treks & Adventure?",
+    answer:
+      "Glacier Treks & Adventure has been in this business for many years. We have the experience of making a trekking expedition with our clients. The people who are involved with us are all experienced. They know the routes and will make your route with the most scenic beauties of nature. We at Glacier Treks & Adventure will provide you the experiences of trekking that has been made by other travellers. We will also going to provide you the route map before the expedition.",
+  },
+  {
+    id: 3,
+    question: "What is the climatic condition of the place?",
+    answer:
+      "Our trekking routes mainly follow the steps of the hills. The hilly regions are mainly comfortable for trekking. Besides, our expert guide will be there throughout the coverage. Mainly the hilly regions are not much humid. They are cool all through the season. Therefore you will not feel tired and with ease cover your distances. ",
+  },
+  {
+    id: 4,
+    question: "What are the food items that I should take?",
+    answer:
+      "You do not have to take the food items with you. We will provide you with all the food items that will be required in the road. Besides, Glacier Treks & Adventure have own chefs. They will make all the arrangements for your fooding and lodging in the places that you are going to be trekked. ",
+  },
+  {
+    id: 5,
+    question:
+      "Does your company provide any type of equipments like the shoes, jackets?",
+    answer: `<p><span>Actually we provide equipment’s only for trekking. Other than these we do not provide anything else. But we will be going to make a list of the stuffs that are important in trekking. You must have:</span></p>
+<ul>
+    <li>A windproof jacket along with the cold resistant trouser</li>
+    <li>An Inner sweater is very important to control your body temperature at the night</li>
+    <li>Gloves, Scurf, woolen caps to protect your ears from the chilling winds</li>
+    <li>Trekking boots with socks</li>
+    <li>Torch and medicine&nbsp;</li>
+</ul>`,
+  },
+
+  {
+    id: 6,
+    question: "Do you provide any types of medicine during mountain sickness?",
+    answer:
+      "Yes we provide medicines for mountain sickness. Our team of experts carries all the necessary medicines. A specialist will also be there in the team.",
+  },
+  {
+    id: 7,
+    question:
+      "Does Glacier Treks & Adventure provide any type of transportation facilities?",
+    answer:
+      "Yes. We provide the transportation facilities for our clients. If any of our clients gets sick due to any reason our team of specialist will check the health conditions and after that we will provide transport facilities. We also provide transport facilities to our clients to reach the point of trekking and after that to the destination.",
+  },
+];

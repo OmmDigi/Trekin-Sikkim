@@ -9,7 +9,16 @@ interface IProps {
 
 export default function ReadMoreToggle({ children, type }: IProps) {
   const { isOpen, setIsOpen } = useReadmore();
+
   if (!isOpen && type === "CLOSE") return null;
   if (isOpen && type === "OPEN") return null;
-  return <div onClick={() => setIsOpen(type === "OPEN")}>{children}</div>;
+  return (
+    <div
+      onClick={() => {
+        setIsOpen(type === "OPEN");
+      }}
+    >
+      {children}
+    </div>
+  );
 }

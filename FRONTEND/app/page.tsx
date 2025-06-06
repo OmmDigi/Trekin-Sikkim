@@ -1,5 +1,5 @@
 import AboutStatsCard from "@/components/About/AboutStatsCard";
-import Banner from "@/components/Banner";
+// import Banner from "@/components/Banner";
 // import BlogListItem from "@/components/Blogs/BlogListItem";
 import Button from "@/components/Button";
 import ExpandCollapseFaq from "@/components/ExpandCollapseFaq";
@@ -21,6 +21,7 @@ import { childVariant, fadeUpVarient } from "@/utils/animations";
 import { Award, Compass, Mountain, Users } from "lucide-react";
 
 import * as motion from "motion/react-client";
+import dynamic from "next/dynamic";
 import React from "react";
 import { BiBookContent } from "react-icons/bi";
 import { FaCaretDown } from "react-icons/fa6";
@@ -41,6 +42,10 @@ const HOW_WE_WORK = [
 interface IProps {
   searchParams: Promise<{ category: string }>;
 }
+
+const Banner = dynamic(() => import("@/components/Banner"), {
+  ssr: true,
+});
 
 export default function Home({ searchParams }: IProps) {
   return (
@@ -451,9 +456,7 @@ export default function Home({ searchParams }: IProps) {
                 {/* <button className="bg-emerald-500 min-w-40 hover:bg-emerald-600 text-white px-6 py-3 rounded-lg shadow-lg transition">
                   Book Now
                 </button> */}
-                <Button
-                  className="min-w-[10rem] transition-all duration-1000 max-sm:min-[8rem] max-sm:pl-3 !bg-accent !text-white"
-                >
+                <Button className="min-w-[10rem] transition-all duration-1000 max-sm:min-[8rem] max-sm:pl-3 !bg-accent !text-white">
                   <BiBookContent />
                   Book Now
                 </Button>

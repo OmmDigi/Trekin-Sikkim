@@ -24,7 +24,9 @@ export default function ReadMore({ children, initIsOpen = false }: IProps) {
   const [isOpen, setIsOpen] = useState(initIsOpen);
 
   return (
-    <ReadMoreContext.Provider value={{ isOpen, setIsOpen }}>
+    <ReadMoreContext.Provider
+      value={{ isOpen, setIsOpen }}
+    >
       {children}
     </ReadMoreContext.Provider>
   );
