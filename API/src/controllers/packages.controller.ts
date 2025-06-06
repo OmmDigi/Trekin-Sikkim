@@ -26,6 +26,7 @@ import {
   VSingle,
   VSinglePackageInfo,
   VUpdateDepartureDate,
+  VUpdateItineraryPdf,
   VUpdatePackageAndOther,
   VUpdatePackageBasicInfo,
   VUpdatePackageFaq,
@@ -45,16 +46,28 @@ export const getSinglePackagePage = asyncErrorHandler(async (req, res) => {
        pseo.meta_description,
        pseo.meta_keywords,
        pseo.canonical,
+       CASE 
+         WHEN c.type_id = 1 THEN 'Trek'
+         WHEN c.type_id = 2 THEN 'Tour'
+         ELSE 'Expedition'
+       END AS trip_type,
        COALESCE(JSON_AGG(DISTINCT to_jsonb(a)) FILTER (WHERE a.additional_id IS NOT NULL), '[]') AS additional,
        COALESCE(JSON_AGG(DISTINCT to_jsonb(mi)) FILTER (WHERE mi.media_item_id IS NOT NULL), '[]') AS banner_info,
        COALESCE(JSON_AGG(DISTINCT JSONB_BUILD_OBJECT(
         'id', po.id,
         'option_name', po.option_name
-       )) FILTER (WHERE po.id IS NOT NULL), '[]') AS other_option_names
+       )) FILTER (WHERE po.id IS NOT NULL), '[]') AS other_option_names,
+       pip.file_link AS itinerary_pdf_link
       FROM packages p
 
       LEFT JOIN package_and_additional paa
       ON p.id = paa.package_id
+
+      LEFT JOIN category c
+      ON c.category_id = p.category_id
+
+      LEFT JOIN package_itinerary_pdf pip
+      ON pip.package_id = p.id
 
       LEFT JOIN additional a
       ON a.additional_id = paa.additional_id
@@ -73,7 +86,7 @@ export const getSinglePackagePage = asyncErrorHandler(async (req, res) => {
 
       WHERE p.slug = $1
 
-      GROUP BY p.id, pseo.meta_title, pseo.meta_description, pseo.meta_keywords, pseo.canonical
+      GROUP BY c.category_id, pip.file_link, p.id, pseo.meta_title, pseo.meta_description, pseo.meta_keywords, pseo.canonical
     `,
     [value.package_slug]
   );
@@ -841,6 +854,24 @@ export const deletePackageItinerary = asyncErrorHandler(async (req, res) => {
   res
     .status(200)
     .json(new ApiResponse(200, "Itinerar has removed from package"));
+});
+
+export const uploadItineraryPdf = asyncErrorHandler(async (req, res) => {
+  const { error, value } = VUpdateItineraryPdf.validate(req.body);
+  if (error) throw new ErrorHandler(400, error.message);
+
+  await pool.query(
+    `
+     INSERT INTO package_itinerary_pdf (package_id, file_link) VALUES ($1, $2)
+     ON CONFLICT (package_id)
+     DO UPDATE SET file_link = EXCLUDED.file_link
+    `,
+    [value.package_id, value.file_link]
+  );
+
+  res
+    .status(200)
+    .json(new ApiResponse(200, "Itinerar Pdf Has Successfully Uploaded"));
 });
 
 //package overview

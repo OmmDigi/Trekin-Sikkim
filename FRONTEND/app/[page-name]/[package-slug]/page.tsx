@@ -6,6 +6,7 @@ import React, { cache } from "react";
 import { BsCurrencyRupee } from "react-icons/bs";
 import {
   DollarSign,
+  FileChartColumn,
   Hourglass,
   LandPlot,
   MapPinned,
@@ -25,6 +26,8 @@ import AvilableDatesSection from "@/components/Packages/AvilableDatesSection";
 import AdditionalCheckbox from "@/components/Packages/AdditionalCheckbox";
 import PackageBookNowBtn from "@/components/Packages/PackageBookNowBtn";
 import { Metadata } from "next";
+import Button from "@/components/Button";
+import Link from "next/link";
 
 const getSinglePackagePageInfo = cache(async (slug: string) => {
   return (
@@ -54,7 +57,7 @@ const OVERVIEW_POINTS = [
   },
   {
     id: "3",
-    title: "Trek Duration",
+    title: "Duration",
     value: "6 days",
     icon: <Hourglass size={13} />,
   },
@@ -72,7 +75,7 @@ const OVERVIEW_POINTS = [
   },
   {
     id: "6",
-    title: "Trek Distance",
+    title: "Distance",
     value: "22 kms",
     icon: <LandPlot size={15} />,
   },
@@ -141,6 +144,9 @@ export default async function page({ params, searchParams }: IProps) {
   OVERVIEW_POINTS[7].value = `$${data.data.offer_price_usd}`;
   OVERVIEW_POINTS[7].other = `$${data.data.original_price_usd}`;
 
+  OVERVIEW_POINTS[2].title = `${data.data.trip_type} Duration`;
+  OVERVIEW_POINTS[5].title = `${data.data.trip_type} Distance`;
+
   const totalPrices = {
     offerPriceInr: parseInt(data.data.offer_price_inr),
     originalPriceInr: parseInt(data.data.original_price_inr),
@@ -166,10 +172,10 @@ export default async function page({ params, searchParams }: IProps) {
       <section className="w-full flex gap-x-10 gap-y-3.5 overflow-visible max-sm:flex-col">
         {/* Left Side */}
         <div className="flex-1 overflow-hidden space-y-5">
-          <div className="relative group/package_banner rounded-3xl min-h-[25rem] overflow-hidden max-sm:shadow-lg max-sm:border max-sm:border-gray-200">
+          <div className="relative group/package_banner rounded-3xl overflow-hidden aspect-[2.8/1] max-sm:aspect-video">
             {data.data.banner_info && data.data.banner_info.length !== 0 ? (
               <ImageSlider
-                wrapperCss="static"
+                // wrapperCss="relative"
                 images={data.data.banner_info.map((item) => ({
                   url: item.item_link,
                   alt_tag: item.alt_tag || "",
@@ -180,13 +186,13 @@ export default async function page({ params, searchParams }: IProps) {
               />
             ) : null}
 
-            <div className="absolute space-y-1 flex flex-col justify-end p-8 inset-0 z-20 opacity-100 max-sm:px-4 bg-[#0000002a] max-sm:bg-transparent">
-              <h1 className="font-semibold font-primary text-white text-2xl select-none max-sm:text-lg max-sm:text-black">
+            <div className="absolute space-y-1 flex flex-col justify-end p-8 inset-0 z-20 opacity-100 bg-[#0000002a]">
+              <h1 className="font-semibold font-primary text-white text-2xl select-none max-sm:text-lg">
                 {data.data.package_name}
               </h1>
 
               <div className="flex items-center justify-between select-none">
-                <span className="text-sm text-gray-200 font-primary max-sm:text-gray-800">
+                <span className="text-sm text-gray-200 font-primary max-sm:text-sm">
                   {data.data.short_description}
                 </span>
               </div>
@@ -205,8 +211,10 @@ export default async function page({ params, searchParams }: IProps) {
                 <ul className="flex items-start gap-5 flex-wrap font-primary">
                   {OVERVIEW_POINTS.map((item) => (
                     <li key={item?.id} className="flex items-center gap-1.5">
-                      <span className="size-[25px] flex items-center justify-center rounded-[50%] bg-accent text-white">
-                        {item.icon}
+                      <span className="size-[25px]">
+                        <span className="size-[24.9px] flex items-center justify-center rounded-[50%] bg-accent text-white">
+                          {item.icon}
+                        </span>
                       </span>
                       <span className="text-sm text-gray-500">
                         <span>{item.title}</span>
@@ -228,7 +236,19 @@ export default async function page({ params, searchParams }: IProps) {
                   ))}
                 </ul>
               </div>
-              <div className="space-y-3.5 max-sm:hidden">
+            </div>
+
+            <div className="space-y-3.5 order-1">
+              <div className="max-sm:order-2">
+                <React.Suspense fallback={<Loading />}>
+                  <AvilableDatesSection
+                    package_id={data.data.id}
+                    searchParams={urlSearchParams}
+                  />
+                </React.Suspense>
+              </div>
+
+              <div className="space-y-3.5">
                 <h3
                   id="Overview"
                   className="text-2xl font-semibold bg-accent text-white p-1.5 px-7 inline-block rounded-tr-lg rounded-bl-lg"
@@ -266,16 +286,8 @@ export default async function page({ params, searchParams }: IProps) {
                 </ul>
               </div>
             </div>
-            <div className="order-1 max-sm:order-2">
-              <React.Suspense fallback={<Loading />}>
-                <AvilableDatesSection
-                  package_id={data.data.id}
-                  searchParams={urlSearchParams}
-                />
-              </React.Suspense>
-            </div>
 
-            <div className="space-y-3.5 hidden max-sm:block order-3">
+            {/* <div className="space-y-3.5 hidden max-sm:block order-3">
               <h3
                 id="Overview"
                 className="text-2xl font-semibold bg-accent text-white p-1.5 px-7 inline-block rounded-tr-lg rounded-bl-lg"
@@ -310,7 +322,7 @@ export default async function page({ params, searchParams }: IProps) {
                   </li>
                 ))}
               </ul>
-            </div>
+            </div> */}
           </div>
 
           {/* <div className="w-full h-[1px] bg-gray-300"></div> */}
@@ -416,12 +428,27 @@ export default async function page({ params, searchParams }: IProps) {
               <Overview package_id={data.data.id} />
             </React.Suspense>
 
-            <h3
-              id="TripItinerary"
-              className="text-2xl font-semibold bg-accent text-white p-1.5 px-7 inline-block mb-5 rounded-tr-lg rounded-bl-lg"
-            >
-              Trip Itinerary :
-            </h3>
+            <div className="flex items-center justify-between">
+              <h3
+                id="TripItinerary"
+                className="text-2xl font-semibold bg-accent text-white p-1.5 px-7 inline-block mb-5 rounded-tr-lg rounded-bl-lg"
+              >
+                Trip Itinerary :
+              </h3>
+
+              {data.data.itinerary_pdf_link ? (
+                <Link
+                  className="block"
+                  href={data.data.itinerary_pdf_link}
+                  target="__blank"
+                >
+                  <Button className="!bg-red-600 !text-white">
+                    <FileChartColumn size={18} />
+                    Itinerary PDF Download
+                  </Button>
+                </Link>
+              ) : null}
+            </div>
             <React.Suspense
               fallback={
                 <Loading

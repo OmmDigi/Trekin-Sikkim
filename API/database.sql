@@ -330,3 +330,12 @@ CREATE TABLE upcoming_treks (
 );
 
 ALTER TABLE category ADD COLUMN showinhomepage BOOLEAN DEFAULT true;
+
+CREATE TABLE package_itinerary_pdf (
+    package_id INTEGER NOT NULL,
+    FOREIGN KEY (package_id) REFERENCES packages(id) ON DELETE CASCADE,
+
+    file_link TEXT,
+
+    UNIQUE(package_id)
+)

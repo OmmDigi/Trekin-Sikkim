@@ -32,10 +32,14 @@ export const uploadFiles = async ({
   formData.set("folder", folder);
 
   for (const file of fileArray) {
-    const convartedData = await convartImgToWebp(file);
-    formData.append("files", convartedData);
+    if (file.type.includes("image")) {
+      const convartedData = await convartImgToWebp(file);
+      formData.append("files", convartedData);
+    } else {
+      formData.append("files", file);
+    }
   }
-  
+
   try {
     const response = await uploadApi.post<IResponse<IUploadedFile[]>>(
       "/api/v1/upload/multiple",

@@ -41,7 +41,7 @@ export default function ChoosePackagesDialog({ isOpen, setOpen }: IProps) {
   >({
     queryKey: ["get-package-list-for-upcoming-package", currentPage],
     queryFn: () => getPackageListForUpcomingPackge(currentPage),
-    onSuccess(data) {
+    onSuccess(data : IResponse<IList[]>) {
       const alreadySelectedIds: number[] = [];
       data.data.forEach((item) => {
         if (item.is_selected) {

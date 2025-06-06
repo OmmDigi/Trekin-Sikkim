@@ -29,8 +29,9 @@ function Tabs({
   const [isPending, startTransition] = useTransition();
   const routes = useRouter();
 
+  //  max-sm:flex-nowrap max-sm:overflow-x-scroll
   return (
-    <div className="flex items-center gap-3 flex-wrap max-sm:flex-nowrap max-sm:overflow-x-scroll">
+    <div className="flex items-center gap-3 flex-wrap">
       {options.map((option, index) => (
         <Link
           scroll={scroll}

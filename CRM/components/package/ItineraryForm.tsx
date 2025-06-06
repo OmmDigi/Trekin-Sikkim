@@ -69,7 +69,7 @@ export default function ItineraryForm({ setIsFormOpen, itinerayId }: IProps) {
     queryKey: ["get-single-faq"],
     queryFn: () => getSingleItinerary(itinerayId),
     enabled: itinerayId !== 0,
-    onSuccess(data) {
+    onSuccess(data: IResponse<IPackgeItinerary>) {
       form.setValue("itinerary_details", data.data.itinerary_details || "");
       form.setValue("itinerary_heading", data.data.itinerary_heading);
       form.setValue("itinerary_subheading", data.data.itinerary_subheading);

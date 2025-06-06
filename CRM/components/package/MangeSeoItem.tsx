@@ -77,7 +77,7 @@ function ManageSeoForm({ packageId, currentStep }: IManageSeoForm) {
     queryKey: ["get-single-packge-seo", packageId],
     queryFn: () => getSinglePackageSeo(packageId),
     enabled: packageId !== 0,
-    onSuccess(data) {
+    onSuccess(data : IResponse<IPacakgeSeo | undefined>) {
       form.reset({
         meta_title: data.data?.meta_title,
         meta_description: data.data?.meta_description,

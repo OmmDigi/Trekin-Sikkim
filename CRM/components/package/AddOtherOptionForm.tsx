@@ -59,7 +59,7 @@ function AddOtherOptionForm({ setIsFormOpen, id }: IProps) {
     queryKey: ["get-single-other-option"],
     queryFn: () => getSingleOtherOption(id),
     enabled: id !== 0,
-    onSuccess(data) {
+    onSuccess(data : IResponse<IPackageOtherOption>) {
       form.reset({
         option_content: data.data.option_content || "",
         option_name: data.data.option_name,

@@ -77,7 +77,7 @@ export default function DepartDateDialog({
     queryKey: ["single-departure-date", departure_date_id],
     queryFn: () => getSingleDepartureDate(departure_date_id),
     enabled: departure_date_id !== 0,
-    onSuccess(data) {
+    onSuccess(data : IResponse<IDepartureDateResponse>) {
       form.reset({
         for_month: data.data.for_month,
         from_date: data.data.from_date,

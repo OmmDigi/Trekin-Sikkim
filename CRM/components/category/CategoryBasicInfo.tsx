@@ -63,7 +63,7 @@ export function CategoryBasicInfo({ category_id, currentStep }: IProps) {
     queryKey: ["get-single-category", category_id],
     queryFn: () => getSingleCategory(category_id),
     enabled: category_id !== 0,
-    onSuccess(data) {
+    onSuccess(data : IResponse<ICategories | null>) {
       if (data.data) {
         form.reset({
           category_name: data.data?.category_name || "",

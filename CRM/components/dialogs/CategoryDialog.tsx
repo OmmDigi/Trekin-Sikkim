@@ -68,7 +68,7 @@ export function CategoryDialog({ isOpen, setOpen, category_id }: IProps) {
     queryKey: ["get-single-category", category_id],
     queryFn: () => getSingleCategory(category_id),
     enabled: category_id !== 0,
-    onSuccess(data) {
+    onSuccess(data : IResponse<ICategories | null>) {
       form.reset({
         category_name: data.data?.category_name || "",
         category_type: data.data?.category_type_id || 1,

@@ -35,7 +35,8 @@ async function submitInformationToServer<T>(params: ParamsType) {
 export const useDoMutation = <T = any>(
   onGSuccess?: (data: IResponse<T>) => void,
   onGError?: (error: AxiosError<IResponse>) => void,
-  hideToastError?: boolean
+  hideToastError?: boolean,
+  hideToastSuccess?: boolean
 ) => {
   const { mutate, isLoading } = useMutation(submitInformationToServer<T>, {
     onSuccess: (data) => {
@@ -43,7 +44,9 @@ export const useDoMutation = <T = any>(
       if (data.onSuccess) {
         data.onSuccess(data.response);
       }
-      toast.success(data.response.message);
+      if (!hideToastSuccess) {
+        toast.success(data.response.message);
+      }
     },
     onError: (error: AxiosError<IResponse>) => {
       onGError?.(error);

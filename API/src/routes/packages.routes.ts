@@ -37,6 +37,7 @@ import {
   updatePackageGalleryInfo,
   updatePackageItinerary,
   updateSinglePackageBasicInfo,
+  uploadItineraryPdf,
 } from "../controllers/packages.controller";
 import { isAuthenticated } from "../middlewares/isAuthenticated";
 import { checkUser } from "../middlewares/checkUser";
@@ -75,6 +76,7 @@ packageRoute
   .get("/itinerary-one/:id", getSinglePackageItinerary)
   .get("/itinerary/:package_id", getPackageItinerary)
   .post("/itinerary", isAuthenticated, createPackageItinerary)
+  .post("/itinerary/upload-pdf", uploadItineraryPdf)
   .put("/itinerary/:id", isAuthenticated, updatePackageItinerary)
   .delete("/itinerary/:id", isAuthenticated, deletePackageItinerary)
 

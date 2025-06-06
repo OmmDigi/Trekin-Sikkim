@@ -59,7 +59,7 @@ export default function PackageGalleryEditDialog({
     queryKey: ["get-single-package-gallery-info"],
     queryFn: () => getSingleGalleryItemInfo(getSingleItemEndPoint, info.id),
     enabled: info.id !== 0,
-    onSuccess(data) {
+    onSuccess(data : IResponse<IPackageGallery>) {
       setSelectedOption(data.data.where_to_use);
     },
   });

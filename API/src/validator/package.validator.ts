@@ -302,6 +302,11 @@ export const VUpdatePackageItinerary = Joi.object({
   itinerary_details: Joi.string().required(),
 });
 
+export const VUpdateItineraryPdf = Joi.object({
+  package_id: Joi.number().required(),
+  file_link : Joi.string().required()
+})
+
 //package overview
 export const VPackageOverview = Joi.object({
   package_id: Joi.number().required(),

@@ -98,7 +98,7 @@ export default function AddMediaGalleryDialog({
     queryKey: ["get-single-media-item", media_item_id],
     queryFn: () => getSingleGalleryItem(media_item_id),
     enabled: media_item_id !== 0,
-    onSuccess(data) {
+    onSuccess(data : IResponse<IGalleryItem | null>) {
       form.reset({
         type: data.data?.media_type,
         photos: undefined,

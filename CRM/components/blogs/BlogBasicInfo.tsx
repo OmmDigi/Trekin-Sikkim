@@ -98,7 +98,7 @@ export default function BlogBasicInfo({ blog_id, currentStep }: IProps) {
     enabled: blog_id != 0,
     queryKey: ["get-single-blog"],
     queryFn: () => getSingleBlog(blog_id),
-    onSuccess(data) {
+    onSuccess(data : IResponse<BlogPost>) {
       form.reset({
         blog_content: data.data.blog_content,
         heading: data.data.heading,

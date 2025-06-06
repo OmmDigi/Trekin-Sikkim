@@ -80,7 +80,7 @@ export default function AdditionalDialog({
     queryKey: ["get-single-addition", additional_id],
     queryFn: () => getAddition(additional_id),
     enabled: additional_id !== 0,
-    onSuccess(data) {
+    onSuccess(data : IResponse<IAddition | null>) {
       form.reset({
         name: data.data?.additional_name || "",
         price_inr: data.data?.price_inr || 0,

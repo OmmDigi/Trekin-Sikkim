@@ -37,7 +37,7 @@ export default function EditCategoryPageContent({ currentStep }: IProps) {
   >({
     queryKey: ["category-page-content", category_id],
     queryFn: () => getSingleCategoryPageContent(category_id),
-    onSuccess(data) {
+    onSuccess(data : IResponse<ICategoryPageContent | undefined>) {
       editorData.current = data.data?.page_content || "NO DATA";
     },
   });

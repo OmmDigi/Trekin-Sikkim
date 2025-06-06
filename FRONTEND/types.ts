@@ -106,6 +106,7 @@ export interface IPackage {
   offer_price_usd: string;
   is_active: number;
   category_id: number;
+  trip_type : "Trip" | "Tour" | "Expedition";
   slug: string;
   additional: IAdditional[];
   banner_info: IMediaItem[];
@@ -114,6 +115,7 @@ export interface IPackage {
   meta_keywords : string;
   canonical : null | string;
   other_option_names: { id: number; option_name: string }[];
+  itinerary_pdf_link : null | string;
 }
 
 export interface IFaq {

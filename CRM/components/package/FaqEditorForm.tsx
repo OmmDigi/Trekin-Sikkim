@@ -74,7 +74,7 @@ export default function FaqEditorForm({
     queryKey: ["get-single-faq"],
     queryFn: () => getSingleFaq(getSingleItemEndPoint, currentRowId),
     enabled: currentRowId !== 0,
-    onSuccess(data) {
+    onSuccess(data : IResponse<IPackgeFAQ>) {
       form.setValue("faq_detail", data.data.faq_detail || "No Data Has Found");
       form.setValue("faq_heading", data.data.faq_heading);
     },

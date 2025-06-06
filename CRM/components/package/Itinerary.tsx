@@ -1,4 +1,4 @@
-import React, { useState, useTransition } from "react";
+import React, { useRef, useState, useTransition } from "react";
 import { Button } from "../ui/button";
 import {
   Table,
@@ -8,7 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import { Pencil, Plus, Trash } from "lucide-react";
+import { Pencil, Plus, Trash, Upload } from "lucide-react";
 import ItineraryForm from "./ItineraryForm";
 import { useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
@@ -20,6 +20,8 @@ import LoadingHandler from "../LoadingHandler";
 import LinkButton from "../link-button";
 import { useDoMutation } from "@/hooks/useDoMutation";
 import { ButtonLoading } from "../ui/button-loading";
+import { uploadFiles } from "../utils/uploadFiles";
+import { toast } from "react-toastify";
 
 interface IProps {
   currentStep: number;
@@ -31,6 +33,7 @@ const getPackageItinerary = async (package_id: number) => {
 
 export default function Itinerary({ currentStep }: IProps) {
   const searchParams = useSearchParams();
+  const uploadInputRef = useRef<HTMLInputElement>(null);
 
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [currentItinerayId, setCurrentItineraryId] = useState(0);
@@ -60,6 +63,62 @@ export default function Itinerary({ currentStep }: IProps) {
     });
   };
 
+  const { mutate: uploadItinerary } = useDoMutation(
+    () => {},
+    () => {},
+    false,
+    true
+  );
+  const [isItineraryUploading, startItineraryUploading] = useTransition();
+
+  const handleUploadInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.currentTarget.files?.[0];
+    if (!file) return;
+
+    const toastId = toast.loading("Uploading...");
+
+    startItineraryUploading(() => {
+      uploadFiles({
+        files: [file],
+        folder: "ItineraryPdf",
+        onUploading(percent) {
+          toast.update(toastId, {
+            render: `Uploading... ${percent}%`,
+            progress: percent,
+          });
+        },
+        onUploaded(result) {
+          uploadItinerary({
+            apiPath: "/api/v1/package/itinerary/upload-pdf",
+            method: "post",
+            formData: {
+              package_id: packageId,
+              file_link: result[0].downloadUrl,
+            },
+            onSuccess() {
+              toast.update(toastId, {
+                render: "Itinerar Pdf Has Successfully Uploaded",
+                type: "success",
+                isLoading: false,
+                autoClose: 3000,
+              });
+            },
+          });
+        },
+        onError(error) {
+          toast.update(toastId, {
+            render: error.response?.data.message,
+            type: "error",
+            isLoading: false,
+            autoClose: 3000,
+          });
+        },
+      });
+    });
+  };
+
   return (
     <div className="space-y-7">
       {isFormOpen ? (
@@ -72,15 +131,37 @@ export default function Itinerary({ currentStep }: IProps) {
           <div className="flex items-center justify-between">
             <h1 className="text-xl font-semibold">Trip Itinerary</h1>
 
-            <Button
-              onClick={() => {
-                setCurrentItineraryId(0);
-                setIsFormOpen(true);
-              }}
-            >
-              <Plus />
-              Add Trip Itinerary
-            </Button>
+            <div className="flex items-center gap-5">
+              <ButtonLoading
+                onClick={() => {
+                  if (!uploadInputRef.current)
+                    return alert("No Upload Input Ref Has Found");
+
+                  uploadInputRef.current.click();
+                }}
+                variant="secondary"
+                loading={isItineraryUploading}
+              >
+                <Upload />
+                Upload Itinerary Pdf
+              </ButtonLoading>
+              <input
+                onChange={handleUploadInputChange}
+                accept="application/pdf"
+                type="file"
+                ref={uploadInputRef}
+                className="hidden"
+              />
+              <Button
+                onClick={() => {
+                  setCurrentItineraryId(0);
+                  setIsFormOpen(true);
+                }}
+              >
+                <Plus />
+                Add Trip Itinerary
+              </Button>
+            </div>
           </div>
 
           <LoadingHandler

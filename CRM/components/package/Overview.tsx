@@ -58,7 +58,7 @@ function Overview({ currentStep }: IProps) {
   >({
     queryKey: ["get-package-overview", packageId],
     queryFn: () => getPackageOverview(packageId),
-    onSuccess(data) {
+    onSuccess(data : IResponse<IOverview>) {
       form.setValue("overview", data.data?.overview || "");
     },
   });

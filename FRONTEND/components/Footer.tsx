@@ -1,15 +1,12 @@
 import { FOOTER_INFO, FOOTERSOCIALLINKS } from "@/constant";
-import api from "@/lib/axios";
 import { cn } from "@/lib/utils";
-import { ICategories, IResponse } from "@/types";
 import Link from "next/link";
 import CustomLink from "./CustomLink";
+import CategoryFooterListView from "./CategoryFooterListView";
+import React from "react";
+import Loading from "./Loading";
 
-export default async function Footer() {
-  const { data: categories } = await api.get<IResponse<ICategories[]>>(
-    "/api/v1/category"
-  );
-
+export default function Footer() {
   return (
     <footer className="w-full bg-primary font-primary text-background py-9 max-sm:text-white max-sm:py-0">
       {/* <section className="space-y-9 wrapper max-sm:max-w-[90%]">
@@ -50,7 +47,7 @@ export default async function Footer() {
 
               <ul className="space-y-4">
                 {item.info.map((cItem, index) => (
-                  <Link
+                  <CustomLink
                     key={index}
                     className="text-sm text-secondary block"
                     href={cItem.pathname ?? "#"}
@@ -62,14 +59,29 @@ export default async function Footer() {
                     ) : null}
 
                     <span>{cItem.text}</span>
-                  </Link>
+                  </CustomLink>
                 ))}
               </ul>
             </li>
           ))}
+
+          <li
+            className={cn(
+              "space-y-4"
+              // index === 0 ? "max-sm:col-span-2" : ""
+            )}
+          >
+            <h2 className="font-semibold text-2xl text-secondary">Category</h2>
+
+            <div className="w-14 h-[1px] bg-light-gray opacity-20"></div>
+
+            <React.Suspense fallback={<Loading />}>
+              <CategoryFooterListView />
+            </React.Suspense>
+          </li>
         </ul>
 
-        <div className="space-y-4">
+        {/* <div className="space-y-4">
           <h2 className="font-semibold text-2xl text-secondary text-center max-sm:text-left">
             Category
           </h2>
@@ -85,7 +97,7 @@ export default async function Footer() {
               </li>
             ))}
           </ul>
-        </div>
+        </div> */}
 
         <div className="flex items-center justify-center">
           <div className="w-14 h-[1px] bg-light-gray opacity-20"></div>
