@@ -416,26 +416,12 @@ export default async function page({ params, searchParams }: IProps) {
           </div>
 
           <section className="font-primary leading-7">
-            <h3
-              id="Overview"
-              className="text-2xl font-semibold bg-accent text-white p-1.5 px-7 inline-block rounded-tr-lg rounded-bl-lg"
-            >
-              Overview :
-            </h3>
-            <React.Suspense
-              fallback={
-                <Loading className="py-6" loadertext="Loading Overview..." />
-              }
-            >
-              <Overview package_id={data.data.id} />
-            </React.Suspense>
-
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between flex-wrap gap-y-2.5">
               <h3
-                id="TripItinerary"
-                className="text-2xl font-semibold bg-accent text-white p-1.5 px-7 inline-block mb-5 rounded-tr-lg rounded-bl-lg"
+                id="Overview"
+                className="text-2xl font-semibold bg-accent text-white p-1.5 px-7 inline-block rounded-tr-lg rounded-bl-lg"
               >
-                Trip Itinerary :
+                Overview :
               </h3>
 
               {data.data.itinerary_pdf_link ? (
@@ -444,13 +430,28 @@ export default async function page({ params, searchParams }: IProps) {
                   href={data.data.itinerary_pdf_link}
                   target="__blank"
                 >
-                  <Button className="!bg-red-600 !text-white">
+                  <Button className="!bg-red-600 !text-white max-sm:text-sm">
                     <FileChartColumn size={18} />
                     Itinerary PDF Download
                   </Button>
                 </Link>
               ) : null}
             </div>
+
+            <React.Suspense
+              fallback={
+                <Loading className="py-6" loadertext="Loading Overview..." />
+              }
+            >
+              <Overview package_id={data.data.id} />
+            </React.Suspense>
+
+            <h3
+              id="TripItinerary"
+              className="text-2xl font-semibold bg-accent text-white p-1.5 px-7 inline-block mb-5 rounded-tr-lg rounded-bl-lg"
+            >
+              Trip Itinerary :
+            </h3>
             <React.Suspense
               fallback={
                 <Loading
