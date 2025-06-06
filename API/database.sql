@@ -338,4 +338,4 @@ CREATE TABLE package_itinerary_pdf (
     file_link TEXT,
 
     UNIQUE(package_id)
-)
+);
