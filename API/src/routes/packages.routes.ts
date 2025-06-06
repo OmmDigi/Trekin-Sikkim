@@ -13,6 +13,7 @@ import {
   deletePackage,
   deletePackageItinerary,
   getDepartureDates,
+  getDepartureDatesV2,
   // getOneOtherOptionNames,
   getOneOtherOptions,
   getPackageFaq,
@@ -54,6 +55,7 @@ packageRoute
 
   .get("/departure-date-one/:id", getSingleDepartureDate)
   .get("/departure-date/:package_id", checkUser, getDepartureDates)
+  .get("/departure-date-v2/:package_id", checkUser, getDepartureDatesV2)
   .post("/departure-date", isAuthenticated, createDepartureDate)
   .put("/departure-date/:id", isAuthenticated, updateDepartureDateInfo)
   .delete("/departure-date/:id", isAuthenticated, deleteDepartureDate)

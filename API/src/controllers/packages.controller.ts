@@ -429,7 +429,6 @@ export const getDepartureDates = asyncErrorHandler(
       dates_info: [],
     };
 
-
     try {
       await client.query("BEGIN");
 
@@ -456,7 +455,7 @@ export const getDepartureDates = asyncErrorHandler(
                 ELSE 13
               END;
       `,
-      [value.package_id]
+        [value.package_id]
       );
 
       dataToReturn.months = avilableMonths.map((item) => item.for_month);
@@ -478,12 +477,53 @@ export const getDepartureDates = asyncErrorHandler(
       await client.query("COMMIT");
       client.release();
 
-      res.status(200).json(new ApiResponse(200, "Departure Date Of A Package", dataToReturn));
+      res
+        .status(200)
+        .json(
+          new ApiResponse(200, "Departure Date Of A Package", dataToReturn)
+        );
     } catch (error: any) {
       await client.query("ROLLBACK");
       client.release();
       throw new ErrorHandler(400, error.message);
     }
+  }
+);
+
+export const getDepartureDatesV2 = asyncErrorHandler(
+  async (req: CustomRequest, res) => {
+    const { error, value } = VSinglePackageInfo.validate(req.params || {});
+    if (error)
+      throw new ErrorHandler(400, error.message, error.details[0].context?.key);
+
+    const { error: filterError, value: filterValue } =
+      VDepartureFilter.validate(req.query);
+    if (filterError) throw new ErrorHandler(400, filterError.message);
+
+    const { rows } = await pool.query(
+      `
+        SELECT 
+          for_month AS month,
+          EXTRACT(YEAR FROM from_date) AS year,
+          JSON_AGG(
+            JSON_BUILD_OBJECT(
+              'id', id,
+              'package_id', package_id,
+              'from_date', from_date,
+              'to_date', to_date,
+              'max_seats', max_seats,
+              'avilibility_text', avilibility_text,
+              'avilibility_color', avilibility_color
+            ) ORDER BY from_date
+          ) AS departureDates
+        FROM packages_departure_date
+        WHERE is_active = 1 AND package_id = 10
+        GROUP BY for_month, EXTRACT(YEAR FROM from_date)
+        ORDER BY EXTRACT(YEAR FROM from_date), TO_DATE(for_month, 'Month');
+      `
+    );
+
+    res.status(200).json(new ApiResponse(200, "", rows));
   }
 );
 

@@ -12,14 +12,6 @@ import {
   Mountain,
   PersonStanding,
   Watch,
-  Calendar,
-  Users,
-  Star,
-  Clock,
-  Shield,
-  CheckCircle,
-  ChevronUp,
-  MoveRight,
 } from "lucide-react";
 import api from "@/lib/axios";
 import { IPackage, IResponse } from "@/types";
@@ -33,11 +25,6 @@ import AvilableDatesSection from "@/components/Packages/AvilableDatesSection";
 import AdditionalCheckbox from "@/components/Packages/AdditionalCheckbox";
 import PackageBookNowBtn from "@/components/Packages/PackageBookNowBtn";
 import { Metadata } from "next";
-import AiAvilableDatesSection from "@/components/AiComponents/AiAvilableDatesSection";
-import ReadMore from "@/components/Utils/ReadMore";
-import ReadMoreContent from "@/components/Utils/ReadMoreContent";
-import ReadMoreToggle from "@/components/Utils/ReadMoreToggle";
-import { cn } from "@/lib/utils";
 
 const getSinglePackagePageInfo = cache(async (slug: string) => {
   return (
@@ -57,59 +44,52 @@ const OVERVIEW_POINTS = [
     id: "1",
     title: "Region",
     value: "Sikkim",
-    icon: <MapPinned size={18} />,
-    color: "bg-blue-500",
+    icon: <MapPinned size={15} />,
   },
   {
     id: "2",
     title: "Best Time",
     value: "September to June",
-    icon: <Watch size={18} />,
-    color: "bg-green-500",
+    icon: <Watch size={15} />,
   },
   {
     id: "3",
     title: "Trek Duration",
     value: "6 days",
-    icon: <Hourglass size={18} />,
-    color: "bg-purple-500",
+    icon: <Hourglass size={13} />,
   },
   {
     id: "4",
     title: "Highest Altitude",
     value: "12,516 ft",
-    icon: <Mountain size={18} />,
-    color: "bg-orange-500",
+    icon: <Mountain size={15} />,
   },
   {
     id: "5",
     title: "Suitable For",
     value: "11 to 62 years",
-    icon: <PersonStanding size={18} />,
-    color: "bg-pink-500",
+    icon: <PersonStanding size={15} />,
   },
   {
     id: "6",
     title: "Trek Distance",
     value: "22 kms",
-    icon: <LandPlot size={18} />,
-    color: "bg-teal-500",
+    icon: <LandPlot size={15} />,
   },
+
   {
     id: "7",
     title: "Price INR",
     value: "₹2000",
     other: "₹15000",
-    icon: <BsCurrencyRupee size={18} />,
-    color: "bg-red-500",
+    icon: <BsCurrencyRupee size={15} />,
   },
   {
     id: "8",
     title: "Price USD",
     value: "$500",
     other: "$1000",
-    icon: <DollarSign size={18} />,
-    color: "bg-emerald-500",
+    icon: <DollarSign size={15} />,
   },
 ];
 
@@ -148,8 +128,6 @@ export default async function page({ params, searchParams }: IProps) {
   const urlSearchParams = await searchParams;
   const newUrlSearchParams = new URLSearchParams(urlSearchParams);
 
-  const isBtnDisable = (await searchParams).date_id === undefined;
-
   const data = await getSinglePackagePageInfo(packageSlug);
 
   OVERVIEW_POINTS[0].value = data.data.region;
@@ -166,11 +144,12 @@ export default async function page({ params, searchParams }: IProps) {
   const totalPrices = {
     offerPriceInr: parseInt(data.data.offer_price_inr),
     originalPriceInr: parseInt(data.data.original_price_inr),
+
     offerPriceUsd: parseInt(data.data.offer_price_usd),
     originalPriceUsd: parseInt(data.data.original_price_usd),
   };
 
-  //calculate the inr price of selected addition price
+  //calclute the inr price of selected addition price
   newUrlSearchParams.forEach((value, key) => {
     if (key.includes("ad")) {
       const inrPrice = data.data.additional[parseInt(value)].price_inr;
@@ -182,432 +161,465 @@ export default async function page({ params, searchParams }: IProps) {
     }
   });
 
-  const discountPercentageINR = Math.round(
-    ((totalPrices.originalPriceInr - totalPrices.offerPriceInr) /
-      totalPrices.originalPriceInr) *
-      100
-  );
-
   return (
-    <main className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
-      <section className="relative">
-        <div className="relative">
-          <div className="relative h-[70vh] max-sm:h-[30vh] overflow-hidden">
+    <main className="wrapper mx-auto pb-10 space-y-3 overflow-visible pt-3.5">
+      <section className="w-full flex gap-x-10 gap-y-3.5 overflow-visible max-sm:flex-col">
+        {/* Left Side */}
+        <div className="flex-1 overflow-hidden space-y-5">
+          <div className="relative group/package_banner rounded-3xl min-h-[25rem] overflow-hidden max-sm:shadow-lg max-sm:border max-sm:border-gray-200">
             {data.data.banner_info && data.data.banner_info.length !== 0 ? (
               <ImageSlider
-                wrapperCss="static size-full"
+                wrapperCss="static"
                 images={data.data.banner_info.map((item) => ({
                   url: item.item_link,
                   alt_tag: item.alt_tag || "",
                 }))}
                 sliderPreview={1}
-                className="h-full w-full !object-cover"
+                className="h-full w-full overflow-hidden rounded-2xl aspect-[2.8/1] max-sm:aspect-video"
                 controllerClassName="z-30"
               />
-            ) : (
-              <div className="h-full w-full bg-gradient-to-r from-blue-600 to-purple-600"></div>
-            )}
-            {/* Overlay */}
-            <div className="absolute inset-0 bg-[#0000005e] z-10 max-sm:hidden"></div>
-          </div>
+            ) : null}
 
-          {/* Hero Content */}
-          <div className="absolute inset-0 z-20 flex items-end max-sm:static max-sm:mt-6">
-            <div className="container mx-auto px-4 pb-12 md:pb-16">
-              <div className="max-w-4xl">
-                {/* <div className="flex items-center gap-2 mb-4">
-                  <span className="px-3 py-1 bg-green-500 text-white text-sm font-medium rounded-full">
-                    Featured Trek
-                  </span>
-                  <div className="flex items-center gap-1">
-                    <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                    <span className="text-white text-sm max-sm:text-black">
-                      4.8 (124 reviews)
-                    </span>
-                  </div>
-                </div> */}
+            <div className="absolute space-y-1 flex flex-col justify-end p-8 inset-0 z-20 opacity-100 max-sm:px-4 bg-[#0000002a] max-sm:bg-transparent">
+              <h1 className="font-semibold font-primary text-white text-2xl select-none max-sm:text-lg max-sm:text-black">
+                {data.data.package_name}
+              </h1>
 
-                <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 leading-tight max-sm:text-black">
-                  {data.data.package_name}
-                </h1>
-
-                <p className="text-xl text-gray-200 mb-6 max-w-2xl max-sm:text-black">
+              <div className="flex items-center justify-between select-none">
+                <span className="text-sm text-gray-200 font-primary max-sm:text-gray-800">
                   {data.data.short_description}
-                </p>
-
-                <div className="flex flex-wrap items-center gap-4">
-                  <div className="flex items-center gap-2 text-white max-sm:text-black">
-                    <MapPinned className="w-5 h-5" />
-                    <span className="font-medium">{data.data.region}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-white max-sm:text-black">
-                    <Clock className="w-5 h-5" />
-                    <span className="font-medium">{data.data.duration}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-white max-sm:text-black">
-                    <Mountain className="w-5 h-5" />
-                    <span className="font-medium">
-                      {data.data.highest_altitude}
-                    </span>
-                  </div>
-                </div>
+                </span>
               </div>
             </div>
           </div>
-        </div>
-      </section>
 
-      <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Main Content */}
-          <div className="lg:col-span-2 space-y-8">
-            {/* Quick Info Cards */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {OVERVIEW_POINTS.slice(0, 6).map((item) => (
-                <div
-                  key={item.id}
-                  className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow"
+          <div className="grid grid-cols-2 gap-6 max-sm:grid-cols-1">
+            <div className="space-y-5 order-2 max-sm:order-1">
+              <div className="space-y-2.5">
+                <h3
+                  id="Overview"
+                  className="text-2xl max-sm:hidden font-semibold bg-accent text-white p-1.5 px-7 inline-block rounded-tr-lg rounded-bl-lg"
                 >
-                  <div
-                    className={`w-10 h-10 ${item.color} rounded-lg flex items-center justify-center text-white mb-3`}
-                  >
-                    {item.icon}
-                  </div>
-                  <p className="text-sm text-gray-600 font-medium">
-                    {item.title}
-                  </p>
-                  <p className="text-lg font-bold text-gray-900">
-                    {item.value}
-                  </p>
-                </div>
-              ))}
+                  Details :
+                </h3>
+                <ul className="flex items-start gap-5 flex-wrap font-primary">
+                  {OVERVIEW_POINTS.map((item) => (
+                    <li key={item?.id} className="flex items-center gap-1.5">
+                      <span className="size-[25px] flex items-center justify-center rounded-[50%] bg-accent text-white">
+                        {item.icon}
+                      </span>
+                      <span className="text-sm text-gray-500">
+                        <span>{item.title}</span>
+                        <span> : </span>
+                        {item.other ? (
+                          <span className="text-red-400 line-through text-xs mr-1.5">
+                            {item.other}
+                          </span>
+                        ) : null}
+                        <span
+                          className={`border-b border-gray-400 ${
+                            item.other ? "font-semibold text-green-700" : ""
+                          }`}
+                        >
+                          {item.value}
+                        </span>
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="space-y-3.5 max-sm:hidden">
+                <h3
+                  id="Overview"
+                  className="text-2xl font-semibold bg-accent text-white p-1.5 px-7 inline-block rounded-tr-lg rounded-bl-lg"
+                >
+                  Additional :
+                </h3>
+
+                <ul>
+                  {data.data.additional.map((additionlInfo, index) => (
+                    <li
+                      key={additionlInfo.additional_id}
+                      className="text-xs py-3.5 cursor-pointer flex justify-between border px-3.5 bg-red-50 border-gray-300"
+                    >
+                      <div className="flex justify-between flex-1">
+                        <div className="flex items-center gap-2">
+                          <span className="text-lg max-sm:text-sm">
+                            {additionlInfo.additional_name}
+                          </span>
+                        </div>
+
+                        <div className="text-center block text-lg max-sm:pl-2.5 max-sm:text-sm">
+                          ₹{additionlInfo.price_inr} / $
+                          {additionlInfo.price_usd}
+                        </div>
+                      </div>
+
+                      <div className="flex justify-end">
+                        <AdditionalCheckbox
+                          additional_id={additionlInfo.additional_id}
+                          index={index}
+                        />
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
-
-            {/* Available Dates */}
-            <ReadMore initIsOpen={true}>
-              <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                <ReadMoreToggle type="OPEN">
-                  <div className="flex items-center justify-between cursor-pointer">
-                    <h3 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
-                      <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
-                        <Calendar className="w-5 h-5 text-white" />
-                      </div>
-                      Available Dates
-                    </h3>
-
-                    <ChevronUp className="rotate-180 cursor-pointer" />
-                  </div>
-                </ReadMoreToggle>
-                <ReadMoreToggle type="CLOSE">
-                  <div className="flex items-center justify-between cursor-pointer">
-                    <h3 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
-                      <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
-                        <Calendar className="w-5 h-5 text-white" />
-                      </div>
-                      Available Dates
-                    </h3>
-
-                    <ChevronUp className="cursor-pointer" />
-                  </div>
-                </ReadMoreToggle>
-                <ReadMoreContent className="mt-6">
-                  <React.Suspense fallback={<Loading />}>
-                    {/* <AvilableDatesSection
+            <div className="order-1 max-sm:order-2">
+              <React.Suspense fallback={<Loading />}>
+                <AvilableDatesSection
                   package_id={data.data.id}
                   searchParams={urlSearchParams}
-                /> */}
-                    <AiAvilableDatesSection
-                      package_id={data.data.id}
-                      searchParams={urlSearchParams}
-                    />
-                  </React.Suspense>
-                </ReadMoreContent>
-              </div>
-            </ReadMore>
+                />
+              </React.Suspense>
+            </div>
 
-            {/* Additional Services */}
-            {data.data.additional.length > 0 && (
-              <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
-                  <div className="w-8 h-8 bg-purple-500 rounded-lg flex items-center justify-center">
-                    <Shield className="w-5 h-5 text-white" />
-                  </div>
-                  Additional Services
-                </h3>
-                <div className="space-y-4">
-                  {data.data.additional.map((additionlInfo, index) => (
-                    <div
-                      key={additionlInfo.additional_id}
-                      className="flex items-center justify-between p-4 border border-gray-200 rounded-xl hover:border-green-300 hover:bg-green-50 transition-all"
-                    >
-                      <div className="flex items-center gap-4">
-                        <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                          <CheckCircle className="w-4 h-4 text-white" />
-                        </div>
-                        <div>
-                          <h4 className="font-semibold text-gray-900">
-                            {additionlInfo.additional_name}
-                          </h4>
-                          <p className="text-green-600 font-bold">
-                            ₹{additionlInfo.price_inr} / $
-                            {additionlInfo.price_usd}
-                          </p>
-                        </div>
+            <div className="space-y-3.5 hidden max-sm:block order-3">
+              <h3
+                id="Overview"
+                className="text-2xl font-semibold bg-accent text-white p-1.5 px-7 inline-block rounded-tr-lg rounded-bl-lg"
+              >
+                Additional :
+              </h3>
+
+              <ul>
+                {data.data.additional.map((additionlInfo, index) => (
+                  <li
+                    key={additionlInfo.additional_id}
+                    className="text-xs py-3.5 cursor-pointer flex justify-between border px-3.5 bg-red-50 border-gray-300"
+                  >
+                    <div className="flex justify-between flex-1">
+                      <div className="flex items-center gap-2">
+                        <span className="text-lg max-sm:text-sm">
+                          {additionlInfo.additional_name}
+                        </span>
                       </div>
+
+                      <div className="text-center block text-lg max-sm:pl-2.5 max-sm:text-sm">
+                        ₹{additionlInfo.price_inr} / ${additionlInfo.price_usd}
+                      </div>
+                    </div>
+
+                    <div className="flex justify-end">
                       <AdditionalCheckbox
                         additional_id={additionlInfo.additional_id}
                         index={index}
                       />
                     </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Navigation Tabs */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-2">
-              <Tabs
-                scroll={true}
-                options={[
-                  { id: "overview", text: "Overview", slug: "#Overview" },
-                  {
-                    id: "trip-itinerary",
-                    text: "Trip Itinerary",
-                    slug: "#TripItinerary",
-                  },
-                  { id: "faq", text: "FAQ", slug: "#faq" },
-                  {
-                    id: "photo-gallery",
-                    text: "Photo Gallery",
-                    slug: "#photo-gallery",
-                  },
-                  ...data.data.other_option_names.map((item) => ({
-                    id: item.id,
-                    text: item.option_name,
-                    slug: `#${item.option_name}`,
-                  })),
-                ]}
-              />
-            </div>
-
-            {/* Content Sections */}
-            <div className="space-y-12">
-              {/* Overview */}
-              <section
-                id="Overview"
-                className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100"
-              >
-                <h3 className="text-3xl font-bold text-gray-900 mb-6 flex items-center gap-3">
-                  <div className="w-10 h-10 bg-blue-500 rounded-xl flex items-center justify-center">
-                    <Star className="w-6 h-6 text-white" />
-                  </div>
-                  Overview
-                </h3>
-                <React.Suspense
-                  fallback={
-                    <Loading
-                      className="py-6"
-                      loadertext="Loading Overview..."
-                    />
-                  }
-                >
-                  <Overview package_id={data.data.id} />
-                </React.Suspense>
-              </section>
-
-              {/* Trip Itinerary */}
-              <section
-                id="TripItinerary"
-                className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100"
-              >
-                <h3 className="text-3xl font-bold text-gray-900 mb-8 flex items-center gap-3">
-                  <div className="w-10 h-10 bg-green-500 rounded-xl flex items-center justify-center">
-                    <Calendar className="w-6 h-6 text-white" />
-                  </div>
-                  Trip Itinerary
-                </h3>
-                <React.Suspense
-                  fallback={
-                    <Loading
-                      className="py-6"
-                      loadertext="Loading Trip Itinerary..."
-                    />
-                  }
-                >
-                  <TripItinerary package_id={data.data.id} />
-                </React.Suspense>
-              </section>
-
-              {/* Photo Gallery */}
-              <section
-                id="photo-gallery"
-                className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100"
-              >
-                <h3 className="text-3xl font-bold text-gray-900 mb-8 flex items-center gap-3">
-                  <div className="w-10 h-10 bg-purple-500 rounded-xl flex items-center justify-center">
-                    <Mountain className="w-6 h-6 text-white" />
-                  </div>
-                  Photo Gallery
-                </h3>
-                <React.Suspense
-                  fallback={
-                    <Loading
-                      className="py-6"
-                      loadertext="Loading Photo Gallery..."
-                    />
-                  }
-                >
-                  <PhotoGallery package_id={data.data.id} />
-                </React.Suspense>
-              </section>
-
-              {/* FAQ */}
-              <section
-                id="faq"
-                className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100"
-              >
-                <h3 className="text-3xl font-bold text-gray-900 mb-8 gap-3">
-                  <span className="float-left mr-4 mb-1.5 w-10 h-10 bg-orange-500 rounded-xl flex items-center justify-center">
-                    <Users className="w-6 h-6 text-white" />
-                  </span>
-                  <span className="inline-block">
-                    Frequently Asked Questions
-                  </span>
-                </h3>
-                <React.Suspense
-                  fallback={
-                    <Loading className="py-6" loadertext="Loading FAQ..." />
-                  }
-                >
-                  <Faqs package_id={data.data.id} />
-                </React.Suspense>
-              </section>
-
-              {/* Other Options */}
-              <OtherOptions package_id={data.data.id} />
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
 
-          {/* Sidebar */}
-          <div className="lg:col-span-1">
-            <div className="sticky top-24 space-y-6">
-              {/* Pricing Card */}
-              <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
-                <div className="text-center mb-6">
-                  <div className="flex items-center justify-center gap-2 mb-2">
-                    <span className="text-3xl font-bold text-gray-900">
-                      ₹{totalPrices.offerPriceInr.toLocaleString()}
-                    </span>
-                    <span className="text-lg text-gray-500 line-through">
-                      ₹{totalPrices.originalPriceInr.toLocaleString()}
+          {/* <div className="w-full h-[1px] bg-gray-300"></div> */}
+
+          {/* <React.Suspense fallback={<Loading />}>
+            <AvilableDatesSection
+              package_id={data.data.id}
+              searchParams={urlSearchParams}
+            />
+          </React.Suspense> */}
+
+          {/* <h3
+            id="Overview"
+            className="text-2xl font-semibold bg-accent text-white p-1.5 px-7 inline-block rounded-tr-lg rounded-bl-lg"
+          >
+            Additional :
+          </h3>
+
+          <ul>
+            {data.data.additional.map((additionlInfo, index) => (
+              <li
+                key={additionlInfo.additional_id}
+                className="text-xs py-3.5 cursor-pointer flex justify-between border px-3.5 bg-red-50 border-gray-300"
+              >
+                <div className="flex justify-between flex-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg max-sm:text-sm">
+                      {additionlInfo.additional_name}
                     </span>
                   </div>
-                  <div className="flex items-center justify-center gap-2 mb-3">
-                    <span className="text-xl font-bold text-gray-700">
-                      ${totalPrices.offerPriceUsd}
-                    </span>
-                    <span className="text-sm text-gray-500 line-through">
-                      ${totalPrices.originalPriceUsd}
-                    </span>
+
+                  <div className="text-center block text-lg max-sm:pl-2.5 max-sm:text-sm">
+                    ₹{additionlInfo.price_inr} / ${additionlInfo.price_usd}
                   </div>
-                  {discountPercentageINR > 0 && (
-                    <div className="inline-flex items-center px-3 py-1 bg-red-100 text-red-800 text-sm font-semibold rounded-full">
-                      Save {discountPercentageINR}%
-                    </div>
-                  )}
                 </div>
 
-                {/* <div className="space-y-4 mb-6">
-                  <div className="flex items-center gap-3 text-gray-600">
-                    <CheckCircle className="w-5 h-5 text-green-500" />
-                    <span>Free Cancellation</span>
-                  </div>
-                  <div className="flex items-center gap-3 text-gray-600">
-                    <CheckCircle className="w-5 h-5 text-green-500" />
-                    <span>Expert Guide Included</span>
-                  </div>
-                  <div className="flex items-center gap-3 text-gray-600">
-                    <CheckCircle className="w-5 h-5 text-green-500" />
-                    <span>All Meals Included</span>
-                  </div>
-                  <div className="flex items-center gap-3 text-gray-600">
-                    <CheckCircle className="w-5 h-5 text-green-500" />
-                    <span>Safety Equipment</span>
-                  </div>
-                </div> */}
+                <div className="flex justify-end">
+                  <AdditionalCheckbox
+                    additional_id={additionlInfo.additional_id}
+                    index={index}
+                  />
+                </div>
+              </li>
+            ))}
+          </ul> */}
 
-                <PackageBookNowBtn package_id={data.data.id} />
+          <div className="flex items-center justify-between h-[3rem] max-sm:h-auto max-sm:flex-wrap max-sm:gap-y-4.5">
+            <span className="font-semibold space-x-2.5">
+              Total:
+              <span className="text-red-400 line-through text-xs ml-1.5">
+                ₹{totalPrices.originalPriceInr}
+              </span>
+              <span>₹{totalPrices.offerPriceInr}</span>
+              <span>/</span>
+              <span className="text-red-400 line-through text-xs ml-1.5">
+                ${totalPrices.originalPriceUsd}
+              </span>
+              <span>${totalPrices.offerPriceUsd}</span>
+            </span>
+            <PackageBookNowBtn package_id={data.data.id} />
+          </div>
 
-                {/* Book Now Mobile Popup Btn */}
-                <div
-                  className={cn(
-                    "hidden max-sm:block fixed bottom-20 z-40 left-2.5 right-2.5",
-                    "transition-transform duration-500",
-                    isBtnDisable ? "translate-y-[150%]" : "translate-y-0"
-                  )}
-                >
-                  <PackageBookNowBtn
-                    className="!rounded-md !py-5 !shadow-2xl flex items-center gap-2.5 !text-lg"
-                    package_id={data.data.id}
+          <div className="w-full h-[1px] bg-gray-300"></div>
+
+          <div className="sticky top-[4.3rem] h-fit">
+            <Tabs
+              // selectedTabCss="bg-accent !text-black !font-semibold"
+              scroll={true}
+              options={[
+                { id: "overview", text: "Overview", slug: "#Overview" },
+                {
+                  id: "trip-itinerary",
+                  text: "Trip Itinerary",
+                  slug: "#TripItinerary",
+                },
+                { id: "faq", text: "Faq", slug: "#faq" },
+                {
+                  id: "photo-gallery",
+                  text: "Photo Gallery",
+                  slug: "#photo-gallery",
+                },
+                ...data.data.other_option_names.map((item) => ({
+                  id: item.id,
+                  text: item.option_name,
+                  slug: `#${item.option_name}`,
+                })),
+              ]}
+            />
+          </div>
+
+          <section className="font-primary leading-7">
+            <h3
+              id="Overview"
+              className="text-2xl font-semibold bg-accent text-white p-1.5 px-7 inline-block rounded-tr-lg rounded-bl-lg"
+            >
+              Overview :
+            </h3>
+            <React.Suspense
+              fallback={
+                <Loading className="py-6" loadertext="Loading Overview..." />
+              }
+            >
+              <Overview package_id={data.data.id} />
+            </React.Suspense>
+
+            <h3
+              id="TripItinerary"
+              className="text-2xl font-semibold bg-accent text-white p-1.5 px-7 inline-block mb-5 rounded-tr-lg rounded-bl-lg"
+            >
+              Trip Itinerary :
+            </h3>
+            <React.Suspense
+              fallback={
+                <Loading
+                  className="py-6"
+                  loadertext="Loading Trip Itinerary..."
+                />
+              }
+            >
+              <TripItinerary package_id={data.data.id} />
+            </React.Suspense>
+
+            <h3
+              id="photo-gallery"
+              className="text-2xl font-semibold bg-accent text-white p-1.5 px-7 inline-block rounded-tr-lg rounded-bl-lg my-5"
+            >
+              Photo Gallery :
+            </h3>
+
+            {/* Gallery Categories */}
+            {/* <ul className="flex items-center gap-2.5 flex-wrap">
+                {GALLERY_CATEGORY.map((cat, index) => (
+                  <li
+                    key={index}
+                    className={`${
+                      index === 0 ? "bg-accent" : ""
+                    } text-sm p-2 cursor-pointer border border-gray-300 text-nowrap`}
                   >
-                    <MoveRight />
-                  </PackageBookNowBtn>
-                </div>
+                    {cat.text}
+                  </li>
+                ))}
+              </ul> */}
+            <React.Suspense
+              fallback={
+                <Loading
+                  className="py-6"
+                  loadertext="Loading Trip Itinerary..."
+                />
+              }
+            >
+              <PhotoGallery package_id={data.data.id} />
+            </React.Suspense>
 
-                <p className="text-center text-sm text-gray-500 mt-4">
-                  Secure booking • No hidden fees
+            <h3
+              id="faq"
+              className="text-2xl font-semibold bg-accent text-white p-1.5 px-7 inline-block rounded-tr-lg rounded-bl-lg mb-5 mt-10"
+            >
+              Frequently Asked Question :{" "}
+            </h3>
+            <React.Suspense
+              fallback={
+                <Loading
+                  className="py-6"
+                  loadertext="Loading Trip Itinerary..."
+                />
+              }
+            >
+              <Faqs package_id={data.data.id} />
+            </React.Suspense>
+          </section>
+
+          {/* <section className="font-primary py-6 leading-7">
+              <h3 className="text-2xl font-semibold underline decoration-accent">
+                Overview :{" "}
+              </h3>
+  
+              <div>
+                <p className="text-sm leading-7 mt-4">
+                  Sandakphu Trek is the best option for first-timer and immature
+                  trekkers which takes you to unexplored and not so known parts of
+                  Nepal and Sikkim. This trail line is the highest in West Bengal.
+                  And its route follows the border of Nepal and India. Trekkers
+                  can also visit Singalila National Park where you will find
+                  species like a red panda. Forests are full of Magnolia and
+                  Rhododendrons because of which during spring, the forest turns
+                  white, pink, and red. You will find many local people staying
+                  there along the route of the Sandakphu Phalut trek. The trek is
+                  somewhere moderate and somewhere hard giving a balance
+                  experience to the hikers. While going towards Tumling you may
+                  also get a view of the great Mt. Everest if the weather is
+                  clear. The last part of the trek is very hard due to the fast
+                  gain in height and also very rewarding because after reaching
+                  the summit point you will get to see a magnificent view.
                 </p>
-              </div>
-
-              {/* Quick Info */}
-              <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                <h4 className="font-bold text-gray-900 mb-4">
-                  Trek Highlights
-                </h4>
-                <div className="space-y-3">
-                  <div className="flex items-center gap-3">
-                    <Mountain className="w-5 h-5 text-blue-500" />
-                    <span className="text-sm text-gray-600">
-                      Altitude: {data.data.highest_altitude}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <LandPlot className="w-5 h-5 text-green-500" />
-                    <span className="text-sm text-gray-600">
-                      Distance: {data.data.trek_distance}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <Watch className="w-5 h-5 text-purple-500" />
-                    <span className="text-sm text-gray-600">
-                      Duration: {data.data.duration}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <PersonStanding className="w-5 h-5 text-orange-500" />
-                    <span className="text-sm text-gray-600">
-                      Age: {data.data.suitable_for}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Contact Card */}
-              <div className="bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl p-6 text-white">
-                <h4 className="font-bold mb-3">Need Help?</h4>
-                <p className="text-sm mb-4 text-blue-100">
-                  Our travel experts are here to help you plan your perfect
-                  adventure.
+  
+                <br />
+                <p className="text-sm leading-7">
+                  Explore the wonders of Sandakphu Trek Package - an incredible
+                  journey through the Himalayas, where you&apos;ll witness
+                  panoramic views, encounter diverse wildlife, and immerse
+                  yourself in the natural beauty of the Singalila ranges.
                 </p>
-                <button className="w-full bg-white text-blue-600 font-semibold py-3 px-4 rounded-xl hover:bg-gray-100 transition-colors">
-                  Contact Expert
-                </button>
+                <br />
+  
+                <p className="text-sm leading-7">
+                  The best time to go on a trek to Sandakphu is from April to June
+                  and October to January. The person should be a minimum
+                  12-year-old to do this trek.
+                </p>
+  
+                <br />
               </div>
-            </div>
-          </div>
+  
+              <h3 className="text-2xl font-semibold underline decoration-accent mb-4">
+                Trip Itinerary :{" "}
+              </h3>
+              <TimeLine />
+  
+              <br />
+  
+              <h3 className="text-2xl font-semibold underline mb-4 decoration-accent">
+                Inclusion :{" "}
+              </h3>
+  
+              <ul className="space-y-2">
+                {inclusion.map((item, index) => (
+                  <li key={index} className="text-sm flex items-start gap-3">
+                    <CheckBox
+                      checked
+                      checkBoxColor="#ffd230"
+                      checkIconColor="#fff"
+                      className="mt-0.5"
+                    />
+  
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+  
+              <br />
+  
+              <h3 className="text-2xl font-semibold underline mb-4 decoration-accent">
+                Exclusion :{" "}
+              </h3>
+  
+              <ul className="space-y-2">
+                {exclusion.map((item, index) => (
+                  <li key={index} className="text-sm flex items-start gap-3">
+                    <CheckBox
+                      checked
+                      checkBoxColor="#ffd230"
+                      checkIconColor="#fff"
+                      className="mt-0.5"
+                    />
+  
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+  
+              <br />
+  
+              <h3 className="text-2xl font-semibold underline mb-4 decoration-accent">
+                Frequently Asked Question :{" "}
+              </h3>
+  
+              <ExpandCollapseFaq />
+            </section> */}
+
+          <OtherOptions package_id={data.data.id} />
         </div>
-      </div>
+
+        {/* Right Side */}
+        {/* <section className="basis-[28rem] space-y-3.5 sticky top-[4.3rem] h-fit max-sm:static">
+            <h3 className="text-2xl font-semibold underline decoration-accent">
+              Related Packages :
+            </h3>
+  
+            <ul className="grid grid-cols-1 gap-x-3 gap-y-3.5 w-full max-sm:grid-cols-1 max-sm:gap-2.5">
+              {POPULER_PACKAGES.slice(0, 5).map((item) => (
+                <li
+                  key={item.id}
+                  // className="w-full h-80 overflow-hidden rounded-[.8rem] relative shadow-2xl group/item max-sm:h-[17rem]"
+                >
+                  <PackageItem option={item} />
+                </li>
+              ))}
+            </ul>
+          </section> */}
+        {/* <div className="p-1.5 z-10 h-fit basis-96 overflow-hidden max-sm:hidden">
+            <h3 className="text-2xl font-semibold underline decoration-accent">
+              Related Packages :
+            </h3>
+  
+            <ul className="w-full grid grid-cols-2">
+              <PackageItem
+                option={{
+                  id: 1,
+                  images: [
+                    "/traking-places/GoechalaTrek.jpg",
+                    "/traking-places/LachungtoYumthangTrek.jpg",
+                  ],
+                  name: "Frey Peak Sikkim",
+                  link: "/trekking-in-sikkim/packages/test-trek",
+                }}
+              />
+            </ul>
+          </div> */}
+      </section>
     </main>
   );
 }
