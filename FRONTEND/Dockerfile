@@ -16,7 +16,7 @@
 FROM node:18 AS builder
 WORKDIR /app
 
-COPY . .     # This copies everything from FRONTEND/
+COPY . .
 
 RUN npm install
 RUN npm run build
@@ -33,5 +33,5 @@ COPY --from=builder /app/next.config.js ./next.config.js
 
 RUN npm install --production
 
-CMD ["npm", "start"]
+CMD ["npm", "run", "start"]
 
