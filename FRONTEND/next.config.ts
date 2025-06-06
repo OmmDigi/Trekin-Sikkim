@@ -10,6 +10,8 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
 
+  output: "standalone",
+
   images: {
     remotePatterns: [
       {

@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { IoAdd, IoRemove } from "react-icons/io5";
 import * as motion from "motion/react-client";
 import { fadeUpVarient } from "@/utils/animations";
+import { cn } from "@/lib/utils";
 
 function ExpandCollapseFaq() {
   const [expandIndex, setExpandIndex] = useState(-1);
@@ -13,9 +14,7 @@ function ExpandCollapseFaq() {
   };
 
   return (
-    <ul
-      className={`flex items-center justify-center flex-col font-primary max-w-[60rem] mx-auto space-y-4`}
-    >
+    <ul className="flex items-center justify-center flex-col font-primary max-w-[60rem] mx-auto space-y-4">
       {[1, 2, 3, 4, 5].map((faq, index) => (
         <motion.li
           variants={fadeUpVarient(0.05 * index)}
@@ -36,9 +35,11 @@ function ExpandCollapseFaq() {
             </h2>
 
             <div
-              className={`overflow-hidden ${
+              className={cn(
+                "overflow-hidden",
+                "transition-all duration-300",
                 expandIndex === index ? "max-h-[500px]" : "max-h-0"
-              } transition-all duration-300`}
+              )}
             >
               <p className="text-sm text-gray-700 mt-2 leading-7">
                 Lorem ipsum, dolor sit amet consectetur adipisicing elit.

@@ -3,6 +3,7 @@
 import React, { ReactNode } from "react";
 import { useCollapsible } from "./Collapsible"; // Import the custom hook
 import { IoAdd, IoRemove } from "react-icons/io5";
+import { cn } from "@/lib/utils";
 
 interface CollapsibleItemProps {
   index: number;
@@ -30,9 +31,11 @@ export const CollapsibleItem: React.FC<CollapsibleItemProps> = ({
         </h2>
 
         <div
-          className={`overflow-hidden ${
-            openIndex === index ? "max-h-[500px]" : "max-h-0"
-          } transition-all duration-300`}
+          className={cn(
+            "overflow-hidden",
+            openIndex === index ? "max-h-[500px]" : "max-h-0",
+            "transition-all duration-300"
+          )}
         >
           <p
             onClick={(e) => {

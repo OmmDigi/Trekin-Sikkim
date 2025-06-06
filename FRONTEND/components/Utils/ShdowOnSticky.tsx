@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "@/lib/utils";
 import {
   DetailedHTMLProps,
   HTMLAttributes,
@@ -32,9 +33,10 @@ export default function ShdowOnSticky(props: IProps) {
   return (
     <div
       {...props}
-      className={`${
-        isSticky ? "shadow-[0px_1px_6px_0px_rgba(50,_50,_93,_0.25)]" : ""
-      } ${props.className ? props.className : ""}`}
+      className={cn(
+        isSticky ? "shadow-[0px_1px_6px_0px_rgba(50,_50,_93,_0.25)]" : "",
+        props.className ? props.className : ""
+      )}
       ref={divRef}
     >
       {props.children}

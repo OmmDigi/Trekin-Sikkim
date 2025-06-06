@@ -25,6 +25,7 @@ import AvilableDatesSection from "@/components/Packages/AvilableDatesSection";
 import AdditionalCheckbox from "@/components/Packages/AdditionalCheckbox";
 import PackageBookNowBtn from "@/components/Packages/PackageBookNowBtn";
 import { Metadata } from "next";
+import { cn } from "@/lib/utils";
 
 const getSinglePackagePageInfo = cache(async (slug: string) => {
   return (
@@ -219,9 +220,10 @@ export default async function page({ params, searchParams }: IProps) {
                     </span>
                   ) : null}
                   <span
-                    className={`border-b border-gray-400 ${
+                    className={cn(
+                      "border-b border-gray-400",
                       item.other ? "font-semibold text-green-700" : ""
-                    }`}
+                    )}
                   >
                     {item.value}
                   </span>

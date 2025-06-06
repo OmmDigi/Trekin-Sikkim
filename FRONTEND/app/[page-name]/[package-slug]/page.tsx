@@ -28,6 +28,7 @@ import PackageBookNowBtn from "@/components/Packages/PackageBookNowBtn";
 import { Metadata } from "next";
 import Button from "@/components/Button";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 const getSinglePackagePageInfo = cache(async (slug: string) => {
   return (
@@ -225,9 +226,10 @@ export default async function page({ params, searchParams }: IProps) {
                           </span>
                         ) : null}
                         <span
-                          className={`border-b border-gray-400 ${
+                          className={cn(
+                            "border-b border-gray-400",
                             item.other ? "font-semibold text-green-700" : ""
-                          }`}
+                          )}
                         >
                           {item.value}
                         </span>

@@ -12,40 +12,26 @@
 
 # CMD [ "npm", "run", "build-start" ]
 
-# ---- Stage 1: Build ----
-FROM node:18-alpine AS builder
-
+# Builder Stage
+FROM node:18 AS builder
 WORKDIR /app
 
-# Copy only package files first for better caching
-COPY package*.json ./
+COPY . .     # This copies everything from FRONTEND/
 
-# Install dependencies
-RUN npm install --force
-
-# Copy the rest of the source code
-COPY . .
-
-# Build the Next.js project
+RUN npm install
 RUN npm run build
 
-# ---- Stage 2: Production Runtime ----
-FROM node:18-alpine
+# Production Stage
+FROM node:18-alpine AS frontend
 
 WORKDIR /app
 
-# Install only production dependencies (optional if needed)
-COPY package*.json ./
-RUN npm install --production --force
-
-# Copy built project from builder
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
-COPY --from=builder /app/next.config.js ./next.config.js
 COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/next.config.js ./next.config.js
 
-# Expose app port
-EXPOSE 3000
+RUN npm install --production
 
-# Start app (make sure `build-start` = "next start" in package.json)
-CMD ["npm", "run", "start"]
+CMD ["npm", "start"]
+

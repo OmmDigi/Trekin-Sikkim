@@ -2,6 +2,7 @@
 
 import { TransitionLink } from "@/components/Utils/TransitionLink";
 import { useOutsideClick } from "@/hooks/useOutsideClick";
+import { cn } from "@/lib/utils";
 import { Blocks, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -73,9 +74,11 @@ function BottomNavigation() {
           }}
           key={item.pathname}
           href={item.pathname}
-          className={`flex items-center flex-col gap-1 justify-center text-primary ${
-            pathname === item.pathname ? "bg-light-gray" : ""
-          } relative`}
+          className={cn(
+            "flex items-center flex-col gap-1 justify-center text-primary",
+            pathname === item.pathname ? "bg-light-gray" : "",
+            "relative"
+          )}
         >
           {item.text === "Overview" && isShowExtraOptions ? (
             <X size={20} />

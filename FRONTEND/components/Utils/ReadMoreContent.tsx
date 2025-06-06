@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "@/lib/utils";
 import { useReadmore } from "./ReadMore";
 
 interface IProps extends React.ComponentProps<"div"> {
@@ -10,9 +11,11 @@ export default function ReadMoreContent({ children, ...props }: IProps) {
   return (
     <div
       {...props}
-      className={`${isOpen ? "max-h-fit" : "max-h-0"} overflow-hidden ${
+      className={cn(
+        isOpen ? "max-h-fit" : "max-h-0",
+        "overflow-hidden",
         props.className ?? ""
-      }`}
+      )}
     >
       {children}
     </div>

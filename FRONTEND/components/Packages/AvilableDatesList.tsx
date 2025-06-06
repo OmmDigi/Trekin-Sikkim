@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { IoMdArrowDropdown } from "react-icons/io";
 import CheckBox from "../Utils/CheckBox";
+import { cn } from "@/lib/utils";
 
 const AVILABLE_DATES = [
   {
@@ -30,23 +31,29 @@ export default function AvilableDatesList() {
         >
           <div
             key={date.month_name}
-            className={`flex items-center justify-between font-semibold ${
-              expandItemIndex === pIndex ? "pb-2" : ""
-            } transition-all duration-300`}
+            className={cn(
+              "flex items-center justify-between font-semibold",
+              expandItemIndex === pIndex ? "pb-2" : "",
+              "transition-all duration-300"
+            )}
           >
             {date.month_name}
             <IoMdArrowDropdown
               size={18}
-              className={`cursor-pointer ${
-                expandItemIndex === pIndex ? "rotate-180" : ""
-              } transition-all duration-300`}
+              className={cn(
+                "cursor-pointer",
+                expandItemIndex === pIndex ? "rotate-180" : "",
+                "transition-all duration-300"
+              )}
             />
           </div>
 
           <ul
-            className={`space-y-1.5 bg-amber-100 overflow-hidden ${
-              expandItemIndex === pIndex ? "max-h-[500px]" : "max-h-0"
-            } transition-all duration-500`}
+            className={cn(
+              "space-y-1.5 bg-amber-100 overflow-hidden",
+              expandItemIndex === pIndex ? "max-h-[500px]" : "max-h-0",
+              "transition-all duration-500"
+            )}
           >
             {date.dates.map((item) => (
               <li
@@ -75,7 +82,7 @@ export default function AvilableDatesList() {
                     </svg>
                   </div>
                 </label> */}
-                <CheckBox checkBoxColor="#007C00" checkIconColor="#fff"/>
+                <CheckBox checkBoxColor="#007C00" checkIconColor="#fff" />
               </li>
             ))}
           </ul>

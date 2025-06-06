@@ -452,7 +452,7 @@ export default function Home({ searchParams }: IProps) {
                   Book Now
                 </button> */}
                 <Button
-                  className={`min-w-[10rem] transition-all duration-1000 max-sm:min-[8rem] max-sm:pl-3 !bg-accent !text-white`}
+                  className="min-w-[10rem] transition-all duration-1000 max-sm:min-[8rem] max-sm:pl-3 !bg-accent !text-white"
                 >
                   <BiBookContent />
                   Book Now

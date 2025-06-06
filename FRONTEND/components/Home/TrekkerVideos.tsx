@@ -4,6 +4,7 @@ import { MdOutlinePlayCircleFilled } from "react-icons/md";
 
 import * as motion from "motion/react-client";
 import { childVariant, parentVariant } from "@/utils/animations";
+import { cn } from "@/lib/utils";
 
 const destinations = [
   {
@@ -63,7 +64,7 @@ function TrekkerVideos() {
         <motion.li
           variants={childVariant}
           key={item.id}
-          className={`relative overflow-hidden rounded-xl ${item.css}`}
+          className={cn("relative overflow-hidden rounded-xl", item.css)}
         >
           <Image
             className="size-full object-cover"

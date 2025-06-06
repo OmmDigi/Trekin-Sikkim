@@ -271,7 +271,10 @@ export default async function page({ params, searchParams }: IProps) {
                   className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow"
                 >
                   <div
-                    className={`w-10 h-10 ${item.color} rounded-lg flex items-center justify-center text-white mb-3`}
+                    className={cn(
+                      item.color,
+                      "w-10 h-10 rounded-lg flex items-center justify-center text-white mb-3"
+                    )}
                   >
                     {item.icon}
                   </div>

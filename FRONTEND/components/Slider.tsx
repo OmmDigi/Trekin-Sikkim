@@ -10,6 +10,7 @@ import * as motion from "motion/react-client";
 import "swiper/css";
 import Button from "./Button";
 import { fadeUpVarient } from "@/utils/animations";
+import { cn } from "@/lib/utils";
 export default function Slider() {
   const swiperRef = useRef<SwiperType>(null);
 
@@ -113,11 +114,12 @@ export default function Slider() {
             swiperRef.current?.slidePrev();
           }}
           disabled={sliderPosition === "start"}
-          className={`!p-0 !size-8 !bg-black !text-secondary ${
+          className={cn(
+            "!p-0 !size-8 !bg-black !text-secondary",
             sliderPosition === "start"
               ? "opacity-20"
               : "active:scale-75 opacity-100"
-          }`}
+          )}
         >
           <IoIosArrowBack size={12} />
         </Button>
@@ -126,11 +128,12 @@ export default function Slider() {
           onClick={() => {
             swiperRef.current?.slideNext();
           }}
-          className={`!p-0 !size-8 !bg-black !text-secondary ${
+          className={cn(
+            "!p-0 !size-8 !bg-black !text-secondary",
             sliderPosition === "end"
               ? "opacity-20"
               : "active:scale-75 opacity-100"
-          }`}
+          )}
         >
           <IoIosArrowBack size={12} className="rotate-180" />
         </Button>

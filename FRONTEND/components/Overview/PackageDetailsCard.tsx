@@ -10,6 +10,7 @@ import { LuSignalHigh } from "react-icons/lu";
 import { PiGlobeStand } from "react-icons/pi";
 import { TbTimeDuration0 } from "react-icons/tb";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 const OVERVIEW_POINTS = [
   {
@@ -91,11 +92,12 @@ function PackageDetailsCard() {
               <span>{item.title}</span>
               <span> : </span>
               <span
-                className={`border-b border-gray-400 ${
+                className={cn(
+                  "border-b border-gray-400",
                   index === OVERVIEW_POINTS.length - 1
                     ? "font-semibold text-green-700"
                     : ""
-                }`}
+                )}
               >
                 {item.value}
               </span>

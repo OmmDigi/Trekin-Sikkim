@@ -6,6 +6,7 @@ import Button from "./Button";
 import { BiBookContent } from "react-icons/bi";
 import { IoIosPlay } from "react-icons/io";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
+import { cn } from "@/lib/utils";
 
 const banner_info = [
   {
@@ -95,11 +96,13 @@ function Banner() {
         {banner_info.map((item, index) => (
           <div
             key={item.id}
-            className={`w-full h-full absolute ${
+            className={cn(
+              "w-full h-full absolute",
+              "transition-all duration-1000 ease-in-out",
               currentBannerIndex === index
                 ? "opacity-100 blur-[0px]"
                 : "opacity-0 blur-md"
-            } transition-all duration-1000 ease-in-out`}
+            )}
           >
             <Image
               className="size-full object-cover"
@@ -155,7 +158,7 @@ function Banner() {
 
             <div className="flex items-center gap-5">
               <Button
-                className={`min-w-[10rem] transition-all duration-1000 max-sm:min-[8rem] max-sm:pl-3 !bg-accent !text-white`}
+                className="min-w-[10rem] transition-all duration-1000 max-sm:min-[8rem] max-sm:pl-3 !bg-accent !text-white"
               >
                 <BiBookContent />
                 Book Now

@@ -17,6 +17,7 @@ import { ArrowUp } from "lucide-react";
 import NewHeader from "@/components/Headers/NewHeader";
 import AiHeader from "@/components/AiComponents/AiHeader";
 import ChildrenHolder from "@/components/ChildrenHolder";
+import { cn } from "@/lib/utils";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -44,7 +45,11 @@ export default function RootLayout({
     <html lang="en">
       <div id="top-layout" className="bg-amber-300"></div>
       <body
-        className={`${poppins.variable} ${montserrat.variable} antialiased !overflow-y-visible`}
+        className={cn(
+          poppins.variable,
+          montserrat.variable,
+          "antialiased !overflow-y-visible"
+        )}
       >
         <ScrollProgress />
         <Constant />

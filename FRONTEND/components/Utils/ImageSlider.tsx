@@ -56,12 +56,8 @@ export default function ImageSlider({
   // const imageRefs = useRef<(HTMLImageElement | null)[]>([]);
 
   return (
-    <div
-      // className={`relative ${wrapperCss ? wrapperCss : ""}`}
-      className={cn("relative", wrapperCss)}
-    >
+    <div className={cn("relative", wrapperCss)}>
       <Swiper
-        // className={`wrapper cursor-grab ${className ? className : ""} z-10`}
         className={cn("cursor-grab size-full", className, "z-10")}
         spaceBetween={0}
         slidesPerView={slidesPerView}
@@ -132,11 +128,6 @@ export default function ImageSlider({
             swiperRef.current?.slidePrev();
           }}
           disabled={sliderPosition === "start"}
-          // className={`!p-0 !size-8 !bg-accent !text-white ${
-          //   sliderPosition === "start"
-          //     ? "opacity-0"
-          //     : "active:scale-75 opacity-100"
-          // }`}
           className={cn(
             sliderPosition === "start"
               ? "opacity-0"
@@ -169,11 +160,6 @@ export default function ImageSlider({
               ? "opacity-0"
               : "active:scale-75 opacity-100"
           )}
-          // className={`!p-0 !size-8 !bg-accent !text-white ${
-          //   sliderPosition === "end"
-          //     ? "opacity-0"
-          //     : "active:scale-75 opacity-100"
-          // }`}
         >
           <IoIosArrowBack size={12} className="rotate-180" />
         </Button>
