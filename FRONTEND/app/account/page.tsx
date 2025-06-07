@@ -42,7 +42,7 @@ export default async function page({ searchParams }: IProps) {
   const currentTab = (await searchParams).tab;
 
   return (
-    <MainWrapper className="wrapper pb-7 space-y-5">
+    <MainWrapper className="wrapper pb-7 space-y-5 pt-10">
       {/* <div className="h-60 w-full aspect-[3/1] bg-gray-200 rounded-2xl max-sm:hidden overflow-hidden"></div> */}
 
       <div className="flex items-start gap-6 pl-3.5 max-sm:flex-col max-sm:gap-y-0">
