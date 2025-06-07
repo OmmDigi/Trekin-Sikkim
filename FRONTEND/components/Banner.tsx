@@ -7,6 +7,7 @@ import { BiBookContent } from "react-icons/bi";
 import { IoIosPlay } from "react-icons/io";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 const banner_info = [
   {
@@ -168,10 +169,12 @@ function Banner() {
               </div>
 
               <div className="flex items-center gap-5">
-                <Button className="min-w-[10rem] transition-all duration-1000 max-sm:min-[8rem] max-sm:pl-3 !bg-accent !text-white">
-                  <BiBookContent />
-                  Book Now
-                </Button>
+                <Link href="#our-packages-section">
+                  <Button className="min-w-[10rem] transition-all duration-1000 max-sm:min-[8rem] max-sm:pl-3 !bg-accent !text-white">
+                    <BiBookContent />
+                    Book Now
+                  </Button>
+                </Link>
 
                 <div className=" border-secondary !bg-accent !text-white backdrop-blur-2xl size-10 flex items-center justify-center rounded-[50%] cursor-pointer max-sm:size-8">
                   <IoIosPlay />

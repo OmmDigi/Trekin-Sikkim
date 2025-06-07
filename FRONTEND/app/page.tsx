@@ -23,6 +23,7 @@ import { Award, Compass, Mountain, Users } from "lucide-react";
 import * as motion from "motion/react-client";
 import { Metadata } from "next";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import React from "react";
 import { BiBookContent } from "react-icons/bi";
 import { FaCaretDown } from "react-icons/fa6";
@@ -463,10 +464,12 @@ export default function Home({ searchParams }: IProps) {
                 {/* <button className="bg-emerald-500 min-w-40 hover:bg-emerald-600 text-white px-6 py-3 rounded-lg shadow-lg transition">
                   Book Now
                 </button> */}
-                <Button className="min-w-[10rem] transition-all duration-1000 max-sm:min-[8rem] max-sm:pl-3 !bg-accent !text-white">
-                  <BiBookContent />
-                  Book Now
-                </Button>
+                <Link href="#our-packages-section">
+                  <Button className="min-w-[10rem] transition-all duration-1000 max-sm:min-[8rem] max-sm:pl-3 !bg-accent !text-white">
+                    <BiBookContent />
+                    Book Now
+                  </Button>
+                </Link>
               </motion.div>
             </div>
           </div>
