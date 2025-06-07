@@ -120,10 +120,10 @@ export default async function AiHeader() {
                 </div>
 
                 {/* Brand Name - Responsive text */}
-                <div className="flex flex-col min-w-0">
-                  <h1 className="font-montserrat font-bold text-lg sm:text-2xl lg:text-3xl text-gray-800 leading-tight truncate">
+                <h1 className="flex flex-col min-w-0">
+                  <span className="font-montserrat font-bold text-lg sm:text-2xl lg:text-3xl text-gray-800 leading-tight truncate">
                     Glacier Treks
-                  </h1>
+                  </span>
                   <div className="flex items-center gap-1 sm:gap-2">
                     <span className="font-montserrat font-semibold text-sm sm:text-lg text-emerald-600 truncate">
                       & Adventure™
@@ -133,7 +133,7 @@ export default async function AiHeader() {
                       Since 2010
                     </span>
                   </div>
-                </div>
+                </h1>
               </div>
 
               {/* Registration Info - Hidden on mobile and small tablets */}

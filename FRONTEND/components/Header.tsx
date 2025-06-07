@@ -82,9 +82,9 @@ export default async function Header() {
   return (
     <StickyHeaderHolder>
       <div className="flex items-center justify-between py-5 wrapper">
-        <h1 className="font-montserrat font-semibold text-subheading max-sm:text-xl transition-none">
+        <h2 className="font-montserrat font-semibold text-subheading max-sm:text-xl transition-none">
           Glacier Treks And Adventure™
-        </h1>
+        </h2>
 
         <MobileNavSlider>
           <ul className="space-y-4 mt-4">

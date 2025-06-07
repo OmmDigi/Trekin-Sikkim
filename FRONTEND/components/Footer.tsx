@@ -105,9 +105,9 @@ export default function Footer() {
 
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="font-semibold text-xl text-secondary">
+            <h2 className="font-semibold text-xl text-secondary">
               TrekInSikkim.
-            </h1>
+            </h2>
           </div>
           <ul className="flex items-center gap-3">
             {FOOTERSOCIALLINKS.map((item, index) => (
