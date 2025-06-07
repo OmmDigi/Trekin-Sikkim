@@ -1,7 +1,9 @@
 import { Router } from "express";
 import {
+  addEnquiry,
   deleteBlog,
   getBlogsList,
+  getEnquiry,
   getRelatedBlogs,
   getSingleBlog,
   getSlugs,
@@ -19,4 +21,7 @@ websiteRoute
   .get("/blogs/:blog_id", checkUser, getSingleBlog)
   .post("/blogs", postNewBlog)
   .put("/blogs/:blog_id", updateSingleBlog)
-  .delete("/blogs/:blog_id", deleteBlog);
+  .delete("/blogs/:blog_id", deleteBlog)
+
+  .get("/enquiry", getEnquiry)
+  .post("/enquiry", addEnquiry);

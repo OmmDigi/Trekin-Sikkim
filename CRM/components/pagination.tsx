@@ -8,7 +8,7 @@ import {
   PaginationPreviousBtn,
 } from "@/components/ui/pagination";
 import { Loader2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface IProps {
   totalPage: number | undefined;
@@ -27,6 +27,7 @@ export function PaginationComp({
   loading = false,
 }: IProps) {
   const [array, setArray] = useState<number[]>([]);
+  const currentClickedNavBtn = useRef<"next" | "prev" | "none">("none");
 
   useEffect(() => {
     setArray(() => {
@@ -37,6 +38,7 @@ export function PaginationComp({
   }, [totalPage]);
 
   const handleNextBtn = () => {
+    currentClickedNavBtn.current = "next";
     if (totalPage !== -1) {
       setArray((prev) => prev.map((item) => item + 1));
     } else {
@@ -46,6 +48,7 @@ export function PaginationComp({
   };
 
   const handlePrevBtn = () => {
+    currentClickedNavBtn.current = "prev";
     if (totalPage !== -1) {
       setArray((prev) => prev.map((item) => item - 1));
     } else {
@@ -65,11 +68,15 @@ export function PaginationComp({
     <Pagination>
       <PaginationContent>
         <PaginationItem>
-          <PaginationPreviousBtn
-            // disabled={array[0] === 1 && page !== 1}
-            disabled={array[0] === 1}
-            onClick={handlePrevBtn}
-          />
+          {loading && currentClickedNavBtn.current === "prev" ? (
+            <Loader2 size={15} className="animate-spin" />
+          ) : (
+            <PaginationPreviousBtn
+              // disabled={array[0] === 1 && page !== 1}
+              disabled={array[0] === 1}
+              onClick={handlePrevBtn}
+            />
+          )}
         </PaginationItem>
         {array.slice().map((item) => (
           <PaginationItem key={item}>
@@ -97,10 +104,14 @@ export function PaginationComp({
         )}
 
         <PaginationItem>
-          <PaginationNextBtn
-            onClick={handleNextBtn}
-            disabled={nextButtonDisibility}
-          />
+          {loading && currentClickedNavBtn.current === "next" ? (
+            <Loader2 size={15} className="animate-spin" />
+          ) : (
+            <PaginationNextBtn
+              onClick={handleNextBtn}
+              disabled={nextButtonDisibility}
+            />
+          )}
         </PaginationItem>
       </PaginationContent>
     </Pagination>

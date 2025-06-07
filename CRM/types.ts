@@ -51,5 +51,15 @@ export type BlogPost = {
 
   slug: string; // TEXT NOT NULL
 
-  media_id : number;
+  media_id: number;
 };
+
+export interface IEnquiry {
+  id: number;
+  name: string;
+  email: string;
+  contact_number: string;
+  number_of_person: number;
+  message: string | null;
+  created_at: string;
+}

@@ -44,3 +44,12 @@ export const VRelatedBlogs = Joi.object({
   keywords: Joi.string().required(),
   current_blog_id: Joi.number().required(),
 });
+
+//Enquiry
+export const VAddEnquiry = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().email().required(),
+  contact_number: Joi.string().required(),
+  number_of_person: Joi.number().required(),
+  message: Joi.string().optional().allow(""),
+});

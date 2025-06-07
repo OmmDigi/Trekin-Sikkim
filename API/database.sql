@@ -346,3 +346,13 @@ ALTER COLUMN departure_date_id DROP NOT NULL;
 ALTER TABLE order_id_and_date
 ADD COLUMN from_date DATE,
 ADD COLUMN to_date DATE;
+
+CREATE TABLE enquiry_form (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255),
+    email VARCHAR(255),
+    contact_number VARCHAR(30),
+    number_of_person INT,
+    message TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

@@ -9,7 +9,9 @@ import {
   objectToSqlInsert,
 } from "../utils/objectToSql";
 import { parsePagination } from "../utils/parsePagination";
+import { sendEmail } from "../utils/sendEmail";
 import {
+  VAddEnquiry,
   VPostNewBlog,
   VRelatedBlogs,
   VSingleBlog,
@@ -244,4 +246,38 @@ export const deleteBlog = asyncErrorHandler(async (req, res) => {
   await pool.query(`DELETE FROM blogs WHERE blog_id = $1`, [value.blog_id]);
 
   res.status(200).json(new ApiResponse(200, "Blog Remove"));
+});
+
+//Enquiry
+
+export const addEnquiry = asyncErrorHandler(async (req, res) => {
+  const { error, value } = VAddEnquiry.validate(req.body);
+  if (error) throw new ErrorHandler(400, error.message);
+
+  const { columns, params, values } = objectToSqlInsert(req.body);
+  await pool.query(
+    `INSERT INTO enquiry_form ${columns} VALUES ${params}`,
+    values
+  );
+
+  res
+    .status(201)
+    .json(
+      new ApiResponse(
+        201,
+        "Your enquiry has successfully submitted. we will contact you very soon"
+      )
+    );
+});
+
+export const getEnquiry = asyncErrorHandler(async (req, res) => {
+  const { LIMIT, OFFSET } = parsePagination(req);
+  const { rows } = await pool.query(
+    `SELECT 
+      *,
+      TO_CHAR(created_at, 'DD Month, YYYY') AS created_at
+     FROM enquiry_form ORDER BY id DESC LIMIT ${LIMIT} OFFSET ${OFFSET}`
+  );
+
+  res.status(200).json(new ApiResponse(200, "Enquiry List", rows));
 });

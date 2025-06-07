@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useTransition } from "react";
 import DialogBody from "./DialogBody";
 import Input from "../Input";
 import HeadingSubHeding from "../HeadingSubHeding";
@@ -10,23 +10,53 @@ import { X } from "lucide-react";
 import Dropdown from "../Form/Dropdown";
 import { useDispatch } from "react-redux";
 import { setDialog } from "@/redux/slices/dialog.slice";
+import api from "@/lib/axios";
+import { toast } from "react-toastify";
+import { IResponse } from "@/types";
+import { AxiosError } from "axios";
 
 function EnquireDialog() {
   const dispatch = useDispatch();
+  const [isPending, startTransition] = useTransition();
+
+  const closeDialog = () => {
+    dispatch(
+      setDialog({
+        id: "enquiry-form",
+        type: "CLOSE",
+      })
+    );
+  };
+
+  const handleFormSubmit = (formData: FormData) => {
+    startTransition(async () => {
+      const dataToStore: any = {};
+      formData.forEach((value, key) => {
+        dataToStore[key] = value;
+      });
+      console.log(dataToStore);
+      try {
+        const response = (
+          await api.post<IResponse>("/api/v1/website/enquiry", dataToStore, {
+            headers: { "Content-Type": "application/json" },
+          })
+        ).data;
+        toast.success(response.message);
+        closeDialog();
+      } catch (error) {
+        const err = error as AxiosError<IResponse>;
+        toast.error(err.response?.data.message);
+      }
+    });
+  };
+
   return (
     <DialogBody
       theme="white"
       className="!rounded-md relative !shadow-2xl p-10 font-primary w-[45rem] mt-10 bg-green-100 space-y-6 max-sm:w-full max-sm:h-full max-sm:mt-0 max-sm:overflow-y-auto"
     >
       <X
-        onClick={() => {
-          dispatch(
-            setDialog({
-              id: "enquiry-form",
-              type: "CLOSE",
-            })
-          );
-        }}
+        onClick={closeDialog}
         className="absolute right-6 top-6 cursor-pointer active:scale-75"
         size={20}
       />
@@ -37,22 +67,43 @@ function EnquireDialog() {
         wrapperCss="block"
       />
 
-      <form className="space-y-3">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleFormSubmit(new FormData(e.currentTarget));
+        }}
+        className="space-y-3"
+      >
         <div className="grid grid-cols-2 gap-3 max-sm:grid-cols-1">
-          <Input label="Full Name" placeholder="Enter your name *" />
-          <Input label="Email" placeholder="Enter your email id" />
           <Input
-            label="Contact Number"
+            required
+            name="name"
+            label="Full Name *"
+            placeholder="Enter your name *"
+          />
+          <Input
+            required
+            name="email"
+            type="email"
+            label="Email"
+            placeholder="Enter your email id"
+          />
+          <Input
+            required
+            name="contact_number"
+            label="Contact Number *"
             placeholder="Enter your contact number"
           />
           <Input
-            label="Number Of Person"
+            required
+            name="number_of_person"
+            label="Number Of Person *"
             placeholder="Number of person will come"
           />
           {/* <Input label="Arrival Date" type="date" />
           <Input label="Departure Date" type="date" /> */}
         </div>
-        <div className="grid grid-cols-2 gap-4 max-sm:grid-cols-1">
+        {/* <div className="grid grid-cols-2 gap-4 max-sm:grid-cols-1">
           <Dropdown
             onSelect={() => {}}
             label="Choose Trip Type"
@@ -77,7 +128,7 @@ function EnquireDialog() {
               { label: "Trek to Bajre Dara", value: "Trek to Bajre Dara" },
             ]}
           />
-          {/* <Dropdown
+          <Dropdown
             onSelect={() => {}}
             label="Choose Trip Type"
             options={[
@@ -85,17 +136,23 @@ function EnquireDialog() {
               { label: "Trek", value: "Trek" },
               { label: "Expedition", value: "Expedition" },
             ]}
-          /> */}
-        </div>
+          />
+        </div> */}
         <TextArea
+          name="message"
           className="w-full"
           label="Message"
+          rows={5}
           placeholder="Enter your enquery here. any other message you want to type"
         />
 
         <div className="flex items-center gap-6">
-          <Button className="!bg-red-500 text-white">Submit</Button>
-          <Button className="">Canel</Button>
+          <Button loading={isPending} className="!bg-red-500 text-white">
+            Submit
+          </Button>
+          <Button onClick={closeDialog} type="button">
+            Cancel
+          </Button>
         </div>
       </form>
     </DialogBody>
