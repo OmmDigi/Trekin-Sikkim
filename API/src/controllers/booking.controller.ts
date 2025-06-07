@@ -3,6 +3,7 @@ import asyncErrorHandler from "../middlewares/asyncErrorHandler";
 import { CustomRequest } from "../types";
 import { ApiResponse } from "../utils/ApiResponse";
 import { ErrorHandler } from "../utils/ErrorHandler";
+import { parsePagination } from "../utils/parsePagination";
 import {
   VBookingData,
   VGetBookingListFilter,
@@ -15,7 +16,9 @@ export const getBookingData = asyncErrorHandler(
 
     const userId = req.user_info?.id;
 
-    const additionalIds = value.additional_ids.split(",");
+    const additionalIds = value.additional_id
+      ? value.additional_ids.split(",")
+      : [];
     const purifyAdditionalIds: number[] = [];
 
     additionalIds.forEach((id: string) => {
@@ -107,32 +110,49 @@ export const getBookingData = asyncErrorHandler(
   }
 );
 
-export const getBookings = asyncErrorHandler(async (req, res) => {
+//get single booking info in user account on view booking details click
+export const getBookings = asyncErrorHandler(async (req : CustomRequest, res) => {
   const { error, value } = VGetBookingListFilter.validate(req.query);
   if (error) throw new ErrorHandler(400, error.message);
 
   let filter = "WHERE ep.as_type = 2 ";
   const filterValue: string[] = [];
+  let placeHolderNumber = 1;
   if (value.phone_number) {
-    filter += `AND u.user_contact_number = $1`;
+    filter += `AND u.user_contact_number = $${placeHolderNumber}`;
     filterValue.push(value.phone_number);
+    placeHolderNumber++;
   } else if (value.name) {
-    filter += `AND u.user_name ILIKE '%' || $1 || '%'`;
+    filter += `AND u.user_name ILIKE '%' || $${placeHolderNumber} || '%'`;
     filterValue.push(value.name);
+    placeHolderNumber++;
   } else if (value.email) {
-    filter += `AND u.user_email = $1`;
+    filter += `AND u.user_email = $${placeHolderNumber}`;
     filterValue.push(value.email);
+    placeHolderNumber++;
   } else if (value.order_id) {
-    filter += `AND ep.order_id = $1`;
-    filterValue.push(value.email);
+    filter += `AND ep.order_id = $${placeHolderNumber}`;
+    filterValue.push(value.order_id);
+    placeHolderNumber++;
   } else if (value.transition_id) {
-    filter += `AND pay.transactionId = $1`;
+    filter += `AND pay.transactionId = $${placeHolderNumber}`;
     filterValue.push(value.transition_id);
+    placeHolderNumber++;
   } else if (value.package_id) {
-    filter += `AND p.id = $1`;
+    filter += `AND p.id = $${placeHolderNumber}`;
     filterValue.push(value.package_id);
+    placeHolderNumber++;
   }
-  
+
+  if(value.from === "account" && req.user_info?.id) {
+    filter += ` AND u.user_id = $${placeHolderNumber}`;
+    filterValue.push(req.user_info.id.toString());
+    placeHolderNumber++;
+  }
+
+
+  const { LIMIT, OFFSET } = parsePagination(req);
+
   const { rows } = await pool.query(
     `
     
@@ -149,8 +169,8 @@ export const getBookings = asyncErrorHandler(async (req, res) => {
       booking_dates AS (
         SELECT
           oid.order_id,
-          pdd.from_date,
-          pdd.to_date
+          COALESCE(pdd.from_date, oid.from_date) AS from_date,
+          COALESCE(pdd.to_date, oid.to_date) AS to_date
         FROM order_id_and_date oid
 
         LEFT JOIN packages_departure_date pdd
@@ -198,6 +218,8 @@ export const getBookings = asyncErrorHandler(async (req, res) => {
       ${filter}
 
       ORDER BY ep.created_at DESC
+
+      LIMIT ${LIMIT} OFFSET ${OFFSET}
     
   `,
     filterValue

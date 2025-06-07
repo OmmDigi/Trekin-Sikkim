@@ -389,7 +389,7 @@ export const getAccountInfo = asyncErrorHandler(
         LEFT JOIN LATERAL (
           SELECT pm.package_id, pm.media_item_id
           FROM package_and_media pm
-          WHERE pm.where_to_use = 'banner'
+          WHERE pm.where_to_use = 'thumbnail' AND pm.package_id = p.id
           LIMIT 1
         ) pm ON pm.package_id = p.id
 

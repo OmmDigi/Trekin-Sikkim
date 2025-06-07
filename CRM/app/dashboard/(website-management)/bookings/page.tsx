@@ -9,7 +9,13 @@ import {
   TableBody,
   TableCell,
 } from "@/components/ui/table";
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -35,10 +41,17 @@ import {
   useSearchParams,
 } from "next/navigation";
 import { ButtonLoading } from "@/components/ui/button-loading";
+import { PaginationComp } from "@/components/pagination";
 
 const searchFormSchema = z.object({
   search_text: z.string().min(1, { message: "Add Search Text" }),
-  search_by: z.enum(["name", "email", "phone_number"]),
+  search_by: z.enum([
+    "name",
+    "email",
+    "phone_number",
+    "order_id",
+    "transition_id",
+  ]),
 });
 
 type TSearch = z.infer<typeof searchFormSchema>;
@@ -51,6 +64,7 @@ const getBookingList = async (searchParams: ReadonlyURLSearchParams) => {
 export default function Bookings() {
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
+  const [isPendingPagination, startTransitionPaginition] = useTransition();
   const routes = useRouter();
   const form = useForm<TSearch>({
     resolver: zodResolver(searchFormSchema),
@@ -68,16 +82,14 @@ export default function Bookings() {
     queryFn: () => getBookingList(searchParams),
   });
 
-
   const onSubmit = (formValue: TSearch) => {
-    const newSearchParams = new URLSearchParams(searchParams);
-    newSearchParams.set(formValue.search_by, formValue.search_text);
+    const newSearchParams = new URLSearchParams();
+    newSearchParams.set(formValue.search_by, formValue.search_text.trim());
 
     startTransition(() => {
       routes.push(`/dashboard/bookings?${newSearchParams.toString()}`);
     });
   };
-
 
   return (
     <div className="space-y-5">
@@ -113,7 +125,7 @@ export default function Bookings() {
                       </SelectItem>
                     </SelectContent>
                   </Select>
-                  {/* <FormMessage /> */}
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -240,6 +252,19 @@ export default function Bookings() {
 
         <ScrollBar className="z-30" orientation="horizontal" />
       </ScrollArea>
+
+      <PaginationComp
+        loading={isPendingPagination}
+        onPageClick={(page) => {
+          const newSearchParams = new URLSearchParams(searchParams);
+          newSearchParams.set("page", page.toString());
+          startTransitionPaginition(() => {
+            routes.push(`/dashboard/bookings?${newSearchParams.toString()}`);
+          });
+        }}
+        page={parseInt(searchParams.get("page") || "1")}
+        totalPage={-1}
+      />
     </div>
   );
 }

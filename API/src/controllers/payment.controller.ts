@@ -155,6 +155,9 @@ export const checkPhonepePaymentStatus = asyncErrorHandler(async (req, res) => {
     if (userRowCount === 0) throw new ErrorHandler(404, "User not found");
 
     // then if any Participants Info there create a new entry in users table with a default password
+    let enrollmentData: any[] = [];
+    let createEnrolledItemPlaceholder = null;
+    const ENROLLMENT_COLUMNS = 5;
     if (orderInfo.participant_info && orderInfo.participant_info.length !== 0) {
       const createUserPlaceholder = generatePlaceholders(
         orderInfo.participant_info.length,
@@ -174,14 +177,12 @@ export const checkPhonepePaymentStatus = asyncErrorHandler(async (req, res) => {
         ])
       );
 
-      // console.log("USER 1");
-
       // after creating participant add them to enrolled_package with the payment owner (he is the current user who is enrolling)
-      const createEnrolledItemPlaceholder = generatePlaceholders(
+      createEnrolledItemPlaceholder = generatePlaceholders(
         (rowCount || rows.length) + 1,
-        5
+        ENROLLMENT_COLUMNS
       );
-      const valuesToStore = rows.flatMap((item) => [
+      enrollmentData = rows.flatMap((item) => [
         value.order_id,
         item.user_id,
         currentPackageId,
@@ -189,20 +190,31 @@ export const checkPhonepePaymentStatus = asyncErrorHandler(async (req, res) => {
         orderInfo.group_type,
       ]); // 1 mean as-participants;
 
-      valuesToStore.push(
+      enrollmentData.push(
         value.order_id,
         currentUserId,
         currentPackageId,
         2,
         orderInfo.group_type
       ); // 2 mean as-owner
-      await client.query(
-        `INSERT INTO enrolled_package (order_id, user_id, package_id, as_type, trip_type) VALUES ${createEnrolledItemPlaceholder}`,
-        valuesToStore
+    } else {
+      createEnrolledItemPlaceholder = generatePlaceholders(
+        1,
+        ENROLLMENT_COLUMNS
       );
+      enrollmentData.push(
+        value.order_id,
+        currentUserId,
+        currentPackageId,
+        2,
+        orderInfo.group_type
+      ); // 2 mean as-owner
     }
 
-    // console.log("USER");
+    await client.query(
+      `INSERT INTO enrolled_package (order_id, user_id, package_id, as_type, trip_type) VALUES ${createEnrolledItemPlaceholder}`,
+      enrollmentData
+    );
 
     if (orderInfo.addon_ids && orderInfo.addon_ids.length !== 0) {
       const createAddonPlaceholder = generatePlaceholders(
@@ -215,15 +227,26 @@ export const checkPhonepePaymentStatus = asyncErrorHandler(async (req, res) => {
       );
     }
 
-    // console.log("order_id_and_additional");
+    // store departure date id date info if exict
+    if (orderInfo?.departure_date_id) {
+      await client.query(
+        "INSERT INTO order_id_and_date (order_id, departure_date_id) VALUES ($1, $2)",
+        [value.order_id, orderInfo.departure_date_id]
+      );
 
-    // store departure date id date info
-    await client.query(
-      "INSERT INTO order_id_and_date (order_id, departure_date_id) VALUES ($1, $2)",
-      [value.order_id, orderInfo.departure_date_id]
-    );
+      await client.query(
+        "UPDATE packages_departure_date SET max_seats = max_seats - 1 WHERE id = $1",
+        [orderInfo.departure_date_id]
+      );
+    }
 
-    // console.log("order_id_and_date");
+    // now if check custom from date and to date has choosed or not if yes store them
+    if (orderInfo?.from_date && orderInfo?.to_date) {
+      await client.query(
+        "INSERT INTO order_id_and_date (order_id, from_date, to_date) VALUES ($1, $2, $3)",
+        [value.order_id, orderInfo.from_date, orderInfo.to_date]
+      );
+    }
 
     await client.query(
       "INSERT INTO payments (order_id, transactionId, amount, state, paymentInstrument) VALUES ($1, $2, $3, $4, $5)",
@@ -236,15 +259,7 @@ export const checkPhonepePaymentStatus = asyncErrorHandler(async (req, res) => {
       ]
     );
 
-    // console.log("payments");
-
-    await client.query(
-      "UPDATE packages_departure_date SET max_seats = max_seats - 1 WHERE id = $1",
-      [orderInfo.departure_date_id]
-    );
-
     await client.query("COMMIT");
-    client.release();
 
     sendBookingConfirmationEmail(orderInfo, paymentInfo);
 
@@ -256,12 +271,11 @@ export const checkPhonepePaymentStatus = asyncErrorHandler(async (req, res) => {
     });
   } catch (error: any) {
     await client.query("ROLLBACK");
-    client.release();
     res.render("payment-failed.ejs", {
       failedAmount: `₹${paymentInfo.data.amount / 100}`,
       purchaseDate: formattedDate,
     });
-
-    console.log(error);
+  } finally {
+    client.release();
   }
 });

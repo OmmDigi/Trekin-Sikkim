@@ -7,6 +7,7 @@ import {
   PaginationNextBtn,
   PaginationPreviousBtn,
 } from "@/components/ui/pagination";
+import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 
 interface IProps {
@@ -14,6 +15,7 @@ interface IProps {
   page: number;
   onPageChange?: (page: number) => void;
   onPageClick?: (page: number) => void;
+  loading?: boolean;
 }
 
 const MAX_PAGE = 5;
@@ -22,6 +24,7 @@ export function PaginationComp({
   page,
   onPageChange,
   onPageClick,
+  loading = false,
 }: IProps) {
   const [array, setArray] = useState<number[]>([]);
 
@@ -34,12 +37,29 @@ export function PaginationComp({
   }, [totalPage]);
 
   const handleNextBtn = () => {
-    setArray((prev) => prev.map((item) => item + 1));
+    if (totalPage !== -1) {
+      setArray((prev) => prev.map((item) => item + 1));
+    } else {
+      onPageChange?.(page + 1);
+      onPageClick?.(page + 1);
+    }
   };
 
   const handlePrevBtn = () => {
-    setArray((prev) => prev.map((item) => item - 1));
+    if (totalPage !== -1) {
+      setArray((prev) => prev.map((item) => item - 1));
+    } else {
+      if (page !== 1) {
+        onPageChange?.(page - 1);
+        onPageClick?.(page - 1);
+      }
+    }
   };
+
+  const nextButtonDisibility =
+    totalPage === -1
+      ? false
+      : array[MAX_PAGE - 1] === undefined || array[MAX_PAGE - 1] >= totalPage;
 
   return (
     <Pagination>
@@ -47,7 +67,7 @@ export function PaginationComp({
         <PaginationItem>
           <PaginationPreviousBtn
             // disabled={array[0] === 1 && page !== 1}
-            disabled={array[0] === 1 || page === 1}
+            disabled={array[0] === 1}
             onClick={handlePrevBtn}
           />
         </PaginationItem>
@@ -58,9 +78,13 @@ export function PaginationComp({
                 onPageChange?.(item);
                 onPageClick?.(item);
               }}
-              isActive={item === page}
+              isActive={item === page || loading}
             >
-              {item}
+              {loading && item === page ? (
+                <Loader2 className="animate-spin" />
+              ) : (
+                item
+              )}
             </PaginationBtn>
           </PaginationItem>
         ))}
@@ -75,10 +99,7 @@ export function PaginationComp({
         <PaginationItem>
           <PaginationNextBtn
             onClick={handleNextBtn}
-            disabled={
-              array[MAX_PAGE - 1] === undefined ||
-              array[MAX_PAGE - 1] >= totalPage
-            }
+            disabled={nextButtonDisibility}
           />
         </PaginationItem>
       </PaginationContent>

@@ -74,11 +74,11 @@ export default function OrderSummerySection({ bookingInfo }: IProps) {
           <span className="text-sm">
             From{" "}
             <span className="underline">
-              {formatDateToReadable(bookingInfo?.datesInfo.from_date || "")}
+              {formatDateToReadable(bookingInfo?.datesInfo?.from_date || bookingState.personal_info?.from_date || "")}
             </span>{" "}
             To{" "}
             <span className="underline">
-              {formatDateToReadable(bookingInfo?.datesInfo.to_date || "")}
+              {formatDateToReadable(bookingInfo?.datesInfo?.to_date || bookingState.personal_info.to_date || "")}
             </span>
           </span>
         </div>

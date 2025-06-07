@@ -15,6 +15,8 @@ interface IPersonalInfo {
   number_of_people: number;
   address?: string;
   dial_code: string;
+  from_date?: string;
+  to_date?: string;
 }
 
 interface IBookingForm {

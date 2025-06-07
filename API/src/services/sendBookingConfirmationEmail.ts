@@ -16,9 +16,27 @@ export const sendBookingConfirmationEmail = async (
       [orderInfo.package_id]
     );
 
-    const { rows: dateInfo } = await pool.query(
-      "SELECT from_date, to_date FROM packages_departure_date"
-    );
+    const dateInfo: {
+      from_date: string | null;
+      to_date: string | null;
+    } = {
+      from_date: null,
+      to_date: null,
+    };
+
+    if (orderInfo?.departure_date_id) {
+      const { rows, rowCount } = await pool.query(
+        "SELECT from_date, to_date FROM packages_departure_date WHERE departure_date_id = $1",
+        [orderInfo.departure_date_id]
+      );
+      if (rowCount !== 0) {
+        dateInfo.from_date = rows[0].from_date;
+        dateInfo.to_date = rows[0].to_date;
+      }
+    } else if (orderInfo?.from_date && orderInfo?.to_date) {
+      dateInfo.from_date = orderInfo?.from_date;
+      dateInfo.to_date = orderInfo?.to_date;
+    }
 
     sendEmail(orderInfo.email, "booking-confirmation", {
       packageName: rows[0].package_name,
@@ -29,8 +47,8 @@ export const sendBookingConfirmationEmail = async (
       transactionId: paymentInfo.data.transactionId,
       groupType: orderInfo.group_type,
       tripDate: `${formatDateToReadable(
-        dateInfo[0].from_date
-      )} - ${formatDateToReadable(dateInfo[0].to_date)}`,
+        dateInfo.from_date || ""
+      )} - ${formatDateToReadable(dateInfo.to_date || "")}`,
     });
 
     await client.query("COMMIT");

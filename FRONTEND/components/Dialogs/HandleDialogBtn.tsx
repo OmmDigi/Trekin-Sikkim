@@ -13,6 +13,8 @@ interface IProps
   id: TDialogID;
   action_type: TDialogAction;
   extraValue?: any;
+  handleClose?: () => void;
+  handleOpen?: () => void;
 }
 
 export default function HandleDialogBtn({
@@ -20,6 +22,8 @@ export default function HandleDialogBtn({
   id,
   action_type,
   extraValue,
+  handleClose,
+  handleOpen,
   ...props
 }: IProps) {
   const dispath = useDispatch();
@@ -29,6 +33,11 @@ export default function HandleDialogBtn({
       {...props}
       onClick={() => {
         dispath(setDialog({ id, type: action_type, extraValue }));
+        if (action_type === "CLOSE") {
+          handleClose?.();
+        } else {
+          handleOpen?.();
+        }
       }}
     >
       {children}

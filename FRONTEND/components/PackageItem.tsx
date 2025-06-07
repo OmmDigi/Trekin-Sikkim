@@ -7,6 +7,7 @@ import Link from "next/link";
 import { IPackageListInfo } from "@/types";
 import HandleDialogBtn from "./Dialogs/HandleDialogBtn";
 import ViewBookingDetails from "./Dialogs/ViewBookingDetails";
+import BookingDialogClient from "./Account/BookingDialogClient";
 // import HandleDialogBtn from "./Dialogs/HandleDialogBtn";
 
 interface IProps {
@@ -132,7 +133,7 @@ export default function PackageItem({ fromWhere, singlePackageInfo }: IProps) {
             </Link>
           ) : (
             <>
-              <ViewBookingDetails packageId={singlePackageInfo.id} />
+              {/* <ViewBookingDetails packageId={singlePackageInfo.id} />
               <HandleDialogBtn id="view-booking-info" action_type="OPEN">
                 <Button
                   className="w-full !bg-red-500 text-xl font-semibold"
@@ -141,7 +142,8 @@ export default function PackageItem({ fromWhere, singlePackageInfo }: IProps) {
                   View Booking Info
                   <GoArrowDownLeft className="rotate-180 ml-1.5" />
                 </Button>
-              </HandleDialogBtn>
+              </HandleDialogBtn> */}
+              <BookingDialogClient packageId={singlePackageInfo.id} />
             </>
           )}
           {/* <div className="flex items-center justify-between">

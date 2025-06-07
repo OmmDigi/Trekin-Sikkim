@@ -158,8 +158,8 @@ type AdditionalInfo = {
 export interface IBooking {
   userInfo: UserInfo;
   packageInfo: PackageInfo;
-  datesInfo: DatesInfo;
-  additionalInfo: AdditionalInfo;
+  datesInfo: DatesInfo | undefined;
+  additionalInfo: AdditionalInfo | undefined;
 }
 
 export interface IBlog {

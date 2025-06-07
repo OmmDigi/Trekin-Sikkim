@@ -1,4 +1,5 @@
 export function formatDateToReadable(dateStr: string) {
+  if (dateStr === "") return "";
   const date = new Date(dateStr);
   if (isNaN(date.getTime())) {
     throw new Error(`Invalid ISO date: "${dateStr}"`);

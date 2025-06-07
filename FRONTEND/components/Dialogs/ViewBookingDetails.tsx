@@ -10,6 +10,7 @@ import { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import HandleDialogBtn from "./HandleDialogBtn";
 import Button from "../Button";
+import { formatDateToReadable } from "../Utils/formatDateToReadable";
 
 // Example icons (you can replace with actual icon components)
 const CalendarIcon = () => (
@@ -62,9 +63,11 @@ const MailIcon = () => (
 
 interface IProps {
   packageId: number;
+  onClose?: () => void;
+  onOpen?: () => void;
 }
 
-export default function ViewBookingDetails({ packageId }: IProps) {
+export default function ViewBookingDetails({ packageId, onClose, onOpen }: IProps) {
   const [booking, setBooking] = useState<IBookingDetails | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -72,7 +75,7 @@ export default function ViewBookingDetails({ packageId }: IProps) {
     setLoading(true);
     api
       .get<IResponse<IBookingDetails[]>>(
-        `/api/v1/booking/list?package_id=${packageId}`
+        `/api/v1/booking/list?package_id=${packageId}&from=account`
       )
       .then((response) => {
         setBooking(response.data.data[0]);
@@ -108,7 +111,14 @@ export default function ViewBookingDetails({ packageId }: IProps) {
                     {booking?.package_name}
                   </h3>
                   <p>
-                    <strong>Date:</strong> 12 May, 2025 - 18 May, 2025
+                    <strong>Date:</strong>{" "}
+                    {formatDateToReadable(
+                      booking?.booking_dates[0]?.from_date || ""
+                    )}{" "}
+                    -{" "}
+                    {formatDateToReadable(
+                      booking?.booking_dates[0]?.to_date || ""
+                    )}
                   </p>
                   <p>
                     <strong>Group Type:</strong> {booking?.trip_type}
@@ -170,6 +180,8 @@ export default function ViewBookingDetails({ packageId }: IProps) {
                 id="view-booking-info"
                 action_type="CLOSE"
                 className="w-full pb-2.5 px-5 flex items-center justify-end"
+                handleClose={onClose}
+                handleOpen={onOpen}
               >
                 <Button theme="accent">Close</Button>
               </HandleDialogBtn>

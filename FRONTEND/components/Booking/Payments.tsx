@@ -29,6 +29,15 @@ export default function Payments() {
   };
 
   const handlePaymentBtnClick = () => {
+    const bodyDateInfo : any = {};
+    if(searchParams.has("date_id")) {
+      bodyDateInfo["departure_date_id"] = searchParams.get("date_id")
+    }
+
+    if(localBookingInfo.personal_info?.from_date && localBookingInfo.personal_info?.to_date) {
+      bodyDateInfo["from_date"] = localBookingInfo.personal_info?.from_date;
+      bodyDateInfo["to_date"] = localBookingInfo.personal_info?.to_date;
+    }
     startTransition(async () => {
       try {
         const { data } = await api.post<IResponse<string>>(
@@ -39,7 +48,10 @@ export default function Payments() {
             contact_number: localBookingInfo.personal_info.contact_number,
             group_type: localBookingInfo.personal_info.group_type,
             number_of_people: localBookingInfo.personal_info.number_of_people,
-            departure_date_id: searchParams.get("date_id"),
+            // departure_date_id: searchParams.get("date_id"),
+            // from_date : localBookingInfo.personal_info?.from_date,
+            // to_date : localBookingInfo.personal_info?.to_date,
+            ...bodyDateInfo,
             package_id: searchParams.get("package_id"),
             currency: "INR",
             addon_ids: getAdditionlIdsFormSearchParams(),

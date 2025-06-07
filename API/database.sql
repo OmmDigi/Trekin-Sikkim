@@ -339,3 +339,10 @@ CREATE TABLE package_itinerary_pdf (
 
     UNIQUE(package_id)
 );
+
+ALTER TABLE order_id_and_date
+ALTER COLUMN departure_date_id DROP NOT NULL;
+
+ALTER TABLE order_id_and_date
+ADD COLUMN from_date DATE,
+ADD COLUMN to_date DATE;

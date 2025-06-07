@@ -25,6 +25,8 @@ const contactFormSchema = z.object({
   group_type: z.string().min(1, { message: "Choose a group type first" }),
   address: z.string().optional(),
   number_of_people: z.number().min(1),
+  from_date: z.string().optional(),
+  to_date: z.string().optional(),
   dial_code: z.string().min(1),
 });
 
@@ -43,6 +45,7 @@ export default function ContactInfoForm({ serverBookingInfo }: IProps) {
     handleSubmit,
     reset,
     setValue,
+    setError,
   } = useForm<TContactForm>({
     resolver: zodResolver(contactFormSchema),
     defaultValues: {
@@ -59,11 +62,23 @@ export default function ContactInfoForm({ serverBookingInfo }: IProps) {
   const dispatch = useDispatch();
   const reduxBookingInfo = useSelector((state: RootState) => state.booking);
   const searchParams = useSearchParams();
-
   const route = useRouter();
+
+  const hasChoosedAvilableDate = searchParams.has("date_id");
 
   const onSubmit = (formData: TContactForm) => {
     // do api management here
+
+    if (!hasChoosedAvilableDate && !formData.from_date) {
+      setError("from_date", { message: "Please Choose Your Trip From Date" });
+      return;
+    }
+
+    if (!hasChoosedAvilableDate && !formData.to_date) {
+      setError("to_date", { message: "Please Choose Your Trip End Date" });
+      return;
+    }
+
     dispatch(
       setPersonalInfo({
         full_name: formData.name,
@@ -73,6 +88,8 @@ export default function ContactInfoForm({ serverBookingInfo }: IProps) {
         address: formData.address,
         group_type: formData.group_type,
         dial_code: formData.dial_code,
+        from_date: formData.from_date,
+        to_date: formData.to_date,
       })
     );
     const newSearchParams = new URLSearchParams(searchParams);
@@ -97,6 +114,9 @@ export default function ContactInfoForm({ serverBookingInfo }: IProps) {
         phone: reduxBookingInfo.personal_info.contact_number,
         dial_code:
           reduxBookingInfo?.personal_info?.dial_code || COUNTRIES[0].dial_code,
+
+        from_date: reduxBookingInfo.personal_info?.from_date,
+        to_date: reduxBookingInfo.personal_info?.to_date,
       });
     } else {
       reset({
@@ -170,6 +190,24 @@ export default function ContactInfoForm({ serverBookingInfo }: IProps) {
           placeholder="Enter how much people will come"
           errorMsg={errors.number_of_people?.message}
         />
+
+        {hasChoosedAvilableDate ? null : (
+          <>
+            <Input
+              type="date"
+              {...register("from_date")}
+              label="From Date *"
+              errorMsg={errors.from_date?.message}
+            />
+
+            <Input
+              type="date"
+              {...register("to_date")}
+              label="To Date *"
+              errorMsg={errors.to_date?.message}
+            />
+          </>
+        )}
 
         <Input
           {...register("address")}

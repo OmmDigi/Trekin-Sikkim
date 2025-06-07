@@ -20,7 +20,10 @@ export const VPayToPackage = Joi.object({
       .allow(null)
   ),
 
-  departure_date_id: Joi.number().required(),
+  departure_date_id: Joi.number().optional(),
+
+  from_date : Joi.string().optional(),
+  to_date : Joi.string().optional(),
 
   addon_ids: Joi.array().items(Joi.number()).optional().allow(null),
 

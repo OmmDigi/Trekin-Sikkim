@@ -53,10 +53,18 @@ export default function BookingPage() {
 
   useEffect(() => {
     const getBookingInfo = async () => {
+      const urlSearchParams = new URLSearchParams();
+      if (packageId) {
+        urlSearchParams.set("package_id", packageId);
+      }
+      if (dateId) {
+        urlSearchParams.set("date_id", dateId);
+      }
+      if (addonIds.length !== 0) {
+        urlSearchParams.set("additional_ids", addonIds.join(","));
+      }
       const { data: bookingInfo } = await api.get<IResponse<IBooking>>(
-        `/api/v1/booking?package_id=${packageId}&date_id=${dateId}&additional_ids=${addonIds.join(
-          ","
-        )}`
+        `/api/v1/booking?${urlSearchParams.toString()}`
       );
       setBookingInfo(bookingInfo.data);
     };
