@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@plugin "@tailwindcss/typography";
 
 :root {
   /* --background: #ffffff;
@@ -27,9 +26,7 @@ html {
   --font-secondary: "Inter", sans-serif;
   --font-montserrat: var(--font-montserrat);
 
-  --color-primary: #000000; /*1e3a8a*/
-  --color-secondary: #f5f5f5;
-  --color-primary: #131313;
+  --color-primary: #131313; /* Fixed: removed duplicate */
   --color-secondary: #ffffff;
   /* --color-accent: #ffd230; */
   /* --color-accent: #1ACE62; */
@@ -114,7 +111,7 @@ button {
 }
 
 .fade-banner-gradient-left {
-  background-image: linear-gradient(to #1dc0848a, rgba(255, 0, 0, 0));
+  background-image: linear-gradient(to right, #1dc0848a, rgba(255, 0, 0, 0)); /* Fixed: added 'right' direction */
 }
 
 @media only screen and (max-width: 639px) {

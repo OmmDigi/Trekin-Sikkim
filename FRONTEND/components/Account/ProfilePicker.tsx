@@ -1,13 +1,11 @@
 "use client";
 
-import { ImageUp, Pencil } from "lucide-react";
+import { Pencil } from "lucide-react";
 import Image from "next/image";
 import { ChangeEvent, useRef, useState } from "react";
 import { uploadFiles } from "../Utils/uploadFiles";
 import SpinnerSvg from "../SpinnerSvg";
 import api from "@/lib/axios";
-// import { AxiosError } from "axios";
-// import { IResponse } from "@/types";
 import { toast } from "react-toastify";
 
 interface IImageStatus {
@@ -89,7 +87,6 @@ export default function ProfilePicker({ defaultImage }: IProps) {
           <SpinnerSvg size="28px" />
         ) : (
           <div className="p-2 bg-white shadow-lg rounded-full">
-            {/* <ImageUp size={15} /> */}
             <Pencil size={15} />
           </div>
         )}

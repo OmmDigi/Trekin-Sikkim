@@ -94,7 +94,6 @@ function Banner() {
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
-        // className="w-full overflow-hidden relative aspect-[3.17/1] max-sm:aspect-[16/9]"
         className="w-full overflow-hidden relative h-[90vh] max-sm:h-[45vh]"
       >
         {banner_info.map((item, index) => (
@@ -118,39 +117,9 @@ function Banner() {
           </div>
         ))}
 
-        {/* <div className="absolute inset-0 bg-[#00000073] z-50">
-          <div className="size-full relative flex items-center max-w-[90%] mx-auto">
-            {banner_info.map((item, index) => (
-              <div key={item.id} className="space-y-4 absolute">
-                <h1
-                  className={`font-montserrat text-secondary text-heading font-[600] max-w-[35rem] ${
-                    currentBannerIndex === index ? "opacity-100" : "opacity-0"
-                  } transition-all duration-1000 max-sm:text-lg max-sm:max-w-[20rem] max-sm:leading-7`}
-                >
-                  {item.title}
-                </h1>
-
-                <div className="flex items-center gap-5">
-                  <Button
-                    className={`min-w-[12rem] ${
-                      currentBannerIndex === index ? "opacity-100" : "opacity-0"
-                    } transition-all duration-1000 max-sm:min-[8rem] max-sm:pl-3 !bg-accent !text-white`}
-                  >
-                    <BiBookContent />
-                    Book Now
-                  </Button>
-
-                  <div className=" border-secondary !bg-accent !text-white backdrop-blur-2xl size-10 flex items-center justify-center rounded-[50%] cursor-pointer max-sm:size-8">
-                    <IoIosPlay />
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div> */}
-
         {banner_info.map((item, index) => (
           <div
+            key={item.id}
             className={cn(
               "absolute inset-0 bg-[#00000094] z-50",
               currentBannerIndex === index

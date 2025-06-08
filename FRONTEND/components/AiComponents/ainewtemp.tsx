@@ -29,7 +29,6 @@ import Loading from "@/components/Loading";
 import Faqs from "@/components/Packages/Faqs";
 import PhotoGallery from "@/components/Packages/PhotoGallery";
 import OtherOptions from "@/components/Packages/OtherOptions";
-import AvilableDatesSection from "@/components/Packages/AvilableDatesSection";
 import AdditionalCheckbox from "@/components/Packages/AdditionalCheckbox";
 import PackageBookNowBtn from "@/components/Packages/PackageBookNowBtn";
 import { Metadata } from "next";

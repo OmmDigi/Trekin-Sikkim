@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Poppins, Montserrat } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Constant from "@/constant";
 import BottomNavigation from "@/components/BottomNavigation";
@@ -14,7 +13,6 @@ import EnquireDialog from "@/components/Dialogs/EnquireDialog";
 import AuthProvider from "@/components/AuthProvider";
 import Link from "next/link";
 import { ArrowUp } from "lucide-react";
-import NewHeader from "@/components/Headers/NewHeader";
 import AiHeader from "@/components/AiComponents/AiHeader";
 import ChildrenHolder from "@/components/ChildrenHolder";
 import { cn } from "@/lib/utils";

@@ -6,7 +6,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState, useTransition } from "react";
-import CustomLink from "./CustomLink";
 
 interface IProps {
   totalPage: number | undefined;

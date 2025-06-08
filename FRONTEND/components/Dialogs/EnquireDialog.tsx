@@ -7,7 +7,6 @@ import HeadingSubHeding from "../HeadingSubHeding";
 import TextArea from "../Form/TextArea";
 import Button from "../Button";
 import { X } from "lucide-react";
-import Dropdown from "../Form/Dropdown";
 import { useDispatch } from "react-redux";
 import { setDialog } from "@/redux/slices/dialog.slice";
 import api from "@/lib/axios";

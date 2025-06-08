@@ -1,14 +1,15 @@
 import type { NextConfig } from "next";
+/** @type {import('next').NextConfig} */
 
 const nextConfig: NextConfig = {
-  webpack(config) {
-    config.optimization.minimize = false; // Disables all minification (JS + CSS)
-    return config;
-  },
+  // webpack(config) {
+  //   config.optimization.minimize = false; // Disables all minification (JS + CSS)
+  //   return config;
+  // },
 
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
+  // eslint: {
+  //   ignoreDuringBuilds: true,
+  // },
 
   output: "standalone",
 

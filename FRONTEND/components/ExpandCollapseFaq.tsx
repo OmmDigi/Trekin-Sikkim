@@ -1,12 +1,7 @@
 import React from "react";
-import { IoAdd, IoRemove } from "react-icons/io5";
 import * as motion from "motion/react-client";
 import { fadeUpVarient } from "@/utils/animations";
-import { cn } from "@/lib/utils";
 import { HOME_FAQS } from "@/constant";
-import ReadMore from "./Utils/ReadMore";
-import ReadMoreContent from "./Utils/ReadMoreContent";
-import ReadMoreToggle from "./Utils/ReadMoreToggle";
 import { Collapsible } from "./Utils/Collapsible";
 import { CollapsibleItem } from "./Utils/CollapsibleItem";
 

@@ -11,11 +11,9 @@ import {
   CheckCircle,
   AlertCircle,
   XCircle,
-  MapPin,
-  Star,
 } from "lucide-react";
 import AvilableDateCheckbox from "../Packages/AvilableDateCheckbox";
-import Button from "../Button";
+
 
 interface IProps {
   package_id: number;
@@ -103,7 +101,7 @@ export default async function AiAvilableDatesSection({
           No Dates Available
         </h3>
         <p className="text-gray-600">
-          We're currently updating our schedule. Please check back soon or
+          We&apos;re currently updating our schedule. Please check back soon or
           contact us for custom dates.
         </p>
         <button className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
@@ -160,7 +158,7 @@ export default async function AiAvilableDatesSection({
 
       {/* Dates Grid */}
       <div className="grid gap-4">
-        {dateInfo.data.dates_info.map((item, index) => {
+        {dateInfo.data.dates_info.map((item) => {
           const styles = getAvailabilityStyles(item.avilibility_color);
           const isDisabled = item.avilibility_color === "Red";
 
