@@ -281,3 +281,66 @@ export const getEnquiry = asyncErrorHandler(async (req, res) => {
 
   res.status(200).json(new ApiResponse(200, "Enquiry List", rows));
 });
+
+// sitemap
+export const getSiteMapList = asyncErrorHandler(async (req, res) => {
+  const client = await pool.connect();
+  const frontendDomain = process.env.FRONTEND_HOST_URL;
+  try {
+    await client.query("BEGIN");
+    const { rows: category } = await client.query(
+      "SELECT slug AS slug FROM category"
+    );
+    const { rows: packages } = await client.query(
+      `
+       SELECT 
+        c.slug || '/' || p.slug
+       AS slug FROM packages p
+
+       LEFT JOIN category c
+       ON p.category_id = c.category_id
+      `
+    );
+    const { rows: blogs } = await client.query(
+      `
+       SELECT 
+        slug
+       AS slug FROM blogs
+      `
+    );
+
+    await client.query("COMMIT");
+
+    const staticPages = ["", "about-us", "contact-us", "articles"].map(
+      (slug) => `<url><loc>${frontendDomain}/${slug}</loc></url>\n`
+    );
+
+    const categoriesSlug = category.map((row) => {
+      return `<url><loc>${frontendDomain}/${row.slug}</loc></url>\n`;
+    });
+
+    const packagesSlug = packages.map((row) => {
+      return `<url><loc>${frontendDomain}/${row.slug}</loc></url>\n`;
+    });
+
+    const blogsSlug = blogs.map((row) => {
+      return `<url><loc>${frontendDomain}/articles/${row.slug}</loc></url>\n`;
+    });
+
+    const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+        <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+        ${staticPages}
+        ${categoriesSlug}
+        ${packagesSlug}
+        ${blogsSlug}
+      </urlset>`;
+
+    res.header("Content-Type", "application/xml");
+    res.send(sitemap);
+  } catch (error: any) {
+    await client.query("ROLLBACK");
+    throw new ErrorHandler(400, error.message);
+  } finally {
+    client.release();
+  }
+});

@@ -6,6 +6,7 @@ import {
   getEnquiry,
   getRelatedBlogs,
   getSingleBlog,
+  getSiteMapList,
   getSlugs,
   postNewBlog,
   updateSingleBlog,
@@ -24,4 +25,6 @@ websiteRoute
   .delete("/blogs/:blog_id", deleteBlog)
 
   .get("/enquiry", getEnquiry)
-  .post("/enquiry", addEnquiry);
+  .post("/enquiry", addEnquiry)
+
+  .get("/sitemap", getSiteMapList)
