@@ -1,6 +1,5 @@
 import { getRefreshToken } from "@/actions/cookies";
 import { NAV_OPTIONS } from "@/constant";
-import api from "@/lib/axios";
 import { LogIn, UserRound } from "lucide-react";
 
 interface IProps {
