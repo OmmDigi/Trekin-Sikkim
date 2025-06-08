@@ -33,7 +33,6 @@ function EnquireDialog() {
       formData.forEach((value, key) => {
         dataToStore[key] = value;
       });
-      console.log(dataToStore);
       try {
         const response = (
           await api.post<IResponse>("/api/v1/website/enquiry", dataToStore, {

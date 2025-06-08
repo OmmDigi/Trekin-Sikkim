@@ -3,7 +3,6 @@ import PackagesListingPage from "@/components/Pages/PackagesListingPage";
 import Button from "@/components/Button";
 import Link from "next/link";
 import ImageSlider from "@/components/Utils/ImageSlider";
-import api from "@/lib/axios";
 import { IMediaItem, IResponse } from "@/types";
 import React from "react";
 import Loading from "@/components/Loading";
@@ -13,8 +12,10 @@ import { CollapsibleItem } from "@/components/Utils/CollapsibleItem";
 import { cache } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { serverApi } from "@/lib/serverApi";
 
 const getCategoryPageInfo = cache(async (slug: string) => {
+  const api = await serverApi();
   return (
     await api.get<IResponse<ICategoryPageInfo | undefined>>(
       `/api/v1/category/page-info/${slug}`

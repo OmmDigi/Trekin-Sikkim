@@ -14,7 +14,6 @@ import {
   PersonStanding,
   Watch,
 } from "lucide-react";
-import api from "@/lib/axios";
 import { IPackage, IResponse } from "@/types";
 import Overview from "@/components/Packages/Overview";
 import TripItinerary from "@/components/Packages/TripItinerary";
@@ -29,10 +28,13 @@ import { Metadata } from "next";
 import Button from "@/components/Button";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { notFound } from "next/navigation";
+import { serverApi } from "@/lib/serverApi";
 
 const getSinglePackagePageInfo = cache(async (slug: string) => {
+  const api = await serverApi();
   return (
-    await api.get<IResponse<IPackage>>(
+    await api.get<IResponse<IPackage | undefined>>(
       `/api/v1/package/single-page-basic/${slug}`
     )
   ).data;
@@ -106,17 +108,17 @@ export async function generateMetadata({
   const packageSlug = (await params)["package-slug"];
   const singlePackageInfo = await getSinglePackagePageInfo(packageSlug);
   return {
-    title: singlePackageInfo.data.meta_title,
-    description: singlePackageInfo.data.meta_description,
-    keywords: singlePackageInfo.data.meta_keywords,
+    title: singlePackageInfo.data?.meta_title,
+    description: singlePackageInfo.data?.meta_description,
+    keywords: singlePackageInfo.data?.meta_keywords,
     alternates: {
-      canonical: singlePackageInfo.data.canonical,
+      canonical: singlePackageInfo.data?.canonical,
     },
     openGraph: {
-      title: singlePackageInfo.data.meta_title,
-      description: singlePackageInfo.data.meta_description,
+      title: singlePackageInfo.data?.meta_title,
+      description: singlePackageInfo.data?.meta_description,
       images: [
-        singlePackageInfo.data.banner_info?.[0]?.item_link ||
+        singlePackageInfo.data?.banner_info?.[0]?.item_link ||
           "/placeholder_background.jpg",
       ],
       url: `/${categoryPageParam}/${packageSlug}`,
@@ -133,6 +135,10 @@ export default async function page({ params, searchParams }: IProps) {
   const newUrlSearchParams = new URLSearchParams(urlSearchParams);
 
   const data = await getSinglePackagePageInfo(packageSlug);
+
+  if (!data.data) {
+    notFound();
+  }
 
   OVERVIEW_POINTS[0].value = data.data.region;
   OVERVIEW_POINTS[1].value = data.data.best_time;
@@ -158,13 +164,15 @@ export default async function page({ params, searchParams }: IProps) {
 
   //calclute the inr price of selected addition price
   newUrlSearchParams.forEach((value, key) => {
-    if (key.includes("ad")) {
-      const inrPrice = data.data.additional[parseInt(value)].price_inr;
-      const usdPrice = data.data.additional[parseInt(value)].price_usd;
-      totalPrices.offerPriceInr += inrPrice;
-      totalPrices.originalPriceInr += inrPrice;
-      totalPrices.offerPriceUsd += usdPrice;
-      totalPrices.originalPriceUsd += usdPrice;
+    if (data.data) {
+      if (key.includes("ad")) {
+        const inrPrice = data.data.additional[parseInt(value)].price_inr;
+        const usdPrice = data.data.additional[parseInt(value)].price_usd;
+        totalPrices.offerPriceInr += inrPrice;
+        totalPrices.originalPriceInr += inrPrice;
+        totalPrices.offerPriceUsd += usdPrice;
+        totalPrices.originalPriceUsd += usdPrice;
+      }
     }
   });
 

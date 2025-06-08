@@ -50,6 +50,6 @@ export const VAddEnquiry = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().email().required(),
   contact_number: Joi.string().required(),
-  number_of_person: Joi.number().required(),
+  number_of_person: Joi.number().optional(),
   message: Joi.string().optional().allow(""),
 });

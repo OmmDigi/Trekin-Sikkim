@@ -1,5 +1,6 @@
 import { getRefreshToken } from "@/actions/cookies";
 import { NAV_OPTIONS } from "@/constant";
+import api from "@/lib/axios";
 import { LogIn, UserRound } from "lucide-react";
 
 interface IProps {
@@ -10,7 +11,11 @@ async function AuthProvider({ children }: IProps) {
   const accessToken = await getRefreshToken();
 
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/is-login`,
+    `${
+      typeof window !== "undefined"
+        ? process.env.NEXT_PUBLIC_API_BASE_URL
+        : process.env.INNER_API_BASE_URL
+    }/api/v1/users/is-login`,
     {
       headers: {
         Cookie: `refreshToken=${accessToken}`,
