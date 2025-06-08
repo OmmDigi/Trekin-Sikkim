@@ -10,7 +10,7 @@ interface IProps {
   error: AxiosError<IResponse>;
 }
 
-export default function error({ error }: IProps) {
+export default function ErrorPage({ error }: IProps) {
   const pathname = usePathname();
 
   return (
