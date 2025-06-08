@@ -108,7 +108,7 @@ function Banner() {
             )}
           >
             <Image
-              className="size-full object-cover"
+              className="w-full object-cover max-h-[90vh] min-h-[90vh] max-sm:min-h-[45vh] max-sm:max-h-[45vh]"
               src={item.image}
               alt="Banner 1"
               height={1200}
@@ -170,35 +170,6 @@ function Banner() {
           </button>
         </div>
       </div>
-      {/* <HomeFilter /> */}
-
-      {/* <div className="relative mt-5 h-48 hidden max-sm:block">
-        {banner_info.map((item, index) => (
-          <div key={item.id} className="space-y-4 absolute">
-            <h1
-              className={`font-montserrat text-primary text-heading font-[600] max-w-[35rem] ${
-                currentBannerIndex === index ? "opacity-100" : "opacity-0"
-              } transition-all duration-1000 max-sm:text-xs max-sm:max-w-[15rem]`}
-            >
-              {item.title}
-            </h1>
-
-            <div className="flex items-center gap-5">
-              <Button
-                className={`min-w-[8rem] ${
-                  currentBannerIndex === index ? "opacity-100" : "opacity-0"
-                } transition-all duration-1000`}
-                icon={<BiBookContent />}
-              >
-                Book Now
-              </Button>
-              <div className=" border-secondary bg-[#ffffffaf] backdrop-blur-2xl size-10 flex items-center justify-center rounded-[50%] cursor-pointer text-primary">
-                <IoIosPlay />
-              </div>
-            </div>
-          </div>
-        ))}
-      </div> */}
     </div>
   );
 }

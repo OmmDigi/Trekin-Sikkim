@@ -22,6 +22,17 @@ import React from "react";
 import { BiBookContent } from "react-icons/bi";
 import { FaCaretDown } from "react-icons/fa6";
 
+const Banner = dynamic(() => import("@/components/Banner"), {
+  loading: () => <Loading />,
+});
+
+const TestimonialSection = dynamic(
+  () => import("@/components/TempComp/TestimonialSection"),
+  {
+    loading: () => <Loading />,
+  }
+);
+
 const ABOUT_US_IMAGES = [
   "/about/about-image-1.jpg",
   "/about/about-image-2.webp",
@@ -38,17 +49,6 @@ const HOW_WE_WORK = [
 interface IProps {
   searchParams: Promise<{ category: string }>;
 }
-
-const Banner = dynamic(() => import("@/components/Banner"), {
-  loading: () => <Loading />,
-});
-
-const TestimonialSection = dynamic(
-  () => import("@/components/TempComp/TestimonialSection"),
-  {
-    loading: () => <Loading />,
-  }
-);
 
 export const metadata: Metadata = {
   title: "Glacier Treks and Adventure | Himalayan Trekking & Guided Tours",
@@ -353,16 +353,11 @@ export default function Home({ searchParams }: IProps) {
         </React.Suspense>
       </section>
 
-      {/* <ArticleSection /> */}
-
       <div className="h-16 max-sm:h-7" />
 
       <section className="w-full bg-light-gray p-12 max-sm:px-3">
         <section className="wrapper space-y-10">
-          <HeadingSubHeding
-            // withIcon={false}
-            heading="Frequently Asked Questions"
-          />
+          <HeadingSubHeding heading="Frequently Asked Questions" />
 
           <ExpandCollapseFaq />
         </section>
