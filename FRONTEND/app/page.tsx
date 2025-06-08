@@ -1,6 +1,4 @@
 import AboutStatsCard from "@/components/About/AboutStatsCard";
-// import Banner from "@/components/Banner";
-// import BlogListItem from "@/components/Blogs/BlogListItem";
 import Button from "@/components/Button";
 import ExpandCollapseFaq from "@/components/ExpandCollapseFaq";
 import HeadingSubHeding from "@/components/HeadingSubHeding";
@@ -8,15 +6,11 @@ import LatestBlogs from "@/components/Home/LatestBlogs";
 import TrekkerVideos from "@/components/Home/TrekkerVideos";
 import Loading from "@/components/Loading";
 import OurPackages from "@/components/Overview/OurPackages";
-// import PackageItem from "@/components/PackageItem";
 import UpcommingPackages from "@/components/Packages/UpcommingPackages";
-// import Tabs from "@/components/Tabs";
-import TestimonialSection from "@/components/TempComp/TestimonialSection";
 import ImageSlider from "@/components/Utils/ImageSlider";
 import ReadMore from "@/components/Utils/ReadMore";
 import ReadMoreContent from "@/components/Utils/ReadMoreContent";
 import ReadMoreToggle from "@/components/Utils/ReadMoreToggle";
-// import { POPULER_PACKAGES } from "@/constant";
 import { childVariant, fadeUpVarient } from "@/utils/animations";
 import { Award, Compass, Mountain, Users } from "lucide-react";
 
@@ -46,8 +40,15 @@ interface IProps {
 }
 
 const Banner = dynamic(() => import("@/components/Banner"), {
-  ssr: true,
+  loading: () => <Loading />,
 });
+
+const TestimonialSection = dynamic(
+  () => import("@/components/TempComp/TestimonialSection"),
+  {
+    loading: () => <Loading />,
+  }
+);
 
 export const metadata: Metadata = {
   title: "Glacier Treks and Adventure | Himalayan Trekking & Guided Tours",
@@ -69,29 +70,6 @@ export default function Home({ searchParams }: IProps) {
           heading="Glacier Treks & Adventure"
           subheading="Welcome to Glacier Treks And Adventure"
         />
-
-        {/* <div className="grid grid-cols-2 max-sm:grid-cols-1">
-          <div>
-            <motion.h2
-              variants={fadeUpVarient(0.05)}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              className="font-semibold font-primary text-4xl max-sm:text-3xl text-accent-2"
-            >
-              Glacier Treks & Adventure
-            </motion.h2>
-            <motion.p
-              variants={fadeUpVarient(0.06)}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              className="text-sm text-accent-2"
-            >
-              Welcome to Glacier Treks And Adventure
-            </motion.p>
-          </div>
-        </div> */}
 
         <motion.div
           variants={fadeUpVarient(0.0)}
@@ -221,164 +199,8 @@ export default function Home({ searchParams }: IProps) {
 
       <div className="h-20 max-sm:h-7" />
 
-      {/* Top Values For You */}
-      {/* <section className="wrapper space-y-10 font-primary bg-light-gray rounded-4xl p-10 pb-20 max-sm:pb-8">
-        <HeadingSubHeding
-          withIcon
-          heading="Top values for you"
-          subheading="Try variety of benefits when using our services"
-        />
-
-        <motion.ul
-          variants={parentVariant}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.4 }}
-          className="flex items-center justify-center flex-wrap gap-5"
-        >
-          {TOP_VALUES.map((value) => (
-            <motion.li
-              variants={childVariant}
-              key={value.id}
-              className="flex items-center justify-center flex-col gap-1 basis-[18rem]"
-            >
-              <div className="size-10 border border-gray-500 flex items-center justify-center rounded-full">
-                <Image
-                  className="w-5"
-                  alt="Value Icons"
-                  src={value.icon}
-                  height={1200}
-                  width={1200}
-                />
-              </div>
-
-              <h2 className="font-medium text-center">{value.name}</h2>
-              <p className="text-xs text-center">{value.description}</p>
-            </motion.li>
-          ))}
-        </motion.ul>
-      </section> */}
-
-      {/* How We Work */}
-      {/* <section className="w-full relative h-[30rem] overflow-hidden">
-        <Image
-          className="size-full object-cover z-0 bg-fixed"
-          src={"/new-images/banner.jpg"}
-          alt="Promo Section"
-          width={1200}
-          height={800}
-        />
-        <div className="size-full absolute inset-0 flex items-center justify-center  z-10 backdrop-blur-md">
-          <div className="wrapper grid grid-cols-2 gap-40 py-10 !font-primary max-sm:grid-cols-1 max-sm:gap-5 max-sm:max-w-[90%]">
-            <div className="space-y-5">
-              <motion.span
-                variants={fadeUpVarient(0.05)}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                className="bg-accent inline-block bg-fixed text-white text-xs px-3 py-1.5 tracking-widest"
-              >
-                HOW WE WORK
-              </motion.span>
-
-              <motion.h3
-                variants={fadeUpVarient(0.08)}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                className="text-4xl font-medium text-white"
-              >
-                Book a trek easily with just a few steps
-              </motion.h3>
-
-              <motion.p
-                variants={fadeUpVarient(0.11)}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                className="text-sm text-white"
-              >
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ea
-                vel, asperiores dolorem dolorum incidunt eos eum et
-              </motion.p>
-
-              <motion.div
-                variants={fadeUpVarient(0.14)}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                className="border-t border-dashed border-gray-400 w-full"
-              ></motion.div>
-
-              <motion.div
-                variants={fadeUpVarient(0.17)}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-              >
-                <Button
-                  theme="accent"
-                  className="min-w-40 shadow-[0px_4px_6px_0px_rgba(0,_0,_0,_0.1)] !rounded-lg"
-                >
-                  Book Now
-                </Button>
-              </motion.div>
-            </div>
-
-            <div>
-              <motion.ul
-                variants={{
-                  hidden: { opacity: 0 },
-                  visible: {
-                    opacity: 1,
-                    transition: {
-                      staggerChildren: 0.3, // Delay between each child animation
-                    },
-                  },
-                }}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, amount: 0.2 }}
-                className="space-y-7"
-              >
-                {[1, 2, 3].map((_, index) => (
-                  <motion.li
-                    variants={childVariant}
-                    key={index}
-                    className="flex items-start gap-6"
-                  >
-                    <div className="size-12">
-                      <div className="size-10 bg-accent text-white rounded-full flex items-center justify-center">
-                        <span>{index + 1}</span>
-                      </div>
-                    </div>
-
-                    <div className="space-y-1">
-                      <h2 className="font-medium text-2xl text-white">
-                        Find your trek
-                      </h2>
-                      <p className="text-[0.8rem] text-gray-500 tracking-wider text-white">
-                        Lorem ipsum dolor sit amet consectetur, adipisicing
-                        elit. Laudantium consectetur.
-                      </p>
-                    </div>
-                  </motion.li>
-                ))}
-              </motion.ul>
-            </div>
-          </div>
-        </div>
-      </section> */}
-
       {/* Promo Section */}
       <section className="w-full relative h-[28rem] overflow-hidden pimg">
-        {/* <Image
-          className="size-full object-cover z-0 bg-fixed"
-          src={"/new-images/banner.jpg"}
-          alt="Promo Section"
-          width={1200}
-          height={800}
-        /> */}
         <div className="size-full fade-gradient-left absolute inset-0 flex items-center justify-start z-10">
           <div className="!font-primary max-w-[90%] mx-auto w-full">
             <div className="space-y-5">
@@ -401,17 +223,6 @@ export default function Home({ searchParams }: IProps) {
               >
                 Book a trek easily with just a few steps
               </motion.h3>
-
-              {/* <motion.p
-                variants={fadeUpVarient(0.11)}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                className="text-sm text-white"
-              >
-                Find your trek {"->"} Choose Your Desired Date {"->"} Fillup
-                Form {"->"} Get Ready for Adventure
-              </motion.p> */}
 
               <motion.ul
                 variants={{
@@ -455,16 +266,6 @@ export default function Home({ searchParams }: IProps) {
                 whileInView="visible"
                 viewport={{ once: true }}
               >
-                
-                {/* <Button
-                  theme="accent"
-                  className="min-w-40 shadow-[0px_4px_6px_0px_rgba(0,_0,_0,_0.1)] !rounded-lg"
-                >
-                  Book Now
-                </Button> */}
-                {/* <button className="bg-emerald-500 min-w-40 hover:bg-emerald-600 text-white px-6 py-3 rounded-lg shadow-lg transition">
-                  Book Now
-                </button> */}
                 <Link href="#our-packages-section">
                   <Button className="min-w-[10rem] transition-all duration-1000 max-sm:min-[8rem] max-sm:pl-3 !bg-accent !text-white">
                     <BiBookContent />
@@ -476,8 +277,6 @@ export default function Home({ searchParams }: IProps) {
           </div>
         </div>
       </section>
-
-      {/* <PromoSection /> */}
 
       <div className="h-16 max-sm:h-7" />
 
@@ -492,12 +291,6 @@ export default function Home({ searchParams }: IProps) {
 
       {/* Our Stories */}
       <section className="wrapper space-y-5">
-        {/* <HeadingSubHeding
-          withIcon
-          heading="Latest Stories"
-          subheading="Discover the experiences of our Trekkers."
-        /> */}
-
         <div className="grid grid-cols-2 max-sm:grid-cols-1">
           <div className="space-y-1.5">
             <motion.h2
@@ -519,69 +312,12 @@ export default function Home({ searchParams }: IProps) {
               Discover the experiences of our Trekkers
             </motion.p>
           </div>
-
-          {/* <div className="flex items-center justify-end text-accent-2">
-            <Link
-              href={"/trekking-in-sikkim"}
-              className="border-b flex items-center justify-center"
-            >
-              Explore More
-              <GoArrowDownLeft className="rotate-180 ml-1.5" />
-            </Link>
-          </div> */}
         </div>
 
         <TrekkerVideos />
-
-        {/* <div className="flex items-center justify-center">
-         
-          <Button theme="accent">
-            Load More
-            <FaCaretDown />
-          </Button>
-        </div> */}
       </section>
 
       <div className="h-16 max-sm:h-7" />
-
-      {/* Testimonials */}
-      {/* <section className="wrapper space-y-10 font-primary">
-
-        <div className="grid grid-cols-2 font-primary max-sm:grid-cols-1">
-          <div className="space-y-1.5">
-            <motion.h2
-              variants={fadeUpVarient(0.05)}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              className="font-semibold font-primary text-4xl max-sm:text-3xl text-accent-2"
-            >
-              Testimonials
-            </motion.h2>
-            <motion.p
-              variants={fadeUpVarient(0.06)}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              className="text-sm text-accent-2"
-            >
-              Discover what our customers are saying about our services.
-            </motion.p>
-          </div>
-
-          <div className="flex items-center justify-end text-accent-2">
-            <Link
-              href={"/trekking-in-sikkim"}
-              className="border-b flex items-center justify-center"
-            >
-              Read More Testimonials
-              <GoArrowDownLeft className="rotate-180 ml-1.5" />
-            </Link>
-          </div>
-        </div>
-
-        <Slider />
-      </section> */}
 
       <TestimonialSection />
 
@@ -610,16 +346,6 @@ export default function Home({ searchParams }: IProps) {
               Our latest articles and guides to help you plan your next trek.
             </motion.p>
           </div>
-
-          {/* <div className="flex items-center justify-end text-accent-2">
-            <Link
-              href={"/trekking-in-sikkim"}
-              className="border-b flex items-center justify-center"
-            >
-              Read More Article
-              <GoArrowDownLeft className="rotate-180 ml-1.5" />
-            </Link>
-          </div> */}
         </div>
 
         <React.Suspense fallback={<Loading />}>

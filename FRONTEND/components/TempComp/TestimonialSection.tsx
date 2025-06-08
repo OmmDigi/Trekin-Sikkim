@@ -47,7 +47,16 @@
 
 "use client";
 
-import { ElfsightWidget } from "react-elfsight-widget";
+import dynamic from "next/dynamic";
+import Loading from "../Loading";
+
+const ElfsightWidget = dynamic(
+  () => import("react-elfsight-widget").then((mod) => mod.ElfsightWidget),
+  {
+    loading: () => <Loading />,
+    ssr: false,
+  }
+);
 
 const TestimonialSection = () => {
   return (
