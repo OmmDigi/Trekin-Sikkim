@@ -16,6 +16,8 @@ import { ArrowUp } from "lucide-react";
 import AiHeader from "@/components/AiComponents/AiHeader";
 import ChildrenHolder from "@/components/ChildrenHolder";
 import { cn } from "@/lib/utils";
+import Loading from "@/components/Loading";
+import React from "react";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -57,29 +59,28 @@ export default function RootLayout({
         >
           <ArrowUp size={18} color="#fff" />
         </Link>
-        <AuthProvider>
-          <ReduxProvider>
-            <DialogWrapper
-              id="enquiry-form"
-              className="flex justify-center items-start"
-            >
-              <EnquireDialog />
-            </DialogWrapper>
-            {/* <HeaderHolder> */}
-            <HeaderHolder>
-              {/* <Header /> */}
-              {/* <NewHeader /> */}
-              <AiHeader />
-            </HeaderHolder>
-            {/* </HeaderHolder> */}
-            {/* <ReactLenis root>{children}</ReactLenis> */}
-            <BottomNavigation />
-            <ChildrenHolder>{children}</ChildrenHolder>
-            <FooterHolder>
-              <Footer />
-            </FooterHolder>
-          </ReduxProvider>
-        </AuthProvider>
+        <React.Suspense fallback={<Loading className="pt-24"/>}>
+          <AuthProvider>
+            <ReduxProvider>
+              <DialogWrapper
+                id="enquiry-form"
+                className="flex justify-center items-start"
+              >
+                <EnquireDialog />
+              </DialogWrapper>
+
+              <HeaderHolder>
+                <AiHeader />
+              </HeaderHolder>
+
+              <BottomNavigation />
+              <ChildrenHolder>{children}</ChildrenHolder>
+              <FooterHolder>
+                <Footer />
+              </FooterHolder>
+            </ReduxProvider>
+          </AuthProvider>
+        </React.Suspense>
       </body>
     </html>
   );

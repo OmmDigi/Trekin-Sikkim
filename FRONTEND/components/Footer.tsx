@@ -9,26 +9,6 @@ import Loading from "./Loading";
 export default function Footer() {
   return (
     <footer className="w-full bg-primary font-primary text-background py-9 max-sm:text-white max-sm:py-0">
-      {/* <section className="space-y-9 wrapper max-sm:max-w-[90%]">
-        <ul className="grid grid-cols-4 gap-10 max-sm:grid-cols-1">
-          <li className="space-y-4">
-            <h2 className="font-semibold text-2xl text-secondary">Category</h2>
-
-            <div className="w-14 h-[1px] bg-light-gray opacity-20"></div>
-
-            <ul className="space-y-4">
-              {[1, 2, 3, 4].map((item, index) => (
-                <li key={index}>
-                  <Link className="text-sm text-secondary block" href={"#"}>
-                    Trekking in sikkim
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </li>
-        </ul>
-      </section> */}
-
       <section className="space-y-9 wrapper max-sm:max-w-[90%] pt-16 max-sm:pt-6">
         <ul className="grid grid-cols-4 gap-10 max-sm:grid-cols-2">
           {FOOTER_INFO.map((item, index) => (
@@ -68,7 +48,6 @@ export default function Footer() {
           <li
             className={cn(
               "space-y-4"
-              // index === 0 ? "max-sm:col-span-2" : ""
             )}
           >
             <h2 className="font-semibold text-2xl text-secondary">Category</h2>
@@ -80,24 +59,6 @@ export default function Footer() {
             </React.Suspense>
           </li>
         </ul>
-
-        {/* <div className="space-y-4">
-          <h2 className="font-semibold text-2xl text-secondary text-center max-sm:text-left">
-            Category
-          </h2>
-          <ul className="flex items-center gap-6 flex-wrap justify-center max-sm:justify-start">
-            {categories.data.map((item) => (
-              <li key={item.category_id}>
-                <CustomLink
-                  className="text-sm text-gray-300 block"
-                  href={`/${item.slug}`}
-                >
-                  {item.category_name}
-                </CustomLink>
-              </li>
-            ))}
-          </ul>
-        </div> */}
 
         <div className="flex items-center justify-center">
           <div className="w-14 h-[1px] bg-light-gray opacity-20"></div>
