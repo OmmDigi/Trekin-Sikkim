@@ -94,7 +94,7 @@ function Banner() {
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
-        className="w-full overflow-hidden relative h-[90vh] max-sm:h-[45vh]"
+        className="w-full overflow-hidden relative min-h-[33rem] max-h-[33rem] max-sm:min-h-[19rem] max-sm:max-h-[19rem]"
       >
         {banner_info.map((item, index) => (
           <div
@@ -108,11 +108,15 @@ function Banner() {
             )}
           >
             <Image
-              className="w-full object-cover max-h-[90vh] min-h-[90vh] max-sm:min-h-[45vh] max-sm:max-h-[45vh]"
+              className="min-h-full w-full object-cover"
               src={item.image}
               alt="Banner 1"
               height={1200}
               width={1200}
+              loading="lazy"
+              layout="responsive"
+              objectFit="cover"
+              objectPosition="center"
             />
           </div>
         ))}
