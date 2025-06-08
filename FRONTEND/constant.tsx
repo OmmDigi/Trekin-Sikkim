@@ -259,7 +259,7 @@ export const POLICY_LIST: NavOptions[] = [
   {
     id: "tc1",
     text: "Terms & Conditions",
-    pathname: "/",
+    pathname: "/Booking-And-Cancellation",
   },
   {
     id: "dic1",

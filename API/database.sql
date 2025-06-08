@@ -356,3 +356,5 @@ CREATE TABLE enquiry_form (
     message TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+INSERT INTO types (type_name) VALUES ('Other');

@@ -157,6 +157,7 @@ export const CATEGORY_TYPE = [
   { name: "Trek", id: 1 },
   { name: "Tour", id: 2 },
   { name: "Expedition", id: 3 },
+  { name: "Other", id: 4 },
 ];
 
 export const buttonVariants = cva(

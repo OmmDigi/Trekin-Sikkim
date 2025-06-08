@@ -27,6 +27,8 @@ export default async function PackagesListingPage({
     )
   ).data;
 
+  if(packageList.data.length === 0) return <></>;
+
   return (
     <main id="packages-list" className="wrapper py-10 space-y-5 max-sm:py-5">
       <div>

@@ -67,7 +67,7 @@ export default function Footer() {
         <div className="flex items-center justify-between">
           <div>
             <h2 className="font-semibold text-xl text-secondary">
-              TrekInSikkim.
+              Glacier Treks & Adventure
             </h2>
           </div>
           <ul className="flex items-center gap-3">
@@ -86,10 +86,10 @@ export default function Footer() {
 
         <div className="border-t border-light-gray opacity-20"></div>
         <div className="flex items-center justify-between flex-wrap gap-3 text-xs text-gray-500 max-sm:justify-center max-sm:pb-10">
-          <span>© 2025 TripTrap. All Rights Reserved.</span>
+          <span>© 2025 Glacier Treks & Adventure All Rights Reserved.</span>
           <span>
             Digital Partner{" "}
-            <Link href={"https://ommdigitalsolution.com/"}>
+            <Link className="underline" href={"https://ommdigitalsolution.com/"}>
               OMM Digital Soluction Pvt.Ltd
             </Link>
           </span>

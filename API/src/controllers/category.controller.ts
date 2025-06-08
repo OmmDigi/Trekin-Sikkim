@@ -30,6 +30,7 @@ export const getCategoryPageInfo = asyncErrorHandler(async (req, res) => {
       c.meta_description,
       c.meta_keywords,
       c.canonical,
+      c.type_id,
       MAX(cpc.page_content) AS page_content,
       COALESCE(JSON_AGG(DISTINCT mi) FILTER (WHERE mi.media_item_id IS NOT NULL), '[]') AS media_items,
       COALESCE(JSON_AGG(DISTINCT cpf) FILTER (WHERE cpf.id IS NOT NULL), '[]') AS faqs
