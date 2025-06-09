@@ -86,12 +86,14 @@ function Banner() {
   };
 
   useEffect(() => {
-    const timeIntervelId = setInterval(() => {
-      onNextBannerClick();
-    }, 6000);
+    if (loaded.length !== 0) {
+      const timeIntervelId = setInterval(() => {
+        onNextBannerClick();
+      }, 6000);
 
-    return () => clearInterval(timeIntervelId);
-  }, [currentBannerIndex]);
+      return () => clearInterval(timeIntervelId);
+    }
+  }, [currentBannerIndex, loaded.length]);
 
   return (
     <div className="group/banner relative">
