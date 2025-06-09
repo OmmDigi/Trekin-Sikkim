@@ -3,10 +3,12 @@ import { IPackageInfoSearchParams, IResponse } from "@/types";
 import api from "@/lib/axios";
 import { cn } from "@/lib/utils";
 import AvilableDateCheckbox from "./AvilableDateCheckbox";
-import { ChevronDown } from "lucide-react";
+import { Calendar, ChevronDown } from "lucide-react";
 import ReadMore from "../Utils/ReadMore";
 import ReadMoreContent from "../Utils/ReadMoreContent";
 import ReadMoreToggle from "../Utils/ReadMoreToggle";
+import CustomLink from "../CustomLink";
+import Button from "../Button";
 
 interface IProps {
   package_id: number;
@@ -44,7 +46,7 @@ export default async function AvilableDatesSection({
   package_id,
   searchParams,
 }: IProps) {
-  const newSearchParams = new URLSearchParams();
+  const newSearchParams = new URLSearchParams(searchParams as any);
   if (searchParams.month) {
     newSearchParams.set("for_month", searchParams.month);
   }
@@ -67,10 +69,35 @@ export default async function AvilableDatesSection({
       <span id="package-dates"></span>
 
       {dateInfo.data.length === 0 ? (
-        <p className="text-sm text-gray-400 tracking-wider">
-          No Avilable Dates
-        </p>
+        <>
+          <p className="text-sm text-gray-400 tracking-wider">
+            No Avilable Dates
+          </p>
+
+          <CustomLink
+            href={`/booking?package_id=${package_id}${
+              newSearchParams.size !== 0 ? newSearchParams.toString() : ""
+            }`}
+          >
+            <Button className="!bg-red-600 text-white !text-sm flex items-center gap-2.5">
+              <Calendar size={15} />
+              <span className="tracking-wide">Customize Your Booking</span>
+            </Button>
+          </CustomLink>
+        </>
       ) : (
+        // <div className="text-center py-12 px-6">
+        //   <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+        //     <Calendar className="w-8 h-8 text-gray-400" />
+        //   </div>
+        //   <h3 className="text-lg font-semibold text-gray-900 mb-2">
+        //     No Dates Available
+        //   </h3>
+
+        //   <button className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+        //     Customize Your Booking
+        //   </button>
+        // </div>
         <ul>
           {dateInfo.data.map((eachDate, index) => (
             <ReadMore key={index}>

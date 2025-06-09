@@ -49,7 +49,7 @@ export default function AiHeader() {
                     height={64}
                     width={64}
                     loading="eager"
-                    priority
+                    priority={false}
                   />
                   <div className="absolute -top-1 -right-1 w-3 h-3 sm:w-4 sm:h-4 bg-emerald-500 rounded-full flex items-center justify-center">
                     <Mountain

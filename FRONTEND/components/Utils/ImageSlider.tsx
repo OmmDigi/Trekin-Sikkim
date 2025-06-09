@@ -82,6 +82,7 @@ export default function ImageSlider({
               alt={info.alt_tag}
               height={1200}
               width={1200}
+              loading="eager"
             />
           </SwiperSlide>
         ))}
