@@ -14,7 +14,7 @@ import { ArrowUp } from "lucide-react";
 import AiHeader from "@/components/AiComponents/AiHeader";
 import ChildrenHolder from "@/components/ChildrenHolder";
 import { cn } from "@/lib/utils";
-import Loading from "@/components/Loading";
+// import Loading from "@/components/Loading";
 import React from "react";
 import dynamic from "next/dynamic";
 
@@ -66,28 +66,28 @@ export default function RootLayout({
         >
           <ArrowUp size={18} color="#fff" />
         </Link>
-        <React.Suspense fallback={<Loading className="pt-24" />}>
-          <AuthProvider>
-            <ReduxProvider>
-              <DialogWrapper
-                id="enquiry-form"
-                className="flex justify-center items-start"
-              >
-                <EnquireDialog />
-              </DialogWrapper>
+        {/* <React.Suspense fallback={<Loading className="pt-24" />}> */}
+        <AuthProvider>
+          <ReduxProvider>
+            <DialogWrapper
+              id="enquiry-form"
+              className="flex justify-center items-start"
+            >
+              <EnquireDialog />
+            </DialogWrapper>
 
-              <HeaderHolder>
-                <AiHeader />
-              </HeaderHolder>
+            <HeaderHolder>
+              <AiHeader />
+            </HeaderHolder>
 
-              <BottomNavigation />
-              <ChildrenHolder>{children}</ChildrenHolder>
-              <FooterHolder>
-                <Footer />
-              </FooterHolder>
-            </ReduxProvider>
-          </AuthProvider>
-        </React.Suspense>
+            <BottomNavigation />
+            <ChildrenHolder>{children}</ChildrenHolder>
+            <FooterHolder>
+              <Footer />
+            </FooterHolder>
+          </ReduxProvider>
+        </AuthProvider>
+        {/* </React.Suspense> */}
       </body>
     </html>
   );
