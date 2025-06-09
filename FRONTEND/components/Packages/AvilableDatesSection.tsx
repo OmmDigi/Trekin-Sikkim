@@ -55,7 +55,7 @@ export default async function AvilableDatesSection({
     )
   ).data;
 
-  return (
+  return dateInfo.data.length === 0 ? null : (
     <div className="space-y-2.5">
       {dateInfo.data.length === 0 ? null : (
         <h3
