@@ -266,34 +266,38 @@ export default async function page({ params, searchParams }: IProps) {
                   Additional :
                 </h3>
 
-                <ul>
-                  {data.data.additional.map((additionlInfo, index) => (
-                    <li
-                      key={additionlInfo.additional_id}
-                      className="text-xs py-3.5 cursor-pointer flex justify-between border px-3.5 bg-red-50 border-gray-300"
-                    >
-                      <div className="flex justify-between flex-1">
-                        <div className="flex items-center gap-2">
-                          <span className="text-lg max-sm:text-sm">
-                            {additionlInfo.additional_name}
-                          </span>
+                {data.data.additional.length === 0 ? (
+                  <p className="text-sm text-gray-400 tracking-wider">No Additional Avilable</p>
+                ) : (
+                  <ul>
+                    {data.data.additional.map((additionlInfo, index) => (
+                      <li
+                        key={additionlInfo.additional_id}
+                        className="text-xs py-3.5 cursor-pointer flex justify-between border px-3.5 bg-red-50 border-gray-300"
+                      >
+                        <div className="flex justify-between flex-1">
+                          <div className="flex items-center gap-2">
+                            <span className="text-lg max-sm:text-sm">
+                              {additionlInfo.additional_name}
+                            </span>
+                          </div>
+
+                          <div className="text-center block text-lg max-sm:pl-2.5 max-sm:text-sm">
+                            ₹{additionlInfo.price_inr} / $
+                            {additionlInfo.price_usd}
+                          </div>
                         </div>
 
-                        <div className="text-center block text-lg max-sm:pl-2.5 max-sm:text-sm">
-                          ₹{additionlInfo.price_inr} / $
-                          {additionlInfo.price_usd}
+                        <div className="flex justify-end">
+                          <AdditionalCheckbox
+                            additional_id={additionlInfo.additional_id}
+                            index={index}
+                          />
                         </div>
-                      </div>
-
-                      <div className="flex justify-end">
-                        <AdditionalCheckbox
-                          additional_id={additionlInfo.additional_id}
-                          index={index}
-                        />
-                      </div>
-                    </li>
-                  ))}
-                </ul>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
             </div>
 

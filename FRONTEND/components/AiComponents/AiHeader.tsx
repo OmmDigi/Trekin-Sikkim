@@ -48,6 +48,8 @@ export default function AiHeader() {
                     alt="Glacier Treks And Adventure"
                     height={64}
                     width={64}
+                    loading="eager"
+                    priority
                   />
                   <div className="absolute -top-1 -right-1 w-3 h-3 sm:w-4 sm:h-4 bg-emerald-500 rounded-full flex items-center justify-center">
                     <Mountain
@@ -111,7 +113,11 @@ export default function AiHeader() {
         </div>
 
         {/* Navigation Section */}
-        <React.Suspense fallback={<p className="text-sm text-center">Loading Navigation items...</p>}>
+        <React.Suspense
+          fallback={
+            <p className="text-sm text-center">Loading Navigation items...</p>
+          }
+        >
           <AiNavItemList />
         </React.Suspense>
 
