@@ -15,7 +15,6 @@ import { childVariant, fadeUpVarient } from "@/utils/animations";
 import { Award, Compass, Mountain, Users } from "lucide-react";
 
 import * as motion from "motion/react-client";
-import { Metadata } from "next";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import React from "react";
@@ -49,12 +48,6 @@ const HOW_WE_WORK = [
 interface IProps {
   searchParams: Promise<{ category: string }>;
 }
-
-export const metadata: Metadata = {
-  title: "Glacier Treks and Adventure | Himalayan Trekking & Guided Tours",
-  description:
-    "Discover unforgettable trekking experiences with Glacier Treks and Adventure – your trusted guide for exploring the majestic Himalayas and breathtaking mountain trails with safety, expertise, and passion.",
-};
 
 export default function Home({ searchParams }: IProps) {
   return (

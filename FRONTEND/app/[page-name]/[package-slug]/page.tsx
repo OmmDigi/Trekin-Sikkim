@@ -30,6 +30,8 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { notFound } from "next/navigation";
 import { serverApi } from "@/lib/serverApi";
+import SetupBottomNavOtherOptions from "@/components/SetupBottomNavOtherOptions";
+import { BOTTOM_NAV_OTHER_OPTIONS } from "@/constant";
 
 const getSinglePackagePageInfo = cache(async (slug: string) => {
   const api = await serverApi();
@@ -178,6 +180,7 @@ export default async function page({ params, searchParams }: IProps) {
 
   return (
     <main className="wrapper mx-auto pb-10 space-y-3 overflow-visible pt-3.5">
+      <SetupBottomNavOtherOptions options={data.data.other_option_names} />
       <section className="w-full flex gap-x-10 gap-y-3.5 overflow-visible max-sm:flex-col">
         {/* Left Side */}
         <div className="flex-1 overflow-hidden space-y-5">
@@ -211,10 +214,7 @@ export default async function page({ params, searchParams }: IProps) {
           <div className="grid grid-cols-2 gap-6 max-sm:grid-cols-1">
             <div className="space-y-5 order-2 max-sm:order-1">
               <div className="space-y-2.5">
-                <h3
-                  id="Overview"
-                  className="text-2xl max-sm:hidden font-semibold bg-accent text-white p-1.5 px-7 inline-block rounded-tr-lg rounded-bl-lg"
-                >
+                <h3 className="text-2xl max-sm:hidden font-semibold bg-accent text-white p-1.5 px-7 inline-block rounded-tr-lg rounded-bl-lg">
                   Details :
                 </h3>
                 <ul className="flex items-start gap-5 flex-wrap font-primary">
@@ -249,7 +249,7 @@ export default async function page({ params, searchParams }: IProps) {
             </div>
 
             <div className="space-y-3.5 order-1">
-              <div className="max-sm:order-2">
+              <div id="available-dates" className="max-sm:order-2">
                 <React.Suspense fallback={<Loading />}>
                   <AvilableDatesSection
                     package_id={data.data.id}
@@ -259,15 +259,14 @@ export default async function page({ params, searchParams }: IProps) {
               </div>
 
               <div className="space-y-3.5">
-                <h3
-                  id="Overview"
-                  className="text-2xl font-semibold bg-accent text-white p-1.5 px-7 inline-block rounded-tr-lg rounded-bl-lg"
-                >
+                <h3 className="text-2xl font-semibold bg-accent text-white p-1.5 px-7 inline-block rounded-tr-lg rounded-bl-lg">
                   Additional :
                 </h3>
 
                 {data.data.additional.length === 0 ? (
-                  <p className="text-sm text-gray-400 tracking-wider">No Additional Avilable</p>
+                  <p className="text-sm text-gray-400 tracking-wider">
+                    No Additional Avilable
+                  </p>
                 ) : (
                   <ul>
                     {data.data.additional.map((additionlInfo, index) => (
@@ -300,88 +299,7 @@ export default async function page({ params, searchParams }: IProps) {
                 )}
               </div>
             </div>
-
-            {/* <div className="space-y-3.5 hidden max-sm:block order-3">
-              <h3
-                id="Overview"
-                className="text-2xl font-semibold bg-accent text-white p-1.5 px-7 inline-block rounded-tr-lg rounded-bl-lg"
-              >
-                Additional :
-              </h3>
-
-              <ul>
-                {data.data.additional.map((additionlInfo, index) => (
-                  <li
-                    key={additionlInfo.additional_id}
-                    className="text-xs py-3.5 cursor-pointer flex justify-between border px-3.5 bg-red-50 border-gray-300"
-                  >
-                    <div className="flex justify-between flex-1">
-                      <div className="flex items-center gap-2">
-                        <span className="text-lg max-sm:text-sm">
-                          {additionlInfo.additional_name}
-                        </span>
-                      </div>
-
-                      <div className="text-center block text-lg max-sm:pl-2.5 max-sm:text-sm">
-                        ₹{additionlInfo.price_inr} / ${additionlInfo.price_usd}
-                      </div>
-                    </div>
-
-                    <div className="flex justify-end">
-                      <AdditionalCheckbox
-                        additional_id={additionlInfo.additional_id}
-                        index={index}
-                      />
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div> */}
           </div>
-
-          {/* <div className="w-full h-[1px] bg-gray-300"></div> */}
-
-          {/* <React.Suspense fallback={<Loading />}>
-            <AvilableDatesSection
-              package_id={data.data.id}
-              searchParams={urlSearchParams}
-            />
-          </React.Suspense> */}
-
-          {/* <h3
-            id="Overview"
-            className="text-2xl font-semibold bg-accent text-white p-1.5 px-7 inline-block rounded-tr-lg rounded-bl-lg"
-          >
-            Additional :
-          </h3>
-
-          <ul>
-            {data.data.additional.map((additionlInfo, index) => (
-              <li
-                key={additionlInfo.additional_id}
-                className="text-xs py-3.5 cursor-pointer flex justify-between border px-3.5 bg-red-50 border-gray-300"
-              >
-                <div className="flex justify-between flex-1">
-                  <div className="flex items-center gap-2">
-                    <span className="text-lg max-sm:text-sm">
-                      {additionlInfo.additional_name}
-                    </span>
-                  </div>
-
-                  <div className="text-center block text-lg max-sm:pl-2.5 max-sm:text-sm">
-                    ₹{additionlInfo.price_inr} / ${additionlInfo.price_usd}
-                  </div>
-                </div>
-
-                <div className="flex justify-end">
-                  <AdditionalCheckbox
-                    additional_id={additionlInfo.additional_id}
-                    index={index}
-                  />
-                </div>
-              </li>
-            ))}
-          </ul> */}
 
           <div className="flex items-center justify-between h-[3rem] max-sm:h-auto max-sm:flex-wrap max-sm:gap-y-4.5">
             <span className="font-semibold space-x-2.5">
@@ -405,25 +323,7 @@ export default async function page({ params, searchParams }: IProps) {
             <Tabs
               // selectedTabCss="bg-accent !text-black !font-semibold"
               scroll={true}
-              options={[
-                { id: "overview", text: "Overview", slug: "#Overview" },
-                {
-                  id: "trip-itinerary",
-                  text: "Trip Itinerary",
-                  slug: "#TripItinerary",
-                },
-                { id: "faq", text: "Faq", slug: "#faq" },
-                {
-                  id: "photo-gallery",
-                  text: "Photo Gallery",
-                  slug: "#photo-gallery",
-                },
-                ...data.data.other_option_names.map((item) => ({
-                  id: item.id,
-                  text: item.option_name,
-                  slug: `#${item.option_name}`,
-                })),
-              ]}
+              options={BOTTOM_NAV_OTHER_OPTIONS}
             />
           </div>
 

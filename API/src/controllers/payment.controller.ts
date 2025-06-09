@@ -275,6 +275,7 @@ export const checkPhonepePaymentStatus = asyncErrorHandler(async (req, res) => {
       failedAmount: `₹${paymentInfo.data.amount / 100}`,
       purchaseDate: formattedDate,
     });
+    console.log(error)
   } finally {
     client.release();
   }

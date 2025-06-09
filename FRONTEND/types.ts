@@ -90,6 +90,10 @@ export interface IAdditional {
   price_usd: number;
 }
 
+export interface IOtherOptionsList {
+  id: number;
+  option_name: string;
+}
 export interface IPackage {
   id: number;
   package_name: string;
@@ -106,16 +110,16 @@ export interface IPackage {
   offer_price_usd: string;
   is_active: number;
   category_id: number;
-  trip_type : "Trip" | "Tour" | "Expedition";
+  trip_type: "Trip" | "Tour" | "Expedition";
   slug: string;
   additional: IAdditional[];
   banner_info: IMediaItem[];
-  meta_title : string;
-  meta_description : string;
-  meta_keywords : string;
-  canonical : null | string;
-  other_option_names: { id: number; option_name: string }[];
-  itinerary_pdf_link : null | string;
+  meta_title: string;
+  meta_description: string;
+  meta_keywords: string;
+  canonical: null | string;
+  other_option_names: IOtherOptionsList[];
+  itinerary_pdf_link: null | string;
 }
 
 export interface IFaq {
@@ -128,7 +132,7 @@ export interface IFaq {
 
 export interface IPackageInfoSearchParams {
   month: string;
-  date_id : string;
+  date_id: string;
 }
 
 type UserInfo = {
@@ -224,7 +228,6 @@ export interface IBookingDetails {
   booking_dates: BookingDate[];
   participant_info: IParticipantInfo[] | null;
 }
-
 
 export interface UpcomingTrekPackage {
   id: number;

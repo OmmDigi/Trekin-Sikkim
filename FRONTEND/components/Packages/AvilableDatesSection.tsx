@@ -47,22 +47,22 @@ export default async function AvilableDatesSection({
   searchParams,
 }: IProps) {
   const newSearchParams = new URLSearchParams(searchParams as any);
+  newSearchParams.set("package_id", package_id.toString());
   if (searchParams.month) {
     newSearchParams.set("for_month", searchParams.month);
   }
 
   const dateInfo = (
     await api.get<IResponse<IServerResponse[]>>(
-      `/api/v1/package/departure-date-v2/${package_id}?${newSearchParams.toString()}`
+      `/api/v1/package/departure-date-v2/${package_id}${
+        searchParams.month ? `?for_month=${searchParams.month}` : ""
+      }`
     )
   ).data;
 
   return (
     <div className="space-y-2.5">
-      <h3
-        id="Overview"
-        className="text-2xl font-semibold bg-accent text-white p-1.5 px-7 inline-block rounded-tr-lg rounded-bl-lg"
-      >
+      <h3 className="text-2xl font-semibold bg-accent text-white p-1.5 px-7 inline-block rounded-tr-lg rounded-bl-lg">
         Avaliable Dates :
       </h3>
 
@@ -74,11 +74,7 @@ export default async function AvilableDatesSection({
             No Avilable Dates
           </p>
 
-          <CustomLink
-            href={`/booking?package_id=${package_id}${
-              newSearchParams.size !== 0 ? newSearchParams.toString() : ""
-            }`}
-          >
+          <CustomLink href={`/booking?${newSearchParams.toString()}`}>
             <Button className="!bg-red-600 text-white !text-sm flex items-center gap-2.5">
               <Calendar size={15} />
               <span className="tracking-wide">Customize Your Booking</span>

@@ -16,9 +16,10 @@ export const getBookingData = asyncErrorHandler(
 
     const userId = req.user_info?.id;
 
-    const additionalIds = value.additional_id
+    const additionalIds = value.additional_ids
       ? value.additional_ids.split(",")
       : [];
+
     const purifyAdditionalIds: number[] = [];
 
     additionalIds.forEach((id: string) => {

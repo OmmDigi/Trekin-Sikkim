@@ -288,12 +288,12 @@ export const updateSinglePackageBasicInfo = asyncErrorHandler(
         values
       );
 
+      await client.query(
+        "DELETE FROM package_and_additional WHERE package_id = $1",
+        [packageID]
+      );
+      
       if (additionals.length !== 0) {
-        await client.query(
-          "DELETE FROM package_and_additional WHERE package_id = $1",
-          [packageID]
-        );
-
         await client.query(
           `INSERT INTO package_and_additional (package_id, additional_id) VALUES ${placeholdernum}
          ON CONFLICT (package_id, additional_id) DO NOTHING
@@ -350,13 +350,13 @@ export const addPackageBasicInfo = asyncErrorHandler(async (req, res) => {
       values
     );
 
+    await client.query(
+      "DELETE FROM package_and_additional WHERE package_id = $1",
+      [rows[0].id]
+    );
+
     if (additionals.length !== 0) {
       const placeholdernum = generatePlaceholders(additionals.length, 2);
-
-      await client.query(
-        "DELETE FROM package_and_additional WHERE package_id = $1",
-        [rows[0].id]
-      );
 
       await client.query(
         `INSERT INTO package_and_additional (package_id, additional_id) VALUES ${placeholdernum}`,

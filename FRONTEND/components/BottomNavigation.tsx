@@ -3,14 +3,16 @@
 import { TransitionLink } from "@/components/Utils/TransitionLink";
 import { useOutsideClick } from "@/hooks/useOutsideClick";
 import { cn } from "@/lib/utils";
+import { RootState } from "@/redux/store";
 import { Blocks, X } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { FaWhatsapp } from "react-icons/fa6";
 import { GoHome } from "react-icons/go";
 import { IoMdCall } from "react-icons/io";
 import { TbCategory } from "react-icons/tb";
+import { useSelector } from "react-redux";
 
 const OPTIONS = [
   {
@@ -37,6 +39,13 @@ const OPTIONS = [
 
 function BottomNavigation() {
   const pathname = usePathname();
+  const params = useParams();
+
+  const SHOW_OTHER_OPTIONS = params["page-name"] && params["package-slug"];
+
+  const { options } = useSelector(
+    (state: RootState) => state.bottomOtherOptionSlice
+  );
 
   const [bottomNavigationList, setBottomNavigationList] = useState(OPTIONS);
 
@@ -47,7 +56,7 @@ function BottomNavigation() {
   );
 
   useEffect(() => {
-    if (pathname.includes("packages/")) {
+    if (SHOW_OTHER_OPTIONS) {
       const temp = [...bottomNavigationList];
       temp[1] = {
         icon: <TbCategory size={20} />,
@@ -58,7 +67,7 @@ function BottomNavigation() {
     } else {
       setBottomNavigationList(OPTIONS);
     }
-  }, [pathname]);
+  }, [SHOW_OTHER_OPTIONS]);
 
   return pathname === "/auth/login" || pathname === "/auth/signup" ? null : (
     <div
@@ -89,30 +98,20 @@ function BottomNavigation() {
           <span className="text-[0.60rem]">{item.text}</span>
 
           {item.text === "Overview" && isShowExtraOptions ? (
-            <div className="fixed bottom-20 bg-accent left-16 rounded-xl transition-all duration-500">
+            <div className="fixed bottom-20 shadow-2xl bg-accent left-16 transition-all duration-500 max-h-[50vh] max-w-[80%] overflow-x-hidden overflow-y-auto bottom_nav">
               <div className="relative">
                 <ul
                   onClick={() => setIsShowExtraOptions(false)}
                   className="*:p-4 text-white relative z-20"
                 >
-                  <li>
-                    <Link href={"#package-dates"}>Package Dates</Link>
-                  </li>
-                  <li>
-                    <Link href={"#Overview"}>Package Overview</Link>
-                  </li>
-                  <li>
-                    <Link href={"#TripItinerary"}>Trip Itinerary</Link>
-                  </li>
-                  <li>
-                    <Link href={"#faq"}>Faq</Link>
-                  </li>
-                  <li className="z-20">
-                    <Link href={"#photo-gallery"}>Photo Gallery</Link>
-                  </li>
+                  {options.map((item) => (
+                    <li key={item.id} className="border-b">
+                      <Link title={item.text} href={item.slug || ""}>
+                        {item.text}
+                      </Link>
+                    </li>
+                  ))}
                 </ul>
-
-                <div className="bg-accent size-10 absolute -bottom-2 left-14 rotate-45 z-10"></div>
               </div>
             </div>
           ) : null}

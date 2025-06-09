@@ -4,7 +4,7 @@ import { ImLocation } from "react-icons/im";
 import { IoLogoWhatsapp } from "react-icons/io";
 import { MdEmail, MdInfoOutline, MdTour } from "react-icons/md";
 import { RiPhoneFill } from "react-icons/ri";
-import { NavOptions } from "./types";
+import { ITabOptions, NavOptions } from "./types";
 import { GoHome } from "react-icons/go";
 import { TbTrekking } from "react-icons/tb";
 import { TiContacts } from "react-icons/ti";
@@ -665,5 +665,33 @@ export const HOME_FAQS = [
       "Does Glacier Treks & Adventure provide any type of transportation facilities?",
     answer:
       "Yes. We provide the transportation facilities for our clients. If any of our clients gets sick due to any reason our team of specialist will check the health conditions and after that we will provide transport facilities. We also provide transport facilities to our clients to reach the point of trekking and after that to the destination.",
+  },
+];
+
+export const BOTTOM_NAV_OTHER_OPTIONS: ITabOptions[] = [
+  {
+    id: "available-dates",
+    slug: "#available-dates",
+    text: "Available Dates",
+  },
+  {
+    id: "overview",
+    slug: "#Overview",
+    text: "Overview",
+  },
+  {
+    id: "trip-itinerary",
+    slug: "#TripItinerary",
+    text: "Trip Itinerary",
+  },
+  {
+    id: "faq",
+    slug: "#faq",
+    text: "Faq",
+  },
+  {
+    id: "photo-gallery",
+    slug: "#photo-gallery",
+    text: "Photo Gallery",
   },
 ];
