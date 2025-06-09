@@ -530,10 +530,11 @@ export const getDepartureDatesV2 = asyncErrorHandler(
             ) ORDER BY from_date
           ) AS departureDates
         FROM packages_departure_date
-        WHERE is_active = 1 AND package_id = 10
+        WHERE is_active = 1 AND package_id = $1
         GROUP BY for_month, EXTRACT(YEAR FROM from_date)
         ORDER BY EXTRACT(YEAR FROM from_date), TO_DATE(for_month, 'Month');
-      `
+      `,
+      [value.package_id]
     );
 
     res.status(200).json(new ApiResponse(200, "", rows));
