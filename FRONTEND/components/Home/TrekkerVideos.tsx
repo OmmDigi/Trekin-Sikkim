@@ -72,6 +72,7 @@ function TrekkerVideos() {
             alt=""
             height={1200}
             width={1200}
+            loading="lazy"
           />
           <div className="w-full cursor-pointer fade-gradient-bottom absolute inset-0 flex items-center justify-center">
             <MdOutlinePlayCircleFilled size={35} className="text-white" />

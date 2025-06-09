@@ -3,11 +3,15 @@ import SpinnerSvg from "./SpinnerSvg";
 import { cn } from "@/lib/utils";
 
 interface IProps extends React.ComponentProps<"div"> {
-  loadersize? : string;
-  loadertext?:string;
+  loadersize?: string;
+  loadertext?: string;
 }
 
-function Loading({loadersize = "18px", loadertext = "Loading...", ...props}: IProps) {
+function Loading({
+  loadersize = "18px",
+  loadertext = "Loading...",
+  ...props
+}: IProps) {
   return (
     <div
       {...props}
@@ -17,7 +21,7 @@ function Loading({loadersize = "18px", loadertext = "Loading...", ...props}: IPr
       )}
     >
       <SpinnerSvg size={loadersize} />
-        <span>{loadertext}</span>
+      <p>{loadertext}</p>
     </div>
   );
 }

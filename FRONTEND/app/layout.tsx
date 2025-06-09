@@ -59,7 +59,7 @@ export default function RootLayout({
         >
           <ArrowUp size={18} color="#fff" />
         </Link>
-        <React.Suspense fallback={<Loading className="pt-24"/>}>
+        <React.Suspense fallback={<Loading className="pt-24" />}>
           <AuthProvider>
             <ReduxProvider>
               <DialogWrapper

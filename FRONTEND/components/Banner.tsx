@@ -35,6 +35,7 @@ const banner_info = [
 
 function Banner() {
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
+  const [loaded, setLoaded] = useState<number[]>([]);
 
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
@@ -80,6 +81,10 @@ function Banner() {
     touchEndX.current = null;
   };
 
+  const markLoaded = (index: number) => {
+    setLoaded((prev) => [...new Set([...prev, index])]);
+  };
+
   useEffect(() => {
     const timeIntervelId = setInterval(() => {
       onNextBannerClick();
@@ -96,30 +101,42 @@ function Banner() {
         onTouchEnd={handleTouchEnd}
         className="w-full overflow-hidden relative min-h-[33rem] max-h-[33rem] max-sm:min-h-[19rem] max-sm:max-h-[19rem]"
       >
-        {banner_info.map((item, index) => (
-          <div
-            key={item.id}
-            className={cn(
-              "w-full h-full absolute",
-              "transition-all duration-1000 ease-in-out",
-              currentBannerIndex === index
-                ? "opacity-100 blur-[0px]"
-                : "opacity-0 blur-md"
-            )}
-          >
-            <Image
-              className="min-h-full w-full object-cover"
-              src={item.image}
-              alt="Banner 1"
-              height={1200}
-              width={1200}
-              loading="lazy"
-              layout="responsive"
-              objectFit="cover"
-              objectPosition="center"
-            />
-          </div>
-        ))}
+        {banner_info.map((item, index) => {
+          const isLoaded = loaded.includes(index);
+          const isFirst = index === 0;
+          return (
+            <div
+              key={item.id}
+              className={cn(
+                "w-full h-full absolute",
+                "transition-all duration-1000 ease-in-out",
+                currentBannerIndex === index
+                  ? "opacity-100 blur-[0px]"
+                  : "opacity-0 blur-md"
+              )}
+            >
+              <Image
+                className={cn(
+                  "object-cover",
+                  isLoaded ? "opacity-100" : "opacity-0"
+                )}
+                src={item.image}
+                alt="Banner 1"
+                fill
+                priority={isFirst}
+                fetchPriority={isFirst ? "high" : "auto"}
+                objectFit="cover"
+                objectPosition="center"
+                sizes="100vw"
+                onLoad={() => markLoaded(index)}
+              />
+
+              {isLoaded ? null : (
+                <div className="absolute inset-0 bg-gray-200 animate-pulse"></div>
+              )}
+            </div>
+          );
+        })}
 
         {banner_info.map((item, index) => (
           <div

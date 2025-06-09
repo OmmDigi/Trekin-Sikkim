@@ -49,6 +49,7 @@
 
 import dynamic from "next/dynamic";
 import Loading from "../Loading";
+import { useInView } from "react-intersection-observer";
 
 const ElfsightWidget = dynamic(
   () => import("react-elfsight-widget").then((mod) => mod.ElfsightWidget),
@@ -59,10 +60,13 @@ const ElfsightWidget = dynamic(
 );
 
 const TestimonialSection = () => {
+  const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.1 });
   return (
-    <div className="wrapper">
-      <ElfsightWidget widgetId={"bbe512e4-6e88-469a-8d1e-870b9210a367"} lazy />
-    </div>
+    <section ref={ref} className="wrapper">
+      {inView ? (
+        <ElfsightWidget widgetId={"bbe512e4-6e88-469a-8d1e-870b9210a367"} />
+      ) : null}
+    </section>
   );
 };
 
