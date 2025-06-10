@@ -71,13 +71,15 @@ function BottomNavigation() {
     }
   }, [SHOW_OTHER_OPTIONS]);
 
+
   return pathname === "/auth/login" || pathname === "/auth/signup" ? null : (
     <div
       ref={parentRef}
       className="hidden font-primary max-sm:grid fixed grid-cols-4 bottom-0 left-0 right-0 h-16 bg-[#fff] shadow-[0px_-4px_6px_0px_rgba(0,_0,_0,_0.1)] z-[99] backdrop-blur-lg"
     >
-      {bottomNavigationList.map((item) => (
+      {bottomNavigationList.map((item, index) => (
         <TransitionLink
+          key={index}
           handleClick={() => {
             if (item.text === "Overview") {
               setIsShowExtraOptions(!isShowExtraOptions);
@@ -85,7 +87,6 @@ function BottomNavigation() {
               dispatch(setDialog({ id: "enquiry-form", type: "OPEN" }))
             }
           }}
-          key={item.pathname}
           href={item.pathname}
           className={cn(
             "flex items-center flex-col gap-1 justify-center text-primary",
