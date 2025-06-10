@@ -15,7 +15,7 @@ export default function ChildrenHolder({ children }: IProps) {
       className={cn(
         pathname === "/auth/login" || pathname === "/auth/signup"
           ? ""
-          : "mt-40 max-sm:mt-36"
+          : "mt-40 max-sm:mt-20"
       )}
     >
       {children}

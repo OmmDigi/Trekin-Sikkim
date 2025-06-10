@@ -21,8 +21,10 @@ export default function PackageItem({ fromWhere, singlePackageInfo }: IProps) {
             className="size-full object-cover opacity-100"
             alt={singlePackageInfo.alt_tag}
             src={singlePackageInfo.thumbnail || "/placeholder_background.jpg"}
-            height={1200}
-            width={1200}
+            // height={1200}
+            // width={1200}
+            fill
+            sizes="(max-width: 768px) 100vw, 700px"
           />
         </div>
         <div className="p-3 space-y-2">

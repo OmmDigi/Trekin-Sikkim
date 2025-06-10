@@ -33,10 +33,9 @@ const TestimonialSection = dynamic(
 );
 
 const ABOUT_US_IMAGES = [
-  "/about/about-image-1.jpg",
-  "/about/about-image-2.webp",
-  "/about/about-image-3.webp",
-  "/about/about-image-4.webp",
+  "/about/about-new-1.webp",
+  "/about/about-new-2.webp",
+  "/about/about-new-3.avif",
 ];
 
 const HOW_WE_WORK = [
@@ -174,7 +173,7 @@ export default function Home({ searchParams }: IProps) {
             </div>
 
             <ImageSlider
-              wrapperCss="max-h-[20rem] max-sm:max-h-60"
+              wrapperCss="max-h-[20rem] max-sm:max-h-60 max-sm:min-h-60"
               images={ABOUT_US_IMAGES.map((item) => ({
                 url: item,
                 alt_tag: "About US Image",

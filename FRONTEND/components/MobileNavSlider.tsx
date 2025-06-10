@@ -16,16 +16,16 @@ export default function MobileNavSlider({ children }: IProps) {
   const dispatch = useDispatch();
 
   return (
-    <div className="group/sidebar z-[100] relative">
+    <div className="group/sidebar z-[100]">
       <IoMenuOutline
         onClick={() => dispatch(setVisibility(true))}
         className="hidden max-sm:block active:ring-1 group-focus/sidebar:text-white"
-        size={24}
+        size={30}
       />
       <aside
         onClick={() => dispatch(setVisibility(false))}
         className={cn(
-          "hidden max-sm:flex fixed bg-[#0004] inset-0 min-h-screen w-full justify-end",
+          "hidden max-sm:flex bg-[#0004] fixed inset-0 h-fit justify-end",
           isOpen ? "visible" : "invisible"
         )}
       >
@@ -47,7 +47,7 @@ export default function MobileNavSlider({ children }: IProps) {
 
             <MdClose
               onClick={() => dispatch(setVisibility(false))}
-              size={28}
+              size={25}
               className="active:ring-1 absolute top-3.5 right-3.5 text-white"
             />
 

@@ -1,10 +1,14 @@
 import React from "react";
 import HandleDialogBtn from "../Dialogs/HandleDialogBtn";
 import Button from "../Button";
-import { MessageCircleQuestion, Mountain } from "lucide-react";
+import { Mail, MessageCircleQuestion, Mountain, Phone } from "lucide-react";
 import Image from "next/image";
 import AiHeaderHolder from "./AiHeaderHolder";
 import AiNavItemList from "./AiNavItemList";
+import MobileNavSlider from "../MobileNavSlider";
+import { NAV_OPTIONS } from "@/constant";
+import NavItem from "../NavItem";
+import Link from "next/link";
 
 export default function AiHeader() {
   return (
@@ -40,7 +44,10 @@ export default function AiHeader() {
           <div className="wrapper py-4">
             <div className="flex items-center justify-between gap-4">
               {/* Logo - Responsive sizing */}
-              <div className="flex items-center gap-3 sm:gap-4 flex-1 sm:flex-initial">
+              <Link
+                href="/"
+                className="flex items-center gap-3 sm:gap-4 flex-1 sm:flex-initial"
+              >
                 <div className="relative">
                   <Image
                     className="w-12 h-12 sm:w-16 sm:h-16 object-contain drop-shadow-lg hover:scale-105 transition-transform duration-300"
@@ -74,7 +81,7 @@ export default function AiHeader() {
                     </span>
                   </div>
                 </h1>
-              </div>
+              </Link>
 
               {/* Registration Info - Hidden on mobile and small tablets */}
               {/* <div className="hidden xl:flex flex-col items-center text-center">
@@ -92,7 +99,7 @@ export default function AiHeader() {
               </div> */}
 
               {/* CTA Button - Responsive sizing */}
-              <div className="flex-shrink-0">
+              <div className="flex-shrink-0 max-sm:hidden">
                 <HandleDialogBtn id="enquiry-form" action_type="OPEN">
                   <Button
                     theme="accent"
@@ -107,6 +114,88 @@ export default function AiHeader() {
                     </span>
                   </Button>
                 </HandleDialogBtn>
+              </div>
+
+              {/* Mobile Menu Button */}
+              <div className="lg:hidden ">
+                <MobileNavSlider>
+                  {/* Mobile Sidebar Content */}
+                  <div className="h-full flex flex-col">
+                    {/* Sidebar Header */}
+                    <div className="bg-gradient-to-r from-emerald-500 to-teal-500 p-6 text-white">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center gap-3">
+                          <Image
+                            className="w-10 h-10 object-contain"
+                            src="/logo.webp"
+                            alt="Glacier Treks"
+                            height={40}
+                            width={40}
+                          />
+                          <div>
+                            <h2 className="font-bold text-lg">Glacier Treks</h2>
+                            <p className="text-xs text-emerald-100">
+                              & Adventure™
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Contact Info in Sidebar */}
+                      <div className="space-y-2 text-sm">
+                        <div className="flex items-center gap-2">
+                          <Phone size={14} />
+                          <span>+91 9876543210</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Mail size={14} />
+                          <span>info@glaciertreks.com</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Navigation Links */}
+                    <div className="px-6 py-4 bg-white">
+                      <nav>
+                        <ul className="space-y-1">
+                          {NAV_OPTIONS.map((option, index) => (
+                            <li key={option.id}>
+                              <NavItem
+                                index={index}
+                                className="!text-base !text-gray-700 hover:!text-emerald-600 hover:!bg-emerald-50 py-3 px-4 rounded-lg transition-all duration-200 border-b border-gray-200 last:border-b-0 !flex w-full"
+                                option={option}
+                              />
+                            </li>
+                          ))}
+                        </ul>
+                      </nav>
+                    </div>
+
+                    {/* Sidebar Footer */}
+                    <div className="bg-gray-50 p-6 border-t border-gray-200">
+                      <div className="text-center">
+                        {/* <div className="bg-emerald-100 px-3 py-2 rounded-lg border border-emerald-200 mb-4">
+                          <span className="text-xs font-semibold text-emerald-800 block">
+                            Registered & Recognised
+                          </span>
+                          <span className="text-xs text-emerald-600 block">
+                            By Sikkim Tourism
+                          </span>
+                        </div> */}
+
+                        <HandleDialogBtn id="enquiry-form" action_type="OPEN">
+                          <Button
+                            theme="accent"
+                            className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white py-3 rounded-lg font-semibold shadow-lg flex items-center justify-center gap-2"
+                          >
+                            <MessageCircleQuestion size={16} />
+                            <span>Quick Enquiry</span>
+                          </Button>
+                        </HandleDialogBtn>
+                      </div>
+                    </div>
+                  </div>
+                </MobileNavSlider>
               </div>
             </div>
           </div>
