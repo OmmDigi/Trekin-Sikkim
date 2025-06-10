@@ -17,6 +17,7 @@ import { cn } from "@/lib/utils";
 // import Loading from "@/components/Loading";
 import React from "react";
 import dynamic from "next/dynamic";
+import Loading from "@/components/Loading";
 
 const DialogWrapper = dynamic(
   () => import("@/components/Dialogs/DialogWrapper")
@@ -55,14 +56,14 @@ export default function RootLayout({
         className={cn(
           poppins.variable,
           montserrat.variable,
-          "antialiased !overflow-y-visible"
+          "antialiased"
         )}
       >
         <ScrollProgress />
         <Constant />
         <Link
           href={"#top-layout"}
-          className="size-9 flex items-center justify-center rounded-full fixed z-30 bg-accent right-4 bottom-4"
+          className="size-10 border border-white flex items-center justify-center rounded-full fixed z-[100] bg-accent right-4 bottom-4 max-sm:bottom-20"
         >
           <ArrowUp size={18} color="#fff" />
         </Link>
@@ -82,9 +83,11 @@ export default function RootLayout({
 
             <BottomNavigation />
             <ChildrenHolder>{children}</ChildrenHolder>
-            <FooterHolder>
-              <Footer />
-            </FooterHolder>
+            <React.Suspense fallback={<Loading />}>
+              <FooterHolder>
+                <Footer />
+              </FooterHolder>
+            </React.Suspense>
           </ReduxProvider>
         </AuthProvider>
         {/* </React.Suspense> */}

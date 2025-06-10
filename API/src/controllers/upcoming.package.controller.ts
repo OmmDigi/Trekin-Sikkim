@@ -3,6 +3,7 @@ import asyncErrorHandler from "../middlewares/asyncErrorHandler";
 import { ApiResponse } from "../utils/ApiResponse";
 import { ErrorHandler } from "../utils/ErrorHandler";
 import { generatePlaceholders } from "../utils/generatePlaceholders";
+import { VSinglePackageInfo } from "../validator/package.validator";
 import { VModifyUpcomingPackage } from "../validator/upcoming.validator";
 
 export const getUpcomingPackageList = asyncErrorHandler(async (req, res) => {
@@ -23,8 +24,11 @@ export const getUpcomingPackageList = asyncErrorHandler(async (req, res) => {
          LEFT JOIN packages p
          ON p.id = ut.package_id
 
+         LEFT JOIN category_and_packages cp
+         ON cp.package_id = p.id
+
          LEFT JOIN category c
-         ON c.category_id = p.category_id
+         ON c.category_id = cp.category_id
 
         LEFT JOIN LATERAL (
             SELECT pam.*
@@ -84,29 +88,32 @@ export const modifyUpcomingPackage = asyncErrorHandler(async (req, res) => {
   const { error, value } = VModifyUpcomingPackage.validate(req.body);
   if (error) throw new ErrorHandler(400, error.message);
 
-  const client = await pool.connect();
+  await pool.query(
+    `INSERT INTO upcoming_treks (package_id) VALUES ${generatePlaceholders(
+      value.length,
+      1
+    )}
+     ON CONFLICT (package_id) DO NOTHING
+    `,
+    value.flatMap((item) => [item])
+  );
 
-  try {
-    await client.query("BEGIN");
-    await client.query("DELETE FROM upcoming_treks");
-
-    if (value.length !== 0) {
-      await client.query(
-        `INSERT INTO upcoming_treks (package_id) VALUES ${generatePlaceholders(
-          value.length,
-          1
-        )}`,
-        value.flatMap((item) => [item])
-      );
-    }
-
-    await client.query("COMMIT");
-
-    res.status(200).json(new ApiResponse(200, "Successfully completed"));
-  } catch (error: any) {
-    await client.query("ROLLBACK");
-    throw new ErrorHandler(400, error.message);
-  } finally {
-    client.release();
-  }
+  res.status(201).json(new ApiResponse(200, "Upcomming packages are added"));
 });
+
+export const deletePackageFromUpcomming = asyncErrorHandler(
+  async (req, res) => {
+    const { error, value } = VSinglePackageInfo.validate(req.params);
+    if (error) throw new ErrorHandler(404, error.message);
+
+    await pool.query("DELETE FROM upcoming_treks WHERE package_id = $1", [
+      value.package_id,
+    ]);
+
+    res
+      .status(200)
+      .json(
+        new ApiResponse(200, "Package has removed form upcoming packages list")
+      );
+  }
+);

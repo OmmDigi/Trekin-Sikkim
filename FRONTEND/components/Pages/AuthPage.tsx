@@ -36,6 +36,7 @@ type AuthFormType = z.infer<typeof authFormSchema>;
 
 export default function AuthPage({ type }: IProps) {
   const searchParams = useSearchParams();
+  const redirectUrl = searchParams.get("redirect");
   const [isLoading, startTransition] = useTransition();
   const routes = useRouter();
   const {
@@ -56,7 +57,6 @@ export default function AuthPage({ type }: IProps) {
         toast.success(data.message);
         startTransition(() => {
           if (data.statusCode === 200) {
-            const redirectUrl = searchParams.get("redirect");
             if (type === "login") {
               if (redirectUrl !== null) {
                 routes.push(redirectUrl);
@@ -64,7 +64,11 @@ export default function AuthPage({ type }: IProps) {
                 routes.push("/account");
               }
             } else {
-              routes.push(`/auth/login?${searchParams.toString()}`);
+              if (redirectUrl) {
+                routes.push(`/auth/login?redirect=${redirectUrl}`);
+              } else {
+                routes.push("/auth/login");
+              }
             }
           }
         });
@@ -140,7 +144,7 @@ export default function AuthPage({ type }: IProps) {
             <h2 className="text-center text-sm flex item-center justify-center gap-1">
               Already have an account?{" "}
               <CustomLink
-                href={"/auth/login"}
+                href={`/auth/login${redirectUrl ? `?redirect=${redirectUrl}` : ""}`}
                 className="font-semibold underline"
               >
                 Log in
@@ -150,7 +154,7 @@ export default function AuthPage({ type }: IProps) {
             <h2 className="text-center text-sm flex item-center justify-center gap-1">
               Don&apos;t have any account?{" "}
               <CustomLink
-                href={"/auth/signup"}
+                href={`/auth/signup${redirectUrl ? `?redirect=${redirectUrl}` : ""}`}
                 className="font-semibold underline"
               >
                 Create Account

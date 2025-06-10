@@ -6,8 +6,10 @@ import { generatePlaceholders } from "../utils/generatePlaceholders";
 import {
   VAddCategoryFaq,
   VAddCategoryGallery,
+  VAddCategoryPackages,
   VAddNewCategory,
   VCategoryPageInfo,
+  VDeleteCategoryPackage,
   VManageCategoryPageContent,
   VSingleCategory,
   VUpdateACategory,
@@ -58,9 +60,41 @@ export const getCategoryPageInfo = asyncErrorHandler(async (req, res) => {
   res.status(200).json(new ApiResponse(200, "Category Page Info", rows[0]));
 });
 
+export const addCategoryPackages = asyncErrorHandler(async (req, res) => {
+  const { error, value } = VAddCategoryPackages.validate(req.body);
+  if (error) throw new ErrorHandler(400, error.message);
+
+  await pool.query(
+    `INSERT INTO category_and_packages (package_id, category_id) VALUES ${generatePlaceholders(
+      value.packages_ids.length,
+      2
+    )}
+    ON CONFLICT DO NOTHING
+    `,
+    value.packages_ids.flatMap((item: number) => [item, value.category_id])
+  );
+
+  res.status(200).json(new ApiResponse(201, "Packages Are Added"));
+});
+
+export const deleteCategoryPackage = asyncErrorHandler(async (req, res) => {
+  const { error, value } = VDeleteCategoryPackage.validate(req.params);
+  if (error) throw new ErrorHandler(404, error.message);
+
+  await pool.query(
+    "DELETE FROM category_and_packages WHERE category_id = $1 AND package_id = $2",
+    [value.package_id, value.package_id]
+  );
+
+  res
+    .status(200)
+    .json(new ApiResponse(200, "Package has removed form this category"));
+});
+
 export const getAllCategories = asyncErrorHandler(async (req, res) => {
   const category_type = req.query.category_type?.toString();
   const inhome = req.query.inhome === "true";
+  const showInfooter = req.query.add_to_footer === "true";
 
   let filter = "";
   const filterValues: string[] = [];
@@ -73,11 +107,19 @@ export const getAllCategories = asyncErrorHandler(async (req, res) => {
     placeholdernum++;
   }
 
-  if(inhome) {
-    if(filter === "") {
-      filter += `WHERE c.showinhomepage = true`
+  if (inhome) {
+    if (filter === "") {
+      filter += `WHERE c.showinhomepage = true`;
     } else {
-      filter += ` AND c.showinhomepage = true`
+      filter += ` AND c.showinhomepage = true`;
+    }
+  }
+
+  if (showInfooter) {
+    if (filter === "") {
+      filter += `WHERE c.add_to_footer = true`;
+    } else {
+      filter += ` AND c.add_to_footer = true`;
     }
   }
 
@@ -100,7 +142,7 @@ export const getSingleCategory = asyncErrorHandler(async (req, res) => {
 
   const { rows } = await pool.query(
     `
-    SELECT c.category_id, c.category_name, c.showinhomepage, t.type_id AS category_type_id, t.type_name AS category_type, c.meta_title, c.meta_description, c.meta_keywords, c.canonical, slug  FROM category c
+    SELECT c.category_id, c.category_name, c.showinhomepage, c.add_to_footer, t.type_id AS category_type_id, t.type_name AS category_type, c.meta_title, c.meta_description, c.meta_keywords, c.canonical, slug  FROM category c
     LEFT JOIN types t ON t.type_id = c.type_id
     WHERE c.category_id = $1
       `,
@@ -131,7 +173,7 @@ export const addNewCategory = asyncErrorHandler(async (req, res) => {
   }
 
   const { rows } = await pool.query(
-    `INSERT INTO category (category_name, type_id, slug, meta_title, meta_description, meta_keywords, canonical, showinhomepage) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING category_id`,
+    `INSERT INTO category (category_name, type_id, slug, meta_title, meta_description, meta_keywords, canonical, showinhomepage, add_to_footer) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING category_id`,
     [
       value.category_name,
       value.category_type,
@@ -140,7 +182,8 @@ export const addNewCategory = asyncErrorHandler(async (req, res) => {
       value.meta_description,
       value.meta_keywords,
       value.canonical,
-      value.showinhomepage
+      value.showinhomepage,
+      value.add_to_footer,
     ]
   );
 
@@ -172,10 +215,8 @@ export const updateCategory = asyncErrorHandler(async (req, res) => {
     );
   }
 
-  console.log(value)
-
   await pool.query(
-    "UPDATE category SET category_name = $1, type_id = $2, slug = $3, meta_title = $4, meta_description = $5, meta_keywords = $6, canonical = $7, showinhomepage = $8  WHERE category_id = $9",
+    "UPDATE category SET category_name = $1, type_id = $2, slug = $3, meta_title = $4, meta_description = $5, meta_keywords = $6, canonical = $7, showinhomepage = $8, add_to_footer = $9 WHERE category_id = $10",
     [
       value.new_category_name,
       value.new_category_type,
@@ -185,6 +226,7 @@ export const updateCategory = asyncErrorHandler(async (req, res) => {
       value.new_meta_keywords,
       value.new_canonical,
       value.showinhomepage,
+      value.add_to_footer,
       value.category_id,
     ]
   );

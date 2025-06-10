@@ -36,12 +36,14 @@ import { PaginationComp } from "@/components/pagination";
 
 const getPackageList = async (searchParams: ReadonlyURLSearchParams) => {
   const newSearchParams = new URLSearchParams(searchParams);
-  if (newSearchParams.get("category_slug") === "all") {
-    newSearchParams.delete("category_slug");
-  }
-  if (!newSearchParams.has("category_type")) {
-    newSearchParams.set("category_type", CATEGORY_TYPE[0].id.toString());
-  }
+  newSearchParams.set("limit", "12")
+  // if (newSearchParams.get("category_slug") === "all") {
+  //   newSearchParams.delete("category_slug");
+  // }
+  // if (!newSearchParams.has("category_type")) {
+  //   newSearchParams.set("category_type", CATEGORY_TYPE[0].id.toString());
+  // }
+  // console.log(`/api/v1/package?${newSearchParams.toString()}`)
   return (await api.get("/api/v1/package?" + newSearchParams.toString())).data;
 };
 
@@ -49,14 +51,14 @@ export default function Packages() {
   const queryClient = useQueryClient();
   const searchParams = useSearchParams();
   const route = useRouter();
-  const [currentCategorySlug, setCurrentCatSLug] = useState("all");
+  // const [currentCategorySlug, setCurrentCatSLug] = useState("all");
 
-  const [isPending, startTransition] = useTransition();
+  // const [isPending, startTransition] = useTransition();
 
   const apiResult = useQueries<
     [
       UseQueryResult<IResponse<IPackageList[]>, AxiosError<IResponse>>,
-      UseQueryResult<IResponse<ICategories[]>, AxiosError<IResponse>>
+      // UseQueryResult<IResponse<ICategories[]>, AxiosError<IResponse>>
     ]
   >({
     queries: [
@@ -65,13 +67,13 @@ export default function Packages() {
         queryFn: () => getPackageList(searchParams),
       },
 
-      {
-        queryKey: ["package-categories", searchParams.get("category_type")],
-        queryFn: () =>
-          getAllCategories(
-            searchParams.get("category_type") || CATEGORY_TYPE[0].id.toString()
-          ),
-      },
+      // {
+      //   queryKey: ["package-categories", searchParams.get("category_type")],
+      //   queryFn: () =>
+      //     getAllCategories(
+      //       searchParams.get("category_type") || CATEGORY_TYPE[0].id.toString()
+      //     ),
+      // },
     ],
   });
 
@@ -96,7 +98,7 @@ export default function Packages() {
         <Label className="font-semibold text-2xl flex-1">Packages</Label>
 
         <div className="flex items-center gap-5">
-          <Select
+          {/* <Select
             onValueChange={(value) => {
               const newSearchParams = new URLSearchParams(searchParams);
               newSearchParams.set("category_type", value);
@@ -117,13 +119,13 @@ export default function Packages() {
                 </SelectItem>
               ))}
             </SelectContent>
-          </Select>
+          </Select> */}
           <LinkButton icon={<Plus />} href="packages/0">
             Add New Package
           </LinkButton>
         </div>
       </div>
-      <Tabs
+      {/* <Tabs
         value={searchParams.get("category_slug") || "all"}
         onValueChange={(value) => {
           if (isPending) return;
@@ -159,7 +161,7 @@ export default function Packages() {
             </TabsTrigger>
           ))}
         </TabsList>
-      </Tabs>
+      </Tabs> */}
       <LoadingHandler
         error={apiResult[0].error}
         loading={apiResult[0].isFetching}

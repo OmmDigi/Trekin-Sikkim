@@ -3,7 +3,9 @@ import Joi from "joi";
 export const VGetPackageList = Joi.object({
   category_slug: Joi.string().optional(),
   category_type: Joi.string().optional(),
+  category_id : Joi.number().optional(),
   page: Joi.number().optional(),
+  limit : Joi.number().optional()
 });
 
 export const VAddPackageBasicInfo = Joi.object({
@@ -104,7 +106,7 @@ export const VAddPackageBasicInfo = Joi.object({
     })
     .required(),
 
-  category_id: Joi.number().required(),
+  // category_id: Joi.number().required(),
   is_active: Joi.number().required(),
 
   additionals: Joi.array().items(Joi.number()).required(),
@@ -209,7 +211,7 @@ export const VUpdatePackageBasicInfo = Joi.object({
     })
     .required(),
 
-  category_id: Joi.number().required(),
+  // category_id: Joi.number().required(),
   is_active: Joi.number().required(),
 
   additionals: Joi.array().items(Joi.number()).required(),

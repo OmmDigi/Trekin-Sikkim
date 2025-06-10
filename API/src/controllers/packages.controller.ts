@@ -63,8 +63,11 @@ export const getSinglePackagePage = asyncErrorHandler(async (req, res) => {
       LEFT JOIN package_and_additional paa
       ON p.id = paa.package_id
 
+      LEFT JOIN category_and_packages cp
+      ON cp.package_id = p.id
+
       LEFT JOIN category c
-      ON c.category_id = p.category_id
+      ON c.category_id = cp.category_id
 
       LEFT JOIN package_itinerary_pdf pip
       ON pip.package_id = p.id
@@ -129,6 +132,16 @@ export const getPackageList = asyncErrorHandler(
       placeholdernum++;
     }
 
+    if (value.category_id) {
+      if (filters === "") {
+        filters = `WHERE c.category_id = $${placeholdernum}`;
+      } else {
+        filters += ` AND c.category_id = $${placeholdernum}`;
+      }
+      filterValues.push(value.category_id);
+      placeholdernum++;
+    }
+
     const { rows: countRows } = await pool.query(
       `
           SELECT 
@@ -147,54 +160,62 @@ export const getPackageList = asyncErrorHandler(
           LEFT JOIN media_item mi
           ON mi.media_item_id = pam.media_item_id AND mi.media_type = 'image'
 
-          LEFT JOIN category c
-          ON c.category_id = pkg.category_id
+          LEFT JOIN category_and_packages cp ON cp.package_id = pkg.id
 
-        ${filters}
+          LEFT JOIN category c
+          ON c.category_id = cp.category_id
+
+         ${filters}
        `,
       filterValues
     );
 
     const totalPackages = countRows[0].total_package;
 
-    const { LIMIT, OFFSET } = parsePagination(req);
+    const { LIMIT, OFFSET } = parsePagination(req, value.limit);
 
     const TOTAL_PAGE = Math.ceil(totalPackages / LIMIT);
 
     const { rows } = await pool.query(
       `
-      SELECT 
-      pkg.id, 
-      pkg.package_name, 
-      pkg.duration, 
-      pkg.short_description,
-      mi.item_link AS thumbnail,
-      mi.alt_tag,
-      pkg.highest_altitude,
-      pkg.slug AS package_slug,
-      c.slug AS category_slug
-    FROM packages pkg
+        SELECT 
+          pkg.id, 
+          pkg.package_name, 
+          pkg.duration, 
+          pkg.short_description,
+          mi.item_link AS thumbnail,
+          mi.alt_tag,
+          pkg.highest_altitude,
+          pkg.slug AS package_slug,
+          c.slug AS category_slug
+        FROM packages pkg
 
-    LEFT JOIN LATERAL (
-      SELECT pam.*
-      FROM package_and_media pam
-      WHERE pam.package_id = pkg.id
-        AND pam.where_to_use = 'thumbnail'
-      ORDER BY pam.id
-      LIMIT 1
-    ) pam ON true
+        LEFT JOIN LATERAL (
+          SELECT pam.*
+          FROM package_and_media pam
+          WHERE pam.package_id = pkg.id
+            AND pam.where_to_use = 'thumbnail'
+          ORDER BY pam.id
+          LIMIT 1
+        ) pam ON true
 
-    LEFT JOIN media_item mi
-    ON mi.media_item_id = pam.media_item_id AND mi.media_type = 'image'
+        LEFT JOIN media_item mi
+        ON mi.media_item_id = pam.media_item_id AND mi.media_type = 'image'
 
-    LEFT JOIN category c
-    ON c.category_id = pkg.category_id
+        LEFT JOIN category_and_packages cp ON cp.package_id = pkg.id
 
-    ${filters}
+        LEFT JOIN category c
+        ON c.category_id = cp.category_id
 
-    LIMIT ${LIMIT} OFFSET ${OFFSET}`,
+        ${filters}
+
+        ORDER BY pkg.id DESC
+
+        LIMIT ${LIMIT} OFFSET ${OFFSET}
+        `,
       filterValues
     );
+
     res
       .status(200)
       .json(
@@ -292,7 +313,7 @@ export const updateSinglePackageBasicInfo = asyncErrorHandler(
         "DELETE FROM package_and_additional WHERE package_id = $1",
         [packageID]
       );
-      
+
       if (additionals.length !== 0) {
         await client.query(
           `INSERT INTO package_and_additional (package_id, additional_id) VALUES ${placeholdernum}

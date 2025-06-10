@@ -7,6 +7,7 @@ import { CategoryBasicInfo } from "./CategoryBasicInfo";
 import AddGalleryItem from "../package/AddGalleryItem";
 import EditCategoryPageContent from "./EditCategoryPageContent";
 import { useRouter, useSearchParams } from "next/navigation";
+import ChoosePackagesStep from "./ChoosePackagesStep";
 
 interface IProps {
   category_id: number;
@@ -16,7 +17,8 @@ const STEPS: TSteps[] = [
   { id: 1, label: "Basic Information" },
   { id: 2, label: "FAQ" },
   { id: 3, label: "Banner Info" },
-  { id: 4, label: "Page Content" },
+  { id: 4, label: "Packages" },
+  { id: 5, label: "Page Content" },
 ];
 
 export default function CategoryStepPage({ category_id, step }: IProps) {
@@ -61,7 +63,7 @@ export default function CategoryStepPage({ category_id, step }: IProps) {
           putEndPoint="/api/v1/category/gallery"
           postEndPoint="/api/v1/category/gallery"
         />
-      ) : step === 4 ? (
+      ) : step === 4 ? <ChoosePackagesStep currentStep={step}/> : step === 5 ? (
         <EditCategoryPageContent currentStep={step} />
       ) : null}
     </div>

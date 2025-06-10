@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { ScrollArea } from "../ui/scroll-area";
 import Image from "next/image";
-import { CircleCheckBig, Layers2 } from "lucide-react";
+import { CircleCheckBig } from "lucide-react";
 import { Checkbox } from "../ui/checkbox";
 import { useQuery } from "@tanstack/react-query";
 import api from "@/lib/axios";
@@ -10,69 +10,44 @@ import { IResponse } from "@/types";
 import { AxiosError } from "axios";
 import LoadingHandler from "../LoadingHandler";
 import { PaginationComp } from "../pagination";
-import { Button } from "../ui/button";
-import { useDoMutation } from "@/hooks/useDoMutation";
 import { ButtonLoading } from "../ui/button-loading";
+import { IPackageList } from "@/features/package/schemaAndTypes";
 
 interface IProps {
   isOpen: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+
+  onDoneBtnClick?: (selectedIds: number[]) => void;
+  isSubmitting?: boolean;
 }
 
-const getPackageListForUpcomingPackge = async (page: number) =>
-  (await api.get(`/api/v1/upcoming/package-list?page=${page}`)).data;
+const getPackageList = async (page: number) =>
+  (await api.get(`/api/v1/package?page=${page}`)).data;
 
-type IList = {
-  package_id: number;
-  package_name: string;
-  category_name: string;
-  item_link: string | null;
-  is_selected: boolean;
-};
-
-export default function ChoosePackagesDialog({ isOpen, setOpen }: IProps) {
+export default function ChoosePackagesDialog({ isOpen, setOpen, onDoneBtnClick, isSubmitting = false }: IProps) {
   const [currentPage, setCurrentPage] = useState(1);
 
-  const [selectedItem, setSelectedItems] = useState<number[]>([]);
+  const selectedPackages = useRef<Map<number, boolean>>(new Map());
 
   const { data, isFetching, error } = useQuery<
-    IResponse<IList[]>,
+    IResponse<IPackageList[]>,
     AxiosError<IResponse>
   >({
-    queryKey: ["get-package-list-for-upcoming-package", currentPage],
-    queryFn: () => getPackageListForUpcomingPackge(currentPage),
-    onSuccess(data : IResponse<IList[]>) {
-      const alreadySelectedIds: number[] = [];
-      data.data.forEach((item) => {
-        if (item.is_selected) {
-          alreadySelectedIds.push(item.package_id);
-        }
-      });
-      setSelectedItems(alreadySelectedIds);
-    },
+    queryKey: ["get-packages-list", currentPage],
+    queryFn: () => getPackageList(currentPage),
   });
-
-  const { isLoading, mutate } = useDoMutation();
-  const onDoneBtnClick = () => {
-    mutate({
-      apiPath: "/api/v1/upcoming/modify",
-      method: "post",
-      formData: selectedItem,
-      onSuccess() {
-        setOpen(false);
-      },
-    });
-  };
-
   return (
     <Dialog open={isOpen} onOpenChange={setOpen}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Choose Package</DialogTitle>
+          <DialogTitle>Choose Packages</DialogTitle>
         </DialogHeader>
 
         <div className="flex items-center justify-end">
-          <ButtonLoading loading={isLoading} onClick={onDoneBtnClick}>
+          <ButtonLoading loading={isSubmitting} onClick={() => {
+            const selectedIds = Array.from(selectedPackages.current.keys());
+            onDoneBtnClick?.(selectedIds)
+          }}>
             <CircleCheckBig />
             Done
           </ButtonLoading>
@@ -86,45 +61,31 @@ export default function ChoosePackagesDialog({ isOpen, setOpen }: IProps) {
           <ScrollArea className="max-h-[60vh]">
             <ul className="space-y-4">
               {data?.data.map((item) => (
-                <li key={item.package_id} className="flex items-start gap-3">
+                <li key={item.id} className="flex items-start gap-3">
                   <div className="flex items-center gap-3.5">
                     <Checkbox
                       className="cursor-pointer border-1 border-green-600"
-                      defaultChecked={item.is_selected}
+                      defaultChecked={selectedPackages.current.has(item.id)}
                       onCheckedChange={(checked) => {
                         if (checked) {
-                          const prevItems = [...selectedItem];
-                          prevItems.push(item.package_id);
-                          setSelectedItems(prevItems);
-                          return;
+                          selectedPackages.current.set(item.id, true);
+                        } else {
+                          selectedPackages.current.delete(item.id);
                         }
-
-                        const filteredItems = selectedItem.filter(
-                          (id) => id !== item.package_id
-                        );
-                        setSelectedItems(filteredItems);
                       }}
                     />
                     <Image
                       className="w-20 aspect-video object-cover"
                       alt=""
-                      src={item.item_link || "/placeholder-image.jpg"}
+                      src={item.thumbnail || "/placeholder-image.jpg"}
                       width={1200}
                       height={1200}
                     />
                   </div>
 
-                  <div className="space-y-2">
-                    <h2 className="font-semibold leading-none">
-                      {item.package_name}
-                    </h2>
-                    <div className="flex items-center gap-1">
-                      <Layers2 size={12} />
-                      <span className="text-sm text-gray-500">
-                        {item.category_name}
-                      </span>
-                    </div>
-                  </div>
+                  <h2 className="font-semibold leading-none line-clamp-1">
+                    {item.package_name}
+                  </h2>
                 </li>
               ))}
             </ul>

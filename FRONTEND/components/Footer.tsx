@@ -5,10 +5,25 @@ import CustomLink from "./CustomLink";
 import CategoryFooterListView from "./CategoryFooterListView";
 import React from "react";
 import Loading from "./Loading";
+import api from "@/lib/axios";
+import { ICategories, IResponse } from "@/types";
 
-export default function Footer() {
+export default async function Footer() {
+  const categories: ICategories[] = [];
+
+  try {
+    const response = await (
+      await api.get<IResponse<ICategories[]>>(
+        "/api/v1/category?add_to_footer=true"
+      )
+    ).data;
+    if (response.data) {
+      categories.push(...response.data);
+    }
+  } catch { }
+
   return (
-    <footer className="w-full bg-primary font-primary text-background py-9 max-sm:text-white max-sm:py-0">
+    <footer className="w-full bg-primary font-primary text-background py-9 max-sm:text-white max-sm:py-9">
       <section className="space-y-9 wrapper max-sm:max-w-[90%] pt-16 max-sm:pt-6">
         <ul className="grid grid-cols-4 gap-10 max-sm:grid-cols-2">
           {FOOTER_INFO.map((item, index) => (
@@ -45,11 +60,7 @@ export default function Footer() {
             </li>
           ))}
 
-          <li
-            className={cn(
-              "space-y-4"
-            )}
-          >
+          <li className={cn("space-y-4")}>
             <h2 className="font-semibold text-2xl text-secondary">Category</h2>
 
             <div className="w-14 h-[1px] bg-light-gray opacity-20"></div>
@@ -64,7 +75,20 @@ export default function Footer() {
           <div className="w-14 h-[1px] bg-light-gray opacity-20"></div>
         </div>
 
-        <div className="flex items-center justify-between">
+        <ul className="grid grid-cols-4 max-sm:grid-cols-2">
+          {categories.map((item) => (
+            <li key={item.category_id} className="max-sm:flex max-sm:items-center max-sm:justify-center">
+              <CustomLink
+                className="text-sm underline text-white flex items-center"
+                href={`/${item.slug}`}
+              >
+                {item.category_name}
+              </CustomLink>
+            </li>
+          ))}
+        </ul>
+
+        <div className="flex items-center justify-between flex-wrap gap-y-3.5">
           <div>
             <h2 className="font-semibold text-xl text-secondary">
               Glacier Treks & Adventure
@@ -89,7 +113,10 @@ export default function Footer() {
           <span>© 2025 Glacier Treks & Adventure All Rights Reserved.</span>
           <span>
             Digital Partner{" "}
-            <Link className="underline" href={"https://ommdigitalsolution.com/"}>
+            <Link
+              className="underline"
+              href={"https://ommdigitalsolution.com/"}
+            >
               OMM Digital Soluction Pvt.Ltd
             </Link>
           </span>

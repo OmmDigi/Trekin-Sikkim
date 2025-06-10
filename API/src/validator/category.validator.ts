@@ -4,6 +4,16 @@ export const VCategoryPageInfo = Joi.object({
   category_slug: Joi.string().required(),
 });
 
+export const VAddCategoryPackages = Joi.object({
+  category_id: Joi.number().required(),
+  packages_ids: Joi.array().items(Joi.number()),
+});
+
+export const VDeleteCategoryPackage = Joi.object({
+  category_id: Joi.number().required(),
+  package_id: Joi.number().required(),
+});
+
 export const VAddNewCategory = Joi.object({
   category_name: Joi.string().required(),
   category_type: Joi.number().required(),
@@ -13,6 +23,7 @@ export const VAddNewCategory = Joi.object({
   category_slug: Joi.string().required(),
   showinhomepage: Joi.boolean().required(),
   canonical: Joi.string().optional(),
+  add_to_footer: Joi.boolean().required(),
 });
 
 export const VUpdateACategory = Joi.object({
@@ -25,6 +36,7 @@ export const VUpdateACategory = Joi.object({
   new_category_slug: Joi.string().required(),
   showinhomepage: Joi.boolean().required(),
   new_canonical: Joi.string().optional(),
+  add_to_footer: Joi.boolean().required(),
 });
 
 export const VSingleCategory = Joi.object({

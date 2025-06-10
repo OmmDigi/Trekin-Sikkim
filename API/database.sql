@@ -358,3 +358,16 @@ CREATE TABLE enquiry_form (
 );
 
 INSERT INTO types (type_name) VALUES ('Other');
+
+ALTER TABLE packages DROP COLUMN category_id;
+ALTER TABLE category ADD COLUMN add_to_footer BOOLEAN DEFAULT false;
+
+CREATE TABLE category_and_packages (
+    package_id INTEGER NOT NULL,
+    FOREIGN KEY (package_id) REFERENCES packages(id) ON DELETE CASCADE,
+
+    category_id INTEGER NOT NULL,
+    FOREIGN KEY (category_id) REFERENCES category(category_id) ON DELETE CASCADE,
+
+    UNIQUE (package_id, category_id)
+);

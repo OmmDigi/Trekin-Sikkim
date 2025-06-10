@@ -63,7 +63,7 @@ export function CategoryBasicInfo({ category_id, currentStep }: IProps) {
     queryKey: ["get-single-category", category_id],
     queryFn: () => getSingleCategory(category_id),
     enabled: category_id !== 0,
-    onSuccess(data : IResponse<ICategories | null>) {
+    onSuccess(data: IResponse<ICategories | null>) {
       if (data.data) {
         form.reset({
           category_name: data.data?.category_name || "",
@@ -74,6 +74,7 @@ export function CategoryBasicInfo({ category_id, currentStep }: IProps) {
           canonical: data.data?.canonical || undefined,
           showinhomepage: data.data?.showinhomepage,
           category_slug: data.data?.slug || "",
+          add_to_footer: data.data?.add_to_footer
         });
       }
     },
@@ -89,8 +90,7 @@ export function CategoryBasicInfo({ category_id, currentStep }: IProps) {
       toast.success(data.message);
       startTransition(() => {
         route.push(
-          `/dashboard/category/${data.data}?category_id=${data.data}&step=${
-            currentStep + 1
+          `/dashboard/category/${data.data}?category_id=${data.data}&step=${currentStep + 1
           }`
         );
       });
@@ -112,8 +112,7 @@ export function CategoryBasicInfo({ category_id, currentStep }: IProps) {
       toast.success(data.message);
       startTransition(() => {
         route.push(
-          `/dashboard/category/${category_id}?category_id=${category_id}&step=${
-            currentStep + 1
+          `/dashboard/category/${category_id}?category_id=${category_id}&step=${currentStep + 1
           }`
         );
       });
@@ -134,6 +133,7 @@ export function CategoryBasicInfo({ category_id, currentStep }: IProps) {
     canonical,
     category_slug,
     showinhomepage,
+    add_to_footer,
   }: TCategoryForm) {
     if (category_id === 0) {
       postCategory({
@@ -145,6 +145,7 @@ export function CategoryBasicInfo({ category_id, currentStep }: IProps) {
         canonical,
         category_slug,
         showinhomepage,
+        add_to_footer
       });
       return;
     }
@@ -159,6 +160,7 @@ export function CategoryBasicInfo({ category_id, currentStep }: IProps) {
       new_canonical: canonical || undefined,
       new_category_slug: category_slug,
       showinhomepage: showinhomepage,
+      add_to_footer: add_to_footer
     });
   }
 
@@ -261,8 +263,35 @@ export function CategoryBasicInfo({ category_id, currentStep }: IProps) {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="true">true</SelectItem>
-                      <SelectItem value="false">false</SelectItem>
+                      <SelectItem value="true">Yes</SelectItem>
+                      <SelectItem value="false">No</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="add_to_footer"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Show In Footer ?</FormLabel>
+                  <Select
+                    onValueChange={(value) => {
+                      field.onChange(value === "true" ? true : false);
+                    }}
+                    defaultValue={field.value === true ? "true" : "false"}
+                  >
+                    <FormControl className="w-full">
+                      <SelectTrigger>
+                        <SelectValue placeholder="Show In Footer ?" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="true">Yes</SelectItem>
+                      <SelectItem value="false">No</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />

@@ -3,16 +3,16 @@
 import { TransitionLink } from "@/components/Utils/TransitionLink";
 import { useOutsideClick } from "@/hooks/useOutsideClick";
 import { cn } from "@/lib/utils";
+import { setDialog } from "@/redux/slices/dialog.slice";
 import { RootState } from "@/redux/store";
-import { Blocks, X } from "lucide-react";
+import { Blocks, MessageSquareDiff, X } from "lucide-react";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { FaWhatsapp } from "react-icons/fa6";
 import { GoHome } from "react-icons/go";
-import { IoMdCall } from "react-icons/io";
 import { TbCategory } from "react-icons/tb";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const OPTIONS = [
   {
@@ -31,15 +31,17 @@ const OPTIONS = [
     pathname: "https://api.whatsapp.com/send?phone=7407248200",
   },
   {
-    icon: <IoMdCall size={20} />,
-    text: "Call Us",
-    pathname: "tel:7407248200",
+    icon: <MessageSquareDiff size={20} />,
+    text: "Enquiry",
+    pathname: "#",
   },
 ];
 
 function BottomNavigation() {
   const pathname = usePathname();
   const params = useParams();
+
+  const dispatch = useDispatch();
 
   const SHOW_OTHER_OPTIONS = params["page-name"] && params["package-slug"];
 
@@ -79,6 +81,8 @@ function BottomNavigation() {
           handleClick={() => {
             if (item.text === "Overview") {
               setIsShowExtraOptions(!isShowExtraOptions);
+            } else if (item.text === "Enquiry") {
+              dispatch(setDialog({ id: "enquiry-form", type: "OPEN" }))
             }
           }}
           key={item.pathname}

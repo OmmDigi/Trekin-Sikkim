@@ -3,6 +3,7 @@
 import { cn } from "@/lib/utils";
 import { setVisibility } from "@/redux/slices/mobileNav.slice";
 import { RootState } from "@/redux/store";
+import { useEffect } from "react";
 import { IoMenuOutline } from "react-icons/io5";
 import { MdClose } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,6 +16,14 @@ export default function MobileNavSlider({ children }: IProps) {
   const isOpen = useSelector((state: RootState) => state.mobileNavSlice);
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+  }, [isOpen])
+
   return (
     <div className="group/sidebar z-[100]">
       <IoMenuOutline
@@ -25,7 +34,7 @@ export default function MobileNavSlider({ children }: IProps) {
       <aside
         onClick={() => dispatch(setVisibility(false))}
         className={cn(
-          "hidden max-sm:flex bg-[#0004] fixed inset-0 h-fit justify-end",
+          "hidden max-sm:flex bg-[#0004] fixed inset-0 min-h-screen max-h-screen overflow-y-auto justify-end",
           isOpen ? "visible" : "invisible"
         )}
       >

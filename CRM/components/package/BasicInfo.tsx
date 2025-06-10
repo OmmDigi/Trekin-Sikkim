@@ -86,7 +86,7 @@ const formSchema = z.object({
     .min(0.1, "Offer Price must be greater than or equal to 0")
     .refine((val) => !isNaN(val), { message: "Invalid price value" }),
 
-  category_id: z.number().min(1, { message: "Please Choose The Category" }),
+  // category_id: z.number().min(1, { message: "Please Choose The Category" }),
   is_active: z.number(),
 
   additionals: z.array(z.number()).optional(),
@@ -147,7 +147,7 @@ function BasicInfoFunc({ packageId, currentStep }: IBasicInfoFunc) {
       region: "",
       suitable_for: "",
       trek_distance: "",
-      category_id: 0,
+      // category_id: 0,
       is_active: 1,
       additionals: [],
     },
@@ -167,7 +167,7 @@ function BasicInfoFunc({ packageId, currentStep }: IBasicInfoFunc) {
   const apiResult = useQueries<
     [
       UseQueryResult<IResponse<IBasicInfoResponse>, AxiosError<IResponse>>,
-      UseQueryResult<IResponse<ICategories[]>, AxiosError<IResponse>>,
+      // UseQueryResult<IResponse<ICategories[]>, AxiosError<IResponse>>,
       UseQueryResult<IResponse<IAddition[]>, AxiosError<IResponse>>
     ]
   >({
@@ -179,10 +179,10 @@ function BasicInfoFunc({ packageId, currentStep }: IBasicInfoFunc) {
         queryFn: () => getSingleBasicInfo(packageId),
       },
 
-      {
-        queryKey: ["package-categories", packageId],
-        queryFn: () => getAllCategories(),
-      },
+      // {
+      //   queryKey: ["package-categories", packageId],
+      //   queryFn: () => getAllCategories(),
+      // },
 
       {
         queryKey: ["get-additionals", packageId],
@@ -243,13 +243,12 @@ function BasicInfoFunc({ packageId, currentStep }: IBasicInfoFunc) {
         region: data.region,
         suitable_for: data.suitable_for,
         trek_distance: data.trek_distance,
-        category_id: data.category_id,
         is_active: data.is_active,
         additionals: data.additionals,
         slug: data.slug,
       });
     }
-  }, [apiResult[0].isSuccess, apiResult[2].isSuccess, apiResult[1].isSuccess]);
+  }, [apiResult[0].isSuccess, apiResult[1].isSuccess]);
 
   return (
     <LoadingHandler
@@ -262,7 +261,7 @@ function BasicInfoFunc({ packageId, currentStep }: IBasicInfoFunc) {
           <div className="grid grid-cols-2 gap-6">
             {Object.entries(formSchema.shape).map(([key]) => {
               if (
-                key === "category_id" ||
+                // key === "category_id" ||
                 key === "is_active" ||
                 key === "additionals"
               )
@@ -286,7 +285,7 @@ function BasicInfoFunc({ packageId, currentStep }: IBasicInfoFunc) {
               );
             })}
 
-            <LoadingHandler
+            {/* <LoadingHandler
               loading={apiResult[1].isFetching}
               error={apiResult[1].error}
               length={apiResult[1].data?.data.length}
@@ -328,7 +327,7 @@ function BasicInfoFunc({ packageId, currentStep }: IBasicInfoFunc) {
                   </FormItem>
                 )}
               />
-            </LoadingHandler>
+            </LoadingHandler> */}
 
             <FormField
               control={form.control}
@@ -361,9 +360,9 @@ function BasicInfoFunc({ packageId, currentStep }: IBasicInfoFunc) {
             />
 
             <LoadingHandler
-              loading={apiResult[2].isFetching}
-              error={apiResult[2].error}
-              length={apiResult[2].data?.data.length}
+              loading={apiResult[1].isFetching}
+              error={apiResult[1].error}
+              length={apiResult[1].data?.data.length}
               noDataMsg="No Additional Item Found"
             >
               <FormField
@@ -375,7 +374,7 @@ function BasicInfoFunc({ packageId, currentStep }: IBasicInfoFunc) {
                     <FormControl>
                       <MultiSelect
                         options={
-                          apiResult[2].data?.data.map((item) => ({
+                          apiResult[1].data?.data.map((item) => ({
                             label: `${item.additional_name} (₹${item.price_inr}), ($${item.price_usd})`,
                             value: item.additional_id,
                           })) || []

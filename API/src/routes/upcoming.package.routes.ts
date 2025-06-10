@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  deletePackageFromUpcomming,
   getPackageChooseList,
   getUpcomingPackageList,
   modifyUpcomingPackage,
@@ -10,4 +11,5 @@ export const upcomingPackageRoutes = Router();
 upcomingPackageRoutes
   .get("/", getUpcomingPackageList)
   .get("/package-list", getPackageChooseList)
-  .post("/modify", modifyUpcomingPackage);
+  .post("/modify", modifyUpcomingPackage)
+  .delete("/:package_id", deletePackageFromUpcomming);

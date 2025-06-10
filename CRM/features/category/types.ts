@@ -10,8 +10,9 @@ export interface ICategories {
   meta_title: string;
   meta_description: string;
   meta_keywords: string;
-  showinhomepage : boolean;
+  showinhomepage: boolean;
   canonical?: string;
+  add_to_footer: boolean;
 }
 
 export type TCategoryForm = z.infer<typeof categoryFormSchema>;
@@ -24,7 +25,7 @@ export interface ICategoryUpdate {
   new_meta_description: string;
   new_meta_keywords: string;
   new_category_slug: string;
-  showinhomepage : boolean;
+  showinhomepage: boolean;
   new_canonical?: string;
-  
+  add_to_footer: boolean;
 }

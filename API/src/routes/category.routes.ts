@@ -1,10 +1,12 @@
 import { Router } from "express";
 import {
   addCategoryGallery,
+  addCategoryPackages,
   addNewCategory,
   createCategoryFaq,
   deleteCategory,
   deleteCategoryFaq,
+  deleteCategoryPackage,
   getAllCategories,
   getCategoryFaq,
   getCategoryGallery,
@@ -27,6 +29,8 @@ categoryRoute
   //for frontend
   .get("/page-info/:category_slug", getCategoryPageInfo)
   //for crm
+  .post("/packages", addCategoryPackages)
+  .delete("/package/:category_id/:package_id", deleteCategoryPackage)
   .get("/", getAllCategories)
   .get("/:category_id", getSingleCategory)
   .post("/", isAuthenticated, addNewCategory)
