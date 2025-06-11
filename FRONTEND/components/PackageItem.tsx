@@ -19,7 +19,7 @@ export default function PackageItem({ fromWhere, singlePackageInfo }: IProps) {
         <div className="h-56 overflow-hidden relative rounded-b-[.8rem]">
           <Image
             className="size-full object-cover opacity-100"
-            alt={singlePackageInfo.alt_tag}
+            alt={singlePackageInfo.alt_tag ?? singlePackageInfo.package_name}
             src={singlePackageInfo.thumbnail || "/placeholder_background.jpg"}
             // height={1200}
             // width={1200}

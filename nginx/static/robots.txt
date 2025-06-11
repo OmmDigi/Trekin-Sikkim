@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: 
+Disallow: /cgi-bin/
+Disallow: https://crm.trekinsikkim.in
+Disallow: https://api.trekinsikkim.in
+Sitemap: https://trekinsikkim.in/sitemap.xml

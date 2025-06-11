@@ -10,6 +10,7 @@ interface IProps extends LinkProps {
   children: React.ReactNode;
   className?: string;
   spinnerSize?: number;
+  title?:string;
 }
 
 export default function CustomLink({
@@ -17,6 +18,7 @@ export default function CustomLink({
   children,
   spinnerSize,
   className,
+  title,
   ...rest
 }: IProps) {
   const route = useRouter();
@@ -30,6 +32,7 @@ export default function CustomLink({
 
   return (
     <Link
+      title={title}
       href={href}
       {...rest}
       className={cn(className, "flex items-center gap-2")}

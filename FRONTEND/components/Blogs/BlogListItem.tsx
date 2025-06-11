@@ -39,9 +39,11 @@ export default function BlogListItem({ blog }: IProps) {
           </h4>
 
           <CustomLink
+            aria-label={`Read the article titled "${blog.heading}"`}
+            title={`Read: ${blog.heading}`}
             href={"/articles/" + blog.slug}
             className="flex items-center gap-2 justify-end bg-gradient-to-r text-xs bg-accent text-white font-semibold py-2 px-4 rounded-full hover:from-cyan-600 hover:to-blue-600 transition-all duration-300"
-            // className="flex items-center justify-end gap-2 text-xs bg-red-500 text-white py-3 px-4 rounded-full"
+          // className="flex items-center justify-end gap-2 text-xs bg-red-500 text-white py-3 px-4 rounded-full"
           >
             <span>Read More</span>
             <MoveRight size={15} />
