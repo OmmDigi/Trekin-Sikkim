@@ -181,6 +181,7 @@ function Banner() {
 
         <div className="absolute z-50 top-0 bottom-0 left-0 flex items-center pl-3 max-sm:hidden">
           <button
+            title="Click To View Previous Banner Item"
             onClick={onPrevBannerClick}
             className="!bg-accent !text-white active:scale-90 cursor-pointer rounded-full size-10 flex items-center justify-center"
           >
@@ -189,6 +190,7 @@ function Banner() {
         </div>
         <div className="absolute z-50 top-0 bottom-0 right-0 flex items-center pr-3  max-sm:hidden">
           <button
+            title="Click To View Next Banner Item"
             onClick={onNextBannerClick}
             className="!bg-accent !text-white active:scale-90 cursor-pointer rounded-full size-10 flex items-center justify-center"
           >

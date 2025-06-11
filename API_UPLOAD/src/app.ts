@@ -6,6 +6,7 @@ import { PUBLIC_FOLDER_NAME } from "./constant";
 import dotenv from "dotenv";
 import { viewRoute } from "./routes/view.routes";
 import cors from "cors";
+import { manageRoutes } from "./routes/manage.routes";
 
 // Load environment variables based on NODE_ENV
 if (process.env.NODE_ENV === "development") {
@@ -42,6 +43,7 @@ app.use(
 
 app.use("/api/v1/upload", uploadRoutes);
 app.use("/api/v1/view", viewRoute);
+app.use("/api/v1/manage", manageRoutes);
 
 app.use(globalErrorController);
 

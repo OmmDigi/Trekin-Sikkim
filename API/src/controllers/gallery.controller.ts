@@ -1,6 +1,7 @@
 import { pool } from "../config/db";
 import asyncErrorHandler from "../middlewares/asyncErrorHandler";
 import { ApiResponse } from "../utils/ApiResponse";
+import { deleteFile } from "../utils/deleteFile";
 import { ErrorHandler } from "../utils/ErrorHandler";
 import { generatePlaceholders } from "../utils/generatePlaceholders";
 import { parsePagination } from "../utils/parsePagination";
@@ -20,14 +21,16 @@ export const getAllMediaItem = asyncErrorHandler(async (req, res) => {
 
   // for cache the gallery total items
   let totalCount = 0;
-  if(!cache.has(GALLERY_ITEM_COUNT_KEY)) {
-    const { rows : totalItems, rowCount } = await pool.query("SELECT COUNT(media_item_id) AS total FROM media_item");
-    if(rowCount === 0) {
-      totalCount = 0
+  if (!cache.has(GALLERY_ITEM_COUNT_KEY)) {
+    const { rows: totalItems, rowCount } = await pool.query(
+      "SELECT COUNT(media_item_id) AS total FROM media_item"
+    );
+    if (rowCount === 0) {
+      totalCount = 0;
     } else {
       totalCount = totalItems[0].total;
     }
-    cache.set(GALLERY_ITEM_COUNT_KEY, totalCount)
+    cache.set(GALLERY_ITEM_COUNT_KEY, totalCount);
   } else {
     totalCount = cache.get(GALLERY_ITEM_COUNT_KEY);
   }
@@ -37,7 +40,11 @@ export const getAllMediaItem = asyncErrorHandler(async (req, res) => {
     `SELECT * FROM media_item ORDER BY media_item_id DESC LIMIT ${LIMIT} OFFSET ${OFFSET}`
   );
 
-  res.status(200).json(new ApiResponse(200, "All gallery list", rows, undefined, TOTAL_PAGE));
+  res
+    .status(200)
+    .json(
+      new ApiResponse(200, "All gallery list", rows, undefined, TOTAL_PAGE)
+    );
 });
 
 export const getSingleMediaItem = asyncErrorHandler(async (req, res) => {
@@ -98,9 +105,15 @@ export const deleteMediaItem = asyncErrorHandler(async (req, res) => {
   if (error)
     throw new ErrorHandler(400, error.message, error.details[0].context?.key);
 
-  await pool.query("DELETE FROM media_item WHERE media_item_id = $1", [
-    value.media_item_id,
-  ]);
+  const { rowCount, rows } = await pool.query(
+    "DELETE FROM media_item WHERE media_item_id = $1 RETURNING item_link",
+    [value.media_item_id]
+  );
+
+  //delete the image form upload-file server
+  if (rowCount && rowCount > 0 && rows[0].item_link) {
+    deleteFile(rows[0].item_link);
+  }
 
   // for cache the gallery total items
   const galleryItems = cache.get(GALLERY_ITEM_COUNT_KEY) || 0;

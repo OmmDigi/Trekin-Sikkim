@@ -1,7 +1,7 @@
 import uploadApi from "@/lib/upload-api";
 import { IResponse, IUploadedFile } from "@/types";
 import { AxiosError } from "axios";
-import { convartImgToWebp } from "./convartImgToWebp";
+import imageCompression from "browser-image-compression";
 
 interface IProps<E = AxiosError<IResponse>> {
   files: File[];
@@ -31,16 +31,33 @@ export const uploadFiles = async ({
 
   formData.set("folder", folder);
 
-  for (const file of fileArray) {
-    if (file.type.includes("image")) {
-      const convartedData = await convartImgToWebp(file);
-      formData.append("files", convartedData);
-    } else {
-      formData.append("files", file);
-    }
-  }
-
   try {
+    // compress the image if it's an image file
+    for (const file of fileArray) {
+      if (!file.type.startsWith("image/")) {
+        console.warn(`Skipping non-image file: ${file.name}`);
+        formData.append("files", file);
+        continue;
+      }
+
+      // Compress and convert to WebP
+      const compressedFile = await imageCompression(file, {
+        maxSizeMB: 0.2,
+        maxWidthOrHeight: 1280,
+        useWebWorker: true,
+        fileType: "image/webp" as const,
+      });
+
+      // Ensure it's WebP format
+      const webpFile = new File(
+        [compressedFile],
+        file.name.replace(/\.[^/.]+$/, ".webp"),
+        { type: "image/webp" }
+      );
+
+      formData.append("files", webpFile);
+    }
+
     const response = await uploadApi.post<IResponse<IUploadedFile[]>>(
       "/api/v1/upload/multiple",
       formData,
