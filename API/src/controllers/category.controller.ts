@@ -83,7 +83,7 @@ export const deleteCategoryPackage = asyncErrorHandler(async (req, res) => {
 
   await pool.query(
     "DELETE FROM category_and_packages WHERE category_id = $1 AND package_id = $2",
-    [value.package_id, value.package_id]
+    [value.category_id, value.package_id]
   );
 
   res

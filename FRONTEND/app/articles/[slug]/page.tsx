@@ -56,7 +56,7 @@ export default async function page({ params }: IProps) {
       <div>
         <h1 className="font-semibold text-2xl">{singleBlog.data.heading}</h1>
         <h2 className="text-sm text-gray-600 line-clamp-2">
-          {singleBlog.data.meta_description}
+          {singleBlog.data?.sub_heading}
         </h2>
       </div>
       <div>

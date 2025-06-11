@@ -42,6 +42,7 @@ export const getBlogsList = asyncErrorHandler(
       SELECT 
         blog_id, 
         heading, 
+        sub_heading,
         meta_description, 
         meta_keywords, 
         created_at,
@@ -89,6 +90,7 @@ export const getRelatedBlogs = asyncErrorHandler(
         SELECT 
             blog_id, 
             heading, 
+            sub_heading,
             meta_description, 
             meta_keywords, 
             created_at,

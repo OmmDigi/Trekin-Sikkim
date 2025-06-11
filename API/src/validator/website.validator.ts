@@ -6,6 +6,7 @@ export const VSingleBlog = Joi.object({
 
 export const VPostNewBlog = Joi.object({
   heading: Joi.string().required(),
+  sub_heading: Joi.string().required(),
   blog_content: Joi.string().required(),
   thumbnail: Joi.string().required(),
   meta_title: Joi.string().optional().allow(""),
@@ -24,6 +25,7 @@ export const VUpdateSingleBlog = Joi.object({
   blog_id: Joi.number().required(),
 
   heading: Joi.string().required(),
+  sub_heading: Joi.string().required(),
   blog_content: Joi.string().required(),
   thumbnail: Joi.string().required(),
 

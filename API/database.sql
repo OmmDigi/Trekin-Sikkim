@@ -371,3 +371,5 @@ CREATE TABLE category_and_packages (
 
     UNIQUE (package_id, category_id)
 );
+
+ALTER TABLE blogs ADD COLUMN sub_heading TEXT;

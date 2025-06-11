@@ -169,6 +169,7 @@ export interface IBooking {
 export interface IBlog {
   blog_id: number;
   heading: string;
+  sub_heading?: string;
   meta_description: string;
   meta_keywords: string;
   created_at: string; // ISO 8601 format
@@ -181,6 +182,7 @@ export interface IBlog {
 export interface ISingleBlog {
   blog_id: number;
   heading: string;
+  sub_heading?:string;
   blog_content: string; // HTML content of the blog
   thumbnail: string; // URL to the thumbnail image
   meta_title: string; // Title for SEO

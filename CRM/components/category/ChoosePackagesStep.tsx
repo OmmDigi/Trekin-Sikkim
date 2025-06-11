@@ -95,12 +95,15 @@ export default function ChoosePackagesStep({ currentStep }: IProps) {
       >
         <ul className="grid grid-cols-3 gap-10 mt-10">
           {data?.data.map((item) => (
-            <li className="w-full overflow-hidden border-2 border-b-green-300 rounded-[.8rem] relative shadow-2xl group/item max-sm:h-[17rem]">
+            <li key={item.id} className="w-full overflow-hidden border-2 border-b-green-300 rounded-[.8rem] relative shadow-2xl group/item max-sm:h-[17rem]">
               <PackageItem onDeleteBtnClick={() => {
                 if (!confirm("Are you sure you want to delete ?")) return;
                 startDeleting({
                   apiPath: `/api/v1/category/package/${categoryId}/${item.id}`,
                   method: "delete",
+                  onSuccess() {
+                    refetch();
+                  }
                 })
               }} packageItem={item} isDeleting={isDeleting} />
             </li>

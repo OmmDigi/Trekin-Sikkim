@@ -46,6 +46,7 @@ import LoadingHandler from "../LoadingHandler";
 
 const blogSchema = z.object({
   heading: z.string().min(1),
+  sub_heading : z.string().min(1),
   blog_content: z.string().min(1),
   thumbnail: z.string(),
 
@@ -102,6 +103,7 @@ export default function BlogBasicInfo({ blog_id, currentStep }: IProps) {
       form.reset({
         blog_content: data.data.blog_content,
         heading: data.data.heading,
+        sub_heading : data.data.sub_heading,
         media_id: data.data.media_id,
         meta_canonical_url: data.data?.meta_canonical_url ?? undefined,
         meta_description: data.data.meta_description,
@@ -187,6 +189,23 @@ export default function BlogBasicInfo({ blog_id, currentStep }: IProps) {
                     <FormControl>
                       <Input
                         placeholder="Enter blog heading"
+                        onChange={(e) => field.onChange(e.currentTarget.value)}
+                        defaultValue={field.value}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="sub_heading"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Blog Short Description</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter blog short description"
                         onChange={(e) => field.onChange(e.currentTarget.value)}
                         defaultValue={field.value}
                       />

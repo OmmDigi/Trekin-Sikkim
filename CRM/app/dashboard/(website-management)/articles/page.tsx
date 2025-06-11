@@ -79,7 +79,7 @@ export default function Articles() {
               </div>
               <div className="flex-1 p-3.5 space-y-1.5">
                 <h2 className="font-semibold">{blog.heading}</h2>
-                <p className="line-clamp-1">{blog.meta_description}</p>
+                <p className="line-clamp-1">{blog.sub_heading}</p>
 
                 <div className="w-full flex items-center gap-5">
                   <ButtonLoading

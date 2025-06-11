@@ -38,6 +38,7 @@ export interface IUploadedFile {
 export type BlogPost = {
   blog_id: number; // SERIAL PRIMARY KEY
   heading: string; // VARCHAR(255) NOT NULL
+  sub_heading? : string;
   blog_content: string; // TEXT NOT NULL
   thumbnail: string; // TEXT NOT NULL
   meta_title: string; // VARCHAR(255) NOT NULL
