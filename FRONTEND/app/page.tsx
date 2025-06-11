@@ -202,7 +202,7 @@ export default function Home({ searchParams }: IProps) {
                 whileInView="visible"
                 viewport={{ once: true }}
                 className="inline-block bg-accent text-white text-sm uppercase font-semibold px-3 py-1 rounded-full mb-4"
-                // className="bg-accent inline-block bg-fixed text-white text-xs px-3 py-1.5 tracking-widest"
+              // className="bg-accent inline-block bg-fixed text-white text-xs px-3 py-1.5 tracking-widest"
               >
                 HOW WE WORK
               </motion.span>
@@ -236,7 +236,7 @@ export default function Home({ searchParams }: IProps) {
                     variants={childVariant}
                     key={index}
                     className="px-5 py-2 border space-x-1.5 border-emerald-500 rounded-full text-sm font-medium hover:bg-emerald-500 text-white"
-                    // className="border-accent border rounded-tr-2xl rounded-bl-2xl space-x-1.5 inline-block bg-fixed text-white text-xs py-1.5 px-5 tracking-widest"
+                  // className="border-accent border rounded-tr-2xl rounded-bl-2xl space-x-1.5 inline-block bg-fixed text-white text-xs py-1.5 px-5 tracking-widest"
                   >
                     <span>{index + 1} .</span>
                     <span>{item}</span>

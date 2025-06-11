@@ -36,11 +36,11 @@ export default function PackageItem({ fromWhere, singlePackageInfo }: IProps) {
             </p>
           </div>
           <div className="flex items-start gap-2.5 flex-col">
-            <span aria-hidden="true" className="bg-emerald-100 flex items-center gap-1 text-emerald-600 text-xs font-semibold px-3 py-1 rounded-full">
+            <span aria-hidden="true" className="bg-emerald-200 text-emerald-700 flex items-center gap-1 text-xs font-semibold px-3 py-1 rounded-full">
               <Timer size={12} className="mb-[0.13rem]" />
               <span aria-hidden="true">{singlePackageInfo.duration}</span>
             </span>
-            <span aria-hidden="true" className="bg-emerald-100 flex items-center gap-1 text-emerald-600 text-xs font-semibold px-3 py-1 rounded-full">
+            <span aria-hidden="true" className="bg-emerald-200 flex items-center gap-1 text-emerald-700 text-xs font-semibold px-3 py-1 rounded-full">
               <SignalHigh size={11} className="mb-[0.13rem]" />
               <span aria-hidden="true">{singlePackageInfo.highest_altitude}</span>
             </span>

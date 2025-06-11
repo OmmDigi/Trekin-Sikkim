@@ -27,10 +27,10 @@ const AboutStatsCard = ({
       ) : null}
 
       <div>
-        <h4 className="font-display text-lg font-semibold max-sm:text-center">
+        <span className="font-display block text-lg font-semibold max-sm:text-center">
           {number}
-        </h4>
-        <p className=" text-sm max-sm:text-center">{text}</p>
+        </span>
+        <span className=" text-sm max-sm:text-center block">{text}</span>
       </div>
     </div>
   );

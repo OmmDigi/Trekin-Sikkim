@@ -11,19 +11,14 @@ export default async function CategoryFooterListView() {
   return (
     <ul className="space-y-4">
       {categories.data.map((categorie, index) => (
-        <CustomLink
-          key={index}
-          className="text-sm text-secondary block"
-          href={categorie.slug ?? "#"}
-        >
-          {/* {categorie.icon ? (
-                          <span className="float-left mr-2 mt-[1px]">
-                            {categorie.icon}
-                          </span>
-                        ) : null} */}
-
-          <span>{categorie.category_name}</span>
-        </CustomLink>
+        <li key={index}>
+          <CustomLink
+            className="text-sm text-secondary block"
+            href={categorie.slug ?? "#"}
+          >
+            <span>{categorie.category_name}</span>
+          </CustomLink>
+        </li>
       ))}
     </ul>
   );
