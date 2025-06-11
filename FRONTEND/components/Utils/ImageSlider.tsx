@@ -80,8 +80,6 @@ export default function ImageSlider({
               className="size-full object-cover"
               src={info.url}
               alt={info.alt_tag}
-              // height={1200}
-              // width={1200}
               fill
               sizes="(max-width: 768px) 100vw, 700px"
               loading="eager"
@@ -120,13 +118,14 @@ export default function ImageSlider({
           controllerPosition === "middle"
             ? "items-center"
             : controllerPosition == "top"
-            ? "items-start !top-1.5"
-            : "items-end !bottom-2.5",
+              ? "items-start !top-1.5"
+              : "items-end !bottom-2.5",
           controllerClassName,
           "justify-center"
         )}
       >
         <Button
+          title="Image Slider Previous Button"
           onClick={() => {
             swiperRef.current?.slidePrev();
           }}
@@ -147,13 +146,14 @@ export default function ImageSlider({
           controllerPosition === "middle"
             ? "items-center"
             : controllerPosition == "top"
-            ? "items-start !top-1.5"
-            : "items-end !bottom-2.5",
+              ? "items-start !top-1.5"
+              : "items-end !bottom-2.5",
           controllerClassName,
           "justify-center"
         )}
       >
         <Button
+          title="Image Slider Next Button"
           disabled={sliderPosition === "end"}
           onClick={() => {
             swiperRef.current?.slideNext();

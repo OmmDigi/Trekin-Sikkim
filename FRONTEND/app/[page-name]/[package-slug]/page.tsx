@@ -104,7 +104,7 @@ const OVERVIEW_POINTS = [
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ ["page-name"]: string; ["package-slug"]: string }>;
+  params: Promise<{ ["page-name"]: string;["package-slug"]: string }>;
 }): Promise<Metadata> {
   const categoryPageParam = (await params)["page-name"];
   const packageSlug = (await params)["package-slug"];
@@ -121,7 +121,7 @@ export async function generateMetadata({
       description: singlePackageInfo.data?.meta_description,
       images: [
         singlePackageInfo.data?.banner_info?.[0]?.item_link ||
-          "/placeholder_background.jpg",
+        "/placeholder_background.jpg",
       ],
       url: `/${categoryPageParam}/${packageSlug}`,
       type: "website",
@@ -323,7 +323,14 @@ export default async function page({ params, searchParams }: IProps) {
             <Tabs
               // selectedTabCss="bg-accent !text-black !font-semibold"
               scroll={true}
-              options={BOTTOM_NAV_OTHER_OPTIONS}
+              options={[
+                ...BOTTOM_NAV_OTHER_OPTIONS,
+                ...data.data.other_option_names.map(other => ({
+                  id: other.id,
+                  slug: `#${other.option_name}`,
+                  text: other.option_name
+                }))
+              ]}
             />
           </div>
 

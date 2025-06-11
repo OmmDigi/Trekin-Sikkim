@@ -182,7 +182,7 @@ export interface IBlog {
 export interface ISingleBlog {
   blog_id: number;
   heading: string;
-  sub_heading?:string;
+  sub_heading?: string;
   blog_content: string; // HTML content of the blog
   thumbnail: string; // URL to the thumbnail image
   meta_title: string; // Title for SEO
@@ -241,4 +241,19 @@ export interface UpcomingTrekPackage {
   short_description: string;
   highest_altitude: string;
   alt_tag: string;
+}
+
+export interface GalleryImage {
+  id: string;
+  src: string;
+  alt: string;
+  title?: string;
+  description?: string;
+}
+
+export interface GalleryDialogProps {
+  images: GalleryImage[];
+  isOpen: boolean;
+  onClose: () => void;
+  initialIndex?: number;
 }

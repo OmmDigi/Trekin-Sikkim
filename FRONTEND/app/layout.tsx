@@ -51,17 +51,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <div id="top-layout" className="bg-amber-300"></div>
       <body
-        className={cn(
-          poppins.variable,
-          montserrat.variable,
-          "antialiased"
-        )}
+        className={cn(poppins.variable, montserrat.variable, "antialiased")}
       >
+        <div id="top-layout" className="bg-amber-300"></div>
         <ScrollProgress />
         <Constant />
         <Link
+          aria-label="Link To Go To Top"
           href={"#top-layout"}
           className="size-10 border border-white flex items-center justify-center rounded-full fixed z-[100] bg-accent right-4 bottom-4 max-sm:bottom-20"
         >

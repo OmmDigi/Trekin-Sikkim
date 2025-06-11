@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next-unused && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "build-start": "next build && next start"

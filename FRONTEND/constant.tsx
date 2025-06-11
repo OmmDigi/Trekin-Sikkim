@@ -283,92 +283,96 @@ export const FOOTER_INFO: {
   heading: string;
   info: NavOptions[];
 }[] = [
-  {
-    id: 1,
-    heading: "Contact",
-    info: [
-      {
-        id: "1-1",
-        icon: <ImLocation />,
-        text: "Yuksom Bazar Main Road Near Hotel Yangri Gang, West Sikkim, Pin no - 737113",
-        pathname: "/",
-      },
-      {
-        id: "1-2",
-        icon: <RiPhoneFill />,
-        text: "+917407248200",
-        pathname: "tel:+917407248200",
-      },
-      {
-        id: "1-3",
-        icon: <IoLogoWhatsapp />,
-        text: "+917407248200",
-        pathname: "https://api.whatsapp.com/send?phone=7407248200",
-      },
-      {
-        id: "1-4",
-        icon: <MdEmail />,
-        text: "kiran.yuksom@gmail.com",
-        pathname: "mailto:kiran.yuksom@gmail.com",
-      },
-    ],
-  },
+    {
+      id: 1,
+      heading: "Contact",
+      info: [
+        {
+          id: "1-1",
+          icon: <ImLocation />,
+          text: "Yuksom Bazar Main Road Near Hotel Yangri Gang, West Sikkim, Pin no - 737113",
+          pathname: "/",
+        },
+        {
+          id: "1-2",
+          icon: <RiPhoneFill />,
+          text: "+917407248200",
+          pathname: "tel:+917407248200",
+        },
+        {
+          id: "1-3",
+          icon: <IoLogoWhatsapp />,
+          text: "+917407248200",
+          pathname: "https://api.whatsapp.com/send?phone=7407248200",
+        },
+        {
+          id: "1-4",
+          icon: <MdEmail />,
+          text: "kiran.yuksom@gmail.com",
+          pathname: "mailto:kiran.yuksom@gmail.com",
+        },
+      ],
+    },
 
-  {
-    id: 2,
-    heading: "Explore",
-    info: NAV_OPTIONS,
-  },
+    {
+      id: 2,
+      heading: "Explore",
+      info: NAV_OPTIONS,
+    },
 
-  {
-    id: 3,
-    heading: "Policies",
-    info: POLICY_LIST,
-  },
+    {
+      id: 3,
+      heading: "Policies",
+      info: POLICY_LIST,
+    },
 
-  // {
-  //   id: 4,
-  //   heading: "Information",
-  //   info: [
-  //     {
-  //       id: "4-1",
-  //       text: "About Us",
-  //       pathname: "/about",
-  //     },
-  //     {
-  //       id: "4-2",
-  //       text: "Contact Us",
-  //       pathname: "/contact",
-  //     },
-  //     {
-  //       id: "4-3",
-  //       text: "Terms & Conditions",
-  //       pathname: "/terms",
-  //     },
-  //   ],
-  // },
-];
+    // {
+    //   id: 4,
+    //   heading: "Information",
+    //   info: [
+    //     {
+    //       id: "4-1",
+    //       text: "About Us",
+    //       pathname: "/about",
+    //     },
+    //     {
+    //       id: "4-2",
+    //       text: "Contact Us",
+    //       pathname: "/contact",
+    //     },
+    //     {
+    //       id: "4-3",
+    //       text: "Terms & Conditions",
+    //       pathname: "/terms",
+    //     },
+    //   ],
+    // },
+  ];
 
 export const FOOTERSOCIALLINKS = [
   {
     icon: FaFacebookF,
     link: "https://www.facebook.com/trekinsikkim.in/",
     name: "Facebook",
+    title: "Facebook Page Link"
   },
   {
     icon: FaXTwitter,
     link: "https://twitter.com/letsgotrek",
     name: "Twitter",
+    title: "Twitter Page Link"
   },
   {
     icon: FaLinkedinIn,
     link: "https://www.linkedin.com/in/kiran-gurung-30937968/",
     name: "Linkedin",
+    title: "Linkedin Page Link"
   },
   {
     icon: CiYoutube,
     link: "https://youtu.be/39GILMVPoFw",
     name: "Youtube",
+    title: "YouTube Channel Link"
   },
 ];
 

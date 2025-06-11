@@ -20,7 +20,7 @@ export default async function Footer() {
     if (response.data) {
       categories.push(...response.data);
     }
-  } catch { }
+  } catch {}
 
   return (
     <footer className="w-full bg-primary font-primary text-background py-9 max-sm:text-white max-sm:py-9">
@@ -42,19 +42,20 @@ export default async function Footer() {
 
               <ul className="space-y-4">
                 {item.info.map((cItem, index) => (
-                  <CustomLink
-                    key={index}
-                    className="text-sm text-secondary block"
-                    href={cItem.pathname ?? "#"}
-                  >
-                    {cItem.icon ? (
-                      <span className="float-left mr-2 mt-[1px]">
-                        {cItem.icon}
-                      </span>
-                    ) : null}
+                  <li key={index}>
+                    <CustomLink
+                      className="text-sm text-secondary block"
+                      href={cItem.pathname ?? "#"}
+                    >
+                      {cItem.icon ? (
+                        <span className="float-left mr-2 mt-[1px]">
+                          {cItem.icon}
+                        </span>
+                      ) : null}
 
-                    <span>{cItem.text}</span>
-                  </CustomLink>
+                      <span>{cItem.text}</span>
+                    </CustomLink>
+                  </li>
                 ))}
               </ul>
             </li>
@@ -77,7 +78,10 @@ export default async function Footer() {
 
         <ul className="grid grid-cols-4 max-sm:grid-cols-2">
           {categories.map((item) => (
-            <li key={item.category_id} className="max-sm:flex max-sm:items-center max-sm:justify-center">
+            <li
+              key={item.category_id}
+              className="max-sm:flex max-sm:items-center max-sm:justify-center"
+            >
               <CustomLink
                 className="text-sm underline text-white flex items-center"
                 href={`/${item.slug}`}
@@ -98,6 +102,7 @@ export default async function Footer() {
             {FOOTERSOCIALLINKS.map((item, index) => (
               <li key={index}>
                 <Link
+                  aria-label={item.title}
                   href={item.link}
                   className="block p-2 rounded-full border text-white hover:bg-secondary hover:text-primary transition-all duration-300"
                 >
