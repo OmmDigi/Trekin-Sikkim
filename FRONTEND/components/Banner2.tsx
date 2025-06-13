@@ -6,6 +6,7 @@ import { useRef, useState } from "react";
 import { BiBookContent } from "react-icons/bi";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import Button from "./Button";
+import { cn } from "@/lib/utils";
 
 const banner_info = [
   {
@@ -35,6 +36,12 @@ export default function Banner2() {
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
+
+  const [loaded, setLoaded] = useState<number[]>([]);
+
+  const markLoaded = (index: number) => {
+    setLoaded((prev) => [...new Set([...prev, index])]);
+  };
 
   const onNextBannerClick = () => {
     setCurrentBannerIndex((prev) => {
@@ -85,57 +92,68 @@ export default function Banner2() {
       className="relative"
     >
       <div className="w-full relative flex overflow-hidden min-h-[33rem] max-h-[33rem] max-sm:min-h-[19rem] max-sm:max-h-[19rem]">
-        {banner_info.map((item, index) => (
-          <div
-            key={item.id}
-            style={{ translate: `-${currentBannerIndex * 100}%` }}
-            className="size-full relative transform duration-500  flex-grow shrink-0 min-h-[33rem] max-h-[33rem] max-sm:min-h-[19rem] max-sm:max-h-[19rem]"
-          >
-            <Image
-              className="min-h-[33rem] max-h-[33rem] max-sm:min-h-[19rem] max-sm:max-h-[19rem] w-full object-cover"
-              src={item.image}
-              alt={item.title}
-              height={1280}
-              width={620}
-              priority={index === 0}
-              fetchPriority={index === 0 ? "high" : "auto"}
-              sizes="100vw"
-            />
+        {banner_info.map((item, index) => {
+          const isLoaded = loaded.includes(index);
+          return (
+            <div
+              key={item.id}
+              style={{ translate: `-${currentBannerIndex * 100}%` }}
+              className="size-full relative transform duration-500  flex-grow shrink-0 min-h-[33rem] max-h-[33rem] max-sm:min-h-[19rem] max-sm:max-h-[19rem]"
+            >
+              <Image
+                className={cn(
+                  isLoaded ? "opacity-100" : "opacity-0",
+                  "min-h-[33rem] max-h-[33rem] max-sm:min-h-[19rem] max-sm:max-h-[19rem] w-full object-cover"
+                )}
+                src={item.image}
+                alt={item.title}
+                height={1280}
+                width={620}
+                priority={index === 0}
+                fetchPriority={index === 0 ? "high" : "auto"}
+                sizes="100vw"
+                onLoad={() => markLoaded(index)}
+              />
 
-            <div className="absolute inset-0 bg-[#00000094] z-50">
-              <div className="max-w-3xl font-montserrat size-full mx-auto flex items-center justify-center flex-col space-y-5 mt-5 max-sm:max-w-[90%] max-sm:mt-0">
-                <div className="space-y-2">
-                  <h2 className="text-4xl font-semibold text-white tracking-widest text-center max-sm:text-2xl">
-                    {item.title}
-                  </h2>
-                  <p className="text-center text-sm text-gray-100 tracking-widest max-sm:text-xs">
-                    {item.subtitle}
-                  </p>
-                </div>
+              {isLoaded ? null : (
+                <div className="absolute inset-0 bg-gray-200 animate-pulse"></div>
+              )}
 
-                <div className="flex items-center gap-5">
-                  <Link href="#our-packages-section">
-                    {/* <Button className="min-w-[10rem] duration-1000 max-sm:min-[8rem] max-sm:pl-3 !bg-[#1dc085] !text-white !font-semibold">
+              <div className="absolute inset-0 bg-[#00000094] z-50">
+                <div className="max-w-3xl font-montserrat size-full mx-auto flex items-center justify-center flex-col space-y-5 mt-5 max-sm:max-w-[90%] max-sm:mt-0">
+                  <div className="space-y-2">
+                    <h2 className="text-4xl font-semibold text-white tracking-widest text-center max-sm:text-2xl">
+                      {item.title}
+                    </h2>
+                    <p className="text-center text-sm text-gray-100 tracking-widest max-sm:text-xs">
+                      {item.subtitle}
+                    </p>
+                  </div>
+
+                  <div className="flex items-center gap-5">
+                    <Link href="#our-packages-section">
+                      {/* <Button className="min-w-[10rem] duration-1000 max-sm:min-[8rem] max-sm:pl-3 !bg-[#1dc085] !text-white !font-semibold">
                       <BiBookContent />
                       Book Now
                     </Button> */}
-                    <Button
-                      theme="accent"
-                      className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white py-3 rounded-lg font-semibold shadow-lg flex items-center justify-center gap-2"
-                    >
-                      <BiBookContent size={16} />
-                      <span> Book Now</span>
-                    </Button>
-                  </Link>
+                      <Button
+                        theme="accent"
+                        className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white py-3 rounded-lg font-semibold shadow-lg flex items-center justify-center gap-2"
+                      >
+                        <BiBookContent size={16} />
+                        <span> Book Now</span>
+                      </Button>
+                    </Link>
 
-                  {/* <div className=" border-secondary !bg-accent !text-white backdrop-blur-2xl size-10 flex items-center justify-center rounded-[50%] cursor-pointer max-sm:size-8">
+                    {/* <div className=" border-secondary !bg-accent !text-white backdrop-blur-2xl size-10 flex items-center justify-center rounded-[50%] cursor-pointer max-sm:size-8">
                     <IoIosPlay />
                   </div> */}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       <div className="absolute z-50 top-0 bottom-0 left-0 flex items-center pl-3 max-sm:items-end max-sm:pb-3">

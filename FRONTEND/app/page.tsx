@@ -8,7 +8,6 @@ import TrekkerVideos from "@/components/Home/TrekkerVideos";
 import Loading from "@/components/Loading";
 import OurPackages from "@/components/Overview/OurPackages";
 import UpcommingPackages from "@/components/Packages/UpcommingPackages";
-import ImageSlider from "@/components/Utils/ImageSlider";
 
 import ReadMore from "@/components/Utils/ReadMore";
 import ReadMoreContent from "@/components/Utils/ReadMoreContent";
@@ -29,6 +28,8 @@ const TestimonialSection = dynamic(
     loading: () => <Loading />,
   }
 );
+
+const ImageSlider = dynamic(() => import("@/components/Utils/ImageSlider"));
 
 const ABOUT_US_IMAGES = [
   "/about/about-new-1.webp",
