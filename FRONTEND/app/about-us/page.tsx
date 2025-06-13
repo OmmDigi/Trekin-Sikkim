@@ -12,9 +12,9 @@ import {
   WalletMinimal,
 } from "lucide-react";
 import React from "react";
-import * as motion from "motion/react-client";
+// import * as motion from "motion/react-client";
 import HeadingSubHeding from "@/components/HeadingSubHeding";
-import { fadeUpVarient } from "@/utils/animations";
+// import { fadeUpVarient } from "@/utils/animations";
 import ImageSlider from "@/components/Utils/ImageSlider";
 import ReadMoreToggle from "@/components/Utils/ReadMoreToggle";
 import Button from "@/components/Button";
@@ -79,11 +79,11 @@ export default function page() {
             subheading="Welcome to Glacier Treks And Adventure"
           />
 
-          <motion.div
-            variants={fadeUpVarient(0.0)}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
+          <div
+            // variants={fadeUpVarient(0.0)}
+            // initial="hidden"
+            // whileInView="visible"
+            // viewport={{ once: true }}
             className="grid grid-cols-4 gap-6 max-sm:grid-cols-2 max-sm:gap-y-10"
           >
             <AboutStatsCard
@@ -109,29 +109,29 @@ export default function page() {
               text="Years Experience"
               icon={<Award className="w-5 h-5" />}
             />
-          </motion.div>
+          </div>
 
           <ReadMore>
             <div className="grid grid-cols-2 gap-14 max-sm:grid-cols-1">
               <div className="flex flex-col justify-between gap-6">
                 <div className="space-y-2.5">
-                  <motion.h2
-                    variants={fadeUpVarient(0.05)}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true }}
+                  <h2
+                    // variants={fadeUpVarient(0.05)}
+                    // initial="hidden"
+                    // whileInView="visible"
+                    // viewport={{ once: true }}
                     className="text-2xl font-semibold max-sm:text-xl"
                   >
                     Glacier Treks And Adventure is the most diverse, creative,
                     and realistic tour trekking adventure service provider in
                     India
-                  </motion.h2>
+                  </h2>
 
-                  <motion.div
-                    variants={fadeUpVarient(0.15)}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true }}
+                  <div
+                    // variants={fadeUpVarient(0.15)}
+                    // initial="hidden"
+                    // whileInView="visible"
+                    // viewport={{ once: true }}
                     className="space-y-2.5 text-justify text-sm leading-6 tracking-wide"
                   >
                     <p>Welcome to Glacier Treks And Adventure</p>
@@ -167,13 +167,13 @@ export default function page() {
                         SAMA, IMF.
                       </p>
                     </ReadMoreContent>
-                  </motion.div>
+                  </div>
                 </div>
-                <motion.div
-                  variants={fadeUpVarient(0.2)}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true }}
+                <div
+                // variants={fadeUpVarient(0.2)}
+                // initial="hidden"
+                // whileInView="visible"
+                // viewport={{ once: true }}
                 >
                   <ReadMoreToggle type="OPEN" key="open">
                     <Button className="space-x-3.5 !bg-accent text-white">
@@ -187,12 +187,15 @@ export default function page() {
                       <FaCaretDown className="rotate-180" />
                     </Button>
                   </ReadMoreToggle>
-                </motion.div>
+                </div>
               </div>
 
               <ImageSlider
                 wrapperCss="max-h-[20rem] max-sm:max-h-60"
-                images={ABOUT_US_IMAGES.map(item => ({url : item, alt_tag : "About Us Images"}))}
+                images={ABOUT_US_IMAGES.map((item) => ({
+                  url: item,
+                  alt_tag: "About Us Images",
+                }))}
                 sliderPreview={1}
                 className="h-full w-full overflow-hidden rounded-bl-[4rem] rounded-tr-[4rem] max-sm:rounded-none"
               />

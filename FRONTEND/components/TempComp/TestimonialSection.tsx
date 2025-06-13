@@ -64,7 +64,10 @@ const TestimonialSection = () => {
   return (
     <section ref={ref} className="wrapper">
       {inView ? (
-        <ElfsightWidget widgetId={"bbe512e4-6e88-469a-8d1e-870b9210a367"} />
+        <ElfsightWidget
+          onLoad={() => console.log("Load")}
+          widgetId={"bbe512e4-6e88-469a-8d1e-870b9210a367"}
+        />
       ) : null}
     </section>
   );

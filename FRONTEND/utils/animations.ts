@@ -1,6 +1,6 @@
-import { Variants } from "motion/react";
+// import { Variants } from "motion/react";
 
-export const fadeUpVarient = (delay: number): Variants => ({
+export const fadeUpVarient = (delay: number): any => ({
   hidden: {
     opacity: 0,
     y: 20,
@@ -16,7 +16,7 @@ export const fadeUpVarient = (delay: number): Variants => ({
   },
 });
 
-export const fadeDownVarient = (delay: number): Variants => ({
+export const fadeDownVarient = (delay: number): any => ({
   hidden: {
     opacity: 0,
     y: -20,

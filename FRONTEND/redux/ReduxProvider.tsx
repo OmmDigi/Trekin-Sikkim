@@ -1,6 +1,5 @@
 "use client";
 
-import { Provider } from "react-redux";
 import { store } from "./store";
 import dynamic from "next/dynamic";
 
@@ -15,6 +14,11 @@ const ToastContainer = dynamic(
 
 const Bounce = dynamic(
   () => import("react-toastify").then((mod) => mod.Bounce),
+  { ssr: false }
+);
+
+const Provider = dynamic(
+  () => import("react-redux").then((mod) => mod.Provider),
   { ssr: false }
 );
 

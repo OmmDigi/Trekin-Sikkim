@@ -35,7 +35,7 @@ const banner_info = [
 
 function Banner() {
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
-  const [loaded, setLoaded] = useState<number[]>([]);
+  const [loaded] = useState<number[]>([]);
 
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
@@ -81,9 +81,9 @@ function Banner() {
     touchEndX.current = null;
   };
 
-  const markLoaded = (index: number) => {
-    setLoaded((prev) => [...new Set([...prev, index])]);
-  };
+  // const markLoaded = (index: number) => {
+  //   setLoaded((prev) => [...new Set([...prev, index])]);
+  // };
 
   useEffect(() => {
     if (loaded.length !== 0) {
@@ -104,14 +104,14 @@ function Banner() {
         className="w-full overflow-hidden relative min-h-[33rem] max-h-[33rem] max-sm:min-h-[19rem] max-sm:max-h-[19rem]"
       >
         {banner_info.map((item, index) => {
-          const isLoaded = loaded.includes(index);
+          // const isLoaded = loaded.includes(index);
           const isFirst = index === 0;
           return (
             <div
               key={item.id}
               className={cn(
                 "w-full h-full absolute",
-                "transition-all duration-1000 ease-in-out",
+                // "transition-all duration-1000 ease-in-out",
                 currentBannerIndex === index
                   ? "opacity-100 blur-[0px]"
                   : "opacity-0 blur-md"
@@ -119,8 +119,8 @@ function Banner() {
             >
               <Image
                 className={cn(
-                  "object-cover",
-                  isLoaded ? "opacity-100" : "opacity-0"
+                  "object-cover"
+                  // isLoaded ? "opacity-100" : "opacity-0"
                 )}
                 src={item.image}
                 alt="Banner 1"
@@ -130,17 +130,17 @@ function Banner() {
                 objectFit="cover"
                 objectPosition="center"
                 sizes="100vw"
-                onLoad={() => markLoaded(index)}
+              // onLoad={() => markLoaded(index)}
               />
 
-              {isLoaded ? null : (
+              {/* {isLoaded ? null : (
                 <div className="absolute inset-0 bg-gray-200 animate-pulse"></div>
-              )}
+              )} */}
             </div>
           );
         })}
 
-        {banner_info.map((item, index) => {
+        {/* {banner_info.map((item, index) => {
           const isLoaded = loaded.includes(index);
           return isLoaded ? (
             <div
@@ -164,7 +164,7 @@ function Banner() {
 
                 <div className="flex items-center gap-5">
                   <Link href="#our-packages-section">
-                    <Button className="min-w-[10rem] transition-all duration-1000 max-sm:min-[8rem] max-sm:pl-3 !bg-accent !text-white">
+                    <Button className="min-w-[10rem] duration-1000 max-sm:min-[8rem] max-sm:pl-3 !bg-accent !text-white">
                       <BiBookContent />
                       Book Now
                     </Button>
@@ -177,6 +177,44 @@ function Banner() {
               </div>
             </div>
           ) : null;
+        })} */}
+
+        {banner_info.map((item, index) => {
+          return (
+            <div
+              key={item.id}
+              className={cn(
+                "absolute inset-0 bg-[#00000094] z-50",
+                currentBannerIndex === index
+                  ? "opacity-100 blur-[0px] z-10"
+                  : "opacity-0 blur-md z-0"
+              )}
+            >
+              <div className="max-w-3xl font-montserrat size-full mx-auto flex items-center justify-center flex-col space-y-5 mt-5 max-sm:max-w-[90%] max-sm:mt-0">
+                <div className="space-y-2">
+                  <h2 className="text-4xl font-semibold text-white tracking-widest text-center max-sm:text-2xl">
+                    {item.title}
+                  </h2>
+                  <p className="text-center text-sm text-gray-100 tracking-widest max-sm:text-xs">
+                    {item.subtitle}
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-5">
+                  <Link href="#our-packages-section">
+                    <Button className="min-w-[10rem] duration-1000 max-sm:min-[8rem] max-sm:pl-3 !bg-accent !text-white">
+                      <BiBookContent />
+                      Book Now
+                    </Button>
+                  </Link>
+
+                  <div className=" border-secondary !bg-accent !text-white backdrop-blur-2xl size-10 flex items-center justify-center rounded-[50%] cursor-pointer max-sm:size-8">
+                    <IoIosPlay />
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
         })}
 
         <div className="absolute z-50 top-0 bottom-0 left-0 flex items-center pl-3 max-sm:hidden">

@@ -3,9 +3,7 @@ import { Poppins, Montserrat } from "next/font/google";
 import "./globals.css";
 import Footer from "@/components/Footer";
 import Constant from "@/constant";
-import BottomNavigation from "@/components/BottomNavigation";
 import ReduxProvider from "@/redux/ReduxProvider";
-import ScrollProgress from "@/components/ScrollProgress";
 import HeaderHolder from "@/components/HeaderHolder";
 import FooterHolder from "@/components/FooterHolder";
 import AuthProvider from "@/components/AuthProvider";
@@ -18,6 +16,8 @@ import { cn } from "@/lib/utils";
 import React from "react";
 import dynamic from "next/dynamic";
 import Loading from "@/components/Loading";
+import ScrollProgress from "@/components/ScrollProgress";
+import BottomNavWrapper from "@/components/Wrappers/BottomNavWrapper";
 
 const DialogWrapper = dynamic(
   () => import("@/components/Dialogs/DialogWrapper")
@@ -78,7 +78,7 @@ export default function RootLayout({
               <AiHeader />
             </HeaderHolder>
 
-            <BottomNavigation />
+            <BottomNavWrapper />
             <ChildrenHolder>{children}</ChildrenHolder>
             <React.Suspense fallback={<Loading />}>
               <FooterHolder>

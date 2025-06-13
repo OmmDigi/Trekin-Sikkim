@@ -1,13 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Swiper as SwiperType } from "swiper/types";
 import Button from "../Button";
 import Image from "next/image";
 
-import "swiper/css";
 import { cn } from "@/lib/utils";
 
 interface IProps {
@@ -21,96 +18,85 @@ interface IProps {
 
 export default function ImageSlider({
   images,
-  sliderPreview,
   className,
   controllerPosition = "middle",
   wrapperCss,
   controllerClassName,
 }: IProps) {
-  const swiperRef = useRef<SwiperType>(null);
+  const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
+  // const touchStartX = useRef<number | null>(null);
+  // const touchEndX = useRef<number | null>(null);
 
-  const [slidesPerView, setSlidesPerView] = useState(sliderPreview);
-
-  const [sliderPosition, setSliderPosition] = useState<
-    "start" | "end" | "middle"
-  >("start");
-
-  const updateSliderPosition = (swiper: SwiperType) => {
-    if (swiper.isBeginning === true) {
-      setSliderPosition("start");
-    } else if (swiper.isEnd === true) {
-      setSliderPosition("end");
-    } else {
-      setSliderPosition("middle");
-    }
+  const onNextBannerClick = () => {
+    setCurrentBannerIndex((prev) => {
+      if (prev >= images.length - 1) return 0;
+      return prev + 1;
+    });
   };
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      if (window.innerWidth <= 639) {
-        setSlidesPerView(1);
-      }
-    }
-  }, []);
+  const onPrevBannerClick = () => {
+    setCurrentBannerIndex((prev) => {
+      if (prev <= 0) return images.length - 1;
+      return prev - 1;
+    });
+  };
 
-  // const imageRefs = useRef<(HTMLImageElement | null)[]>([]);
+  // const handleTouchStart = (e: React.TouchEvent<HTMLElement>) => {
+  //   touchStartX.current = e.targetTouches[0].clientX;
+  // };
+
+  // const handleTouchMove = (e: React.TouchEvent<HTMLElement>) => {
+  //   touchEndX.current = e.targetTouches[0].clientX;
+  // };
+
+  // const handleTouchEnd = () => {
+  //   if (touchStartX.current === null || touchEndX.current === null) return;
+
+  //   const distance = touchStartX.current - touchEndX.current;
+  //   const minSwipeDistance = 50; // Define a minimum distance for a valid swipe
+
+  //   if (distance > minSwipeDistance) {
+  //     //swipe left
+  //     onNextBannerClick();
+  //   } else if (distance < -minSwipeDistance) {
+  //     //swipe right
+  //     onPrevBannerClick();
+  //   }
+
+  //   // Reset touch coordinates
+  //   touchStartX.current = null;
+  //   touchEndX.current = null;
+  // };
 
   return (
     <div className={cn("relative", wrapperCss)}>
-      <Swiper
-        className={cn("cursor-grab size-full", className, "z-10")}
-        spaceBetween={0}
-        slidesPerView={slidesPerView}
-        navigation
-        pagination={{ clickable: true }}
-        scrollbar={{ draggable: true }}
-        onSwiper={(swiper) => {
-          swiperRef.current = swiper;
-          updateSliderPosition(swiper);
-        }}
-        onSlideChange={(swiper) => {
-          updateSliderPosition(swiper);
-        }}
+      <ul
+        className={cn(
+          "cursor-grab size-full",
+          className,
+          "z-10 !flex items-center"
+        )}
       >
         {images.map((info, index) => (
-          <SwiperSlide key={index} className="size-full">
+          <li
+            style={{ translate: `-${currentBannerIndex * 100}%` }}
+            key={index}
+            className="size-full flex-grow shrink-0 transition-all duration-300"
+          >
             <Image
               placeholder="blur"
               blurDataURL="/placeholder_background.jpg"
               className="size-full object-cover"
               src={info.url}
               alt={info.alt_tag}
-              fill
+              height={1280}
+              width={720}
               sizes="(max-width: 768px) 100vw, 700px"
               loading="eager"
             />
-          </SwiperSlide>
+          </li>
         ))}
-      </Swiper>
-
-      {/* <div
-        className={cn(
-          "absolute top-3.5 right-3.5 z-30 flex items-center justify-center"
-        )}
-      >
-        <button
-          onClick={() => {
-            const elem = imageRefs.current[];
-            if (!document.fullscreenElement && elem) {
-              elem.requestFullscreen().catch((err) => {
-                console.error(
-                  `Error trying to enable full-screen mode: ${err.message}`
-                );
-              });
-            } else if (document.fullscreenElement) {
-              document.exitFullscreen();
-            }
-          }}
-          className="flex items-center justify-center bg-white cursor-pointer active:scale-90 rounded-full size-10"
-        >
-          <Maximize size={12} />
-        </button>
-      </div> */}
+      </ul>
 
       <div
         className={cn(
@@ -118,20 +104,18 @@ export default function ImageSlider({
           controllerPosition === "middle"
             ? "items-center"
             : controllerPosition == "top"
-              ? "items-start !top-1.5"
-              : "items-end !bottom-2.5",
+            ? "items-start !top-1.5"
+            : "items-end !bottom-2.5",
           controllerClassName,
           "justify-center"
         )}
       >
         <Button
           title="Image Slider Previous Button"
-          onClick={() => {
-            swiperRef.current?.slidePrev();
-          }}
-          disabled={sliderPosition === "start"}
+          onClick={onPrevBannerClick}
+          disabled={currentBannerIndex === 0}
           className={cn(
-            sliderPosition === "start"
+            currentBannerIndex === 0
               ? "opacity-0"
               : "active:scale-75 opacity-100"
           )}
@@ -146,20 +130,18 @@ export default function ImageSlider({
           controllerPosition === "middle"
             ? "items-center"
             : controllerPosition == "top"
-              ? "items-start !top-1.5"
-              : "items-end !bottom-2.5",
+            ? "items-start !top-1.5"
+            : "items-end !bottom-2.5",
           controllerClassName,
           "justify-center"
         )}
       >
         <Button
           title="Image Slider Next Button"
-          disabled={sliderPosition === "end"}
-          onClick={() => {
-            swiperRef.current?.slideNext();
-          }}
+          disabled={currentBannerIndex === images.length - 1}
+          onClick={onNextBannerClick}
           className={cn(
-            sliderPosition === "end"
+            currentBannerIndex === images.length - 1
               ? "opacity-0"
               : "active:scale-75 opacity-100"
           )}

@@ -1,7 +1,7 @@
 import PackageItem from "@/components/PackageItem";
-import { childVariant, parentVariant } from "@/utils/animations";
+// import { childVariant, parentVariant } from "@/utils/animations";
 import React from "react";
-import * as motion from "motion/react-client";
+// import * as motion from "motion/react-client";
 import Pagination from "@/components/Pagination";
 import { CiFilter } from "react-icons/ci";
 import HandleDialogBtn from "@/components/Dialogs/HandleDialogBtn";
@@ -27,7 +27,7 @@ export default async function PackagesListingPage({
     )
   ).data;
 
-  if(packageList.data.length === 0) return <></>;
+  if (packageList.data.length === 0) return <></>;
 
   return (
     <main id="packages-list" className="wrapper py-10 space-y-5 max-sm:py-5">
@@ -73,23 +73,26 @@ export default async function PackagesListingPage({
         </DialogWrapper> */}
 
         <div className="col-span-4 space-y-10 max-sm:col-auto">
-          <motion.ul
+          <ul
             key={current_page}
-            variants={parentVariant}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }}
+            // variants={parentVariant}
+            // initial="hidden"
+            // whileInView="visible"
+            // viewport={{ once: true, amount: 0.2 }}
             className="grid grid-cols-4 gap-x-3 gap-y-3.5 w-full max-sm:grid-cols-1"
           >
             {packageList.data.map((packageItem) => (
-              <motion.li key={packageItem.id} variants={childVariant}>
+              <li
+                key={packageItem.id}
+                // variants={childVariant}
+              >
                 <PackageItem
                   fromWhere="normal"
                   singlePackageInfo={packageItem}
                 />
-              </motion.li>
+              </li>
             ))}
-          </motion.ul>
+          </ul>
 
           <Pagination
             page={current_page}

@@ -144,7 +144,9 @@ export default function AuthPage({ type }: IProps) {
             <h2 className="text-center text-sm flex item-center justify-center gap-1">
               Already have an account?{" "}
               <CustomLink
-                href={`/auth/login${redirectUrl ? `?redirect=${redirectUrl}` : ""}`}
+                href={`/auth/login${
+                  redirectUrl ? `?redirect=${redirectUrl}` : ""
+                }`}
                 className="font-semibold underline"
               >
                 Log in
@@ -154,7 +156,9 @@ export default function AuthPage({ type }: IProps) {
             <h2 className="text-center text-sm flex item-center justify-center gap-1">
               Don&apos;t have any account?{" "}
               <CustomLink
-                href={`/auth/signup${redirectUrl ? `?redirect=${redirectUrl}` : ""}`}
+                href={`/auth/signup${
+                  redirectUrl ? `?redirect=${redirectUrl}` : ""
+                }`}
                 className="font-semibold underline"
               >
                 Create Account

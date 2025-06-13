@@ -3,7 +3,7 @@
 import { NavOptions } from "@/types";
 import React, { useState } from "react";
 import { useOutsideClick } from "@/hooks/useOutsideClick";
-import { motion } from "motion/react";
+// import { motion } from "motion/react";
 import { ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { useDispatch } from "react-redux";
@@ -76,9 +76,9 @@ export default function NavItem({ option, className, index }: IProps) {
 
       {option.submenu && submenuVisibility ? (
         <div className="absolute top-[2rem] font-primary max-sm:static text-sm max-sm:text-base">
-          <motion.div
-            initial={{ opacity: 0, translateY: 30 }}
-            animate={{ opacity: 1, translateY: 0 }}
+          <div
+            // initial={{ opacity: 0, translateY: 30 }}
+            // animate={{ opacity: 1, translateY: 0 }}
             className="min-w-60 relative top-[2rem] max-sm:top-[0.30rem]"
           >
             <ul className="bg-accent backdrop-blur-xl shadow-2xl rounded-b-xl max-sm:rounded-none max-sm:shadow-none overflow-hidden">
@@ -98,7 +98,7 @@ export default function NavItem({ option, className, index }: IProps) {
                 </li>
               ))}
             </ul>
-          </motion.div>
+          </div>
         </div>
       ) : null}
     </li>
