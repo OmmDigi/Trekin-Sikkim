@@ -13,8 +13,10 @@ export default async function AiNavItemList() {
   const api = await serverApi();
   const [categoriesInfo, upcomingPackageInfo] = await Promise.all([
     api.get<IResponse<ICategories[]>>("/api/v1/category"),
-    api.get<IResponse<UpcomingTrekPackage[]>>("/api/v1/upcoming"),
+    api.get<IResponse<UpcomingTrekPackage[]>>("/api/v1/upcoming")
+    // api.get<IResponse>("/api/v1/users/is-login")
   ]);
+
 
   const upcomingPackage: NavOptions[] = [];
   const trekHeadings: NavOptions[] = [];

@@ -6,7 +6,7 @@ import Constant from "@/constant";
 import ReduxProvider from "@/redux/ReduxProvider";
 import HeaderHolder from "@/components/HeaderHolder";
 import FooterHolder from "@/components/FooterHolder";
-import AuthProvider from "@/components/AuthProvider";
+// import AuthProvider from "@/components/AuthProvider";
 import Link from "next/link";
 import { ArrowUp } from "lucide-react";
 import AiHeader from "@/components/AiComponents/AiHeader";
@@ -18,6 +18,8 @@ import dynamic from "next/dynamic";
 import Loading from "@/components/Loading";
 import ScrollProgress from "@/components/ScrollProgress";
 import BottomNavWrapper from "@/components/Wrappers/BottomNavWrapper";
+// import ShimmerLoading from "@/components/ShimmerLoading";
+import Head from "next/head";
 
 const DialogWrapper = dynamic(
   () => import("@/components/Dialogs/DialogWrapper")
@@ -51,6 +53,29 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <Head>
+        <link
+          rel="preload"
+          as="image"
+          href="/images/banner_1.jpg"
+          type="image/jpeg"
+          fetchPriority="high"
+        />
+        <link
+          rel="preload"
+          as="image"
+          href="/images/banner_2.jpg"
+          type="image/jpeg"
+          fetchPriority="high"
+        />
+        <link
+          rel="preload"
+          as="image"
+          href="/images/banner_3.jpg"
+          type="image/jpeg"
+          fetchPriority="high"
+        />
+      </Head>
       <body
         className={cn(poppins.variable, montserrat.variable, "antialiased")}
       >
@@ -64,8 +89,8 @@ export default function RootLayout({
         >
           <ArrowUp size={18} color="#fff" />
         </Link>
-        {/* <React.Suspense fallback={<Loading className="pt-24" />}> */}
-        <AuthProvider>
+        {/* <React.Suspense fallback={<ShimmerLoading />}> */}
+          {/* <AuthProvider> */}
           <ReduxProvider>
             <DialogWrapper
               id="enquiry-form"
@@ -86,7 +111,7 @@ export default function RootLayout({
               </FooterHolder>
             </React.Suspense>
           </ReduxProvider>
-        </AuthProvider>
+          {/* </AuthProvider> */}
         {/* </React.Suspense> */}
       </body>
     </html>
