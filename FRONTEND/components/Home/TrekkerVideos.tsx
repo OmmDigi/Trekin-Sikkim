@@ -2,10 +2,7 @@ import React from "react";
 import Image from "next/image";
 import { MdOutlinePlayCircleFilled } from "react-icons/md";
 
-// import * as motion from "motion/react-client";
-// import { childVariant, parentVariant } from "@/utils/animations";
 import { cn } from "@/lib/utils";
-// import dynamic from "next/dynamic";
 
 const destinations = [
   {
@@ -38,35 +35,13 @@ const destinations = [
     css: "",
     heading: "Destination 5",
   },
-  // {
-  //   id: 6,
-  //   img: "/videos/image5.jpg",
-  //   css: "",
-  //   heading: "Destination 5",
-  // },
-  // {
-  //   id: 7,
-  //   img: "/videos/image2.jpg",
-  //   css: "",
-  //   heading: "Destination 4",
-  // },
 ];
-
-// const Mul = dynamic(() => import("motion/react-client").then((mod) => mod.ul));
-// const Mli = dynamic(() => import("motion/react-client").then((mod) => mod.li));
 
 function TrekkerVideos() {
   return (
-    <ul
-      // variants={parentVariant}
-      // initial="hidden"
-      // whileInView="visible"
-      // viewport={{ once: true, amount: 0.4 }}
-      className="w-full grid grid-cols-3 gap-6 max-sm:grid-cols-2"
-    >
+    <ul className="w-full grid grid-cols-3 gap-6 max-sm:grid-cols-2">
       {destinations.map((item) => (
         <li
-          // variants={childVariant}
           key={item.id}
           className={cn("relative overflow-hidden rounded-xl", item.css)}
         >

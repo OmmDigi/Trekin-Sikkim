@@ -13,7 +13,6 @@ import ReadMore from "@/components/Utils/ReadMore";
 import ReadMoreContent from "@/components/Utils/ReadMoreContent";
 import ReadMoreToggle from "@/components/Utils/ReadMoreToggle";
 
-// import { childVariant, fadeUpVarient } from "@/utils/animations";
 import { Award, Compass, Mountain, Users } from "lucide-react";
 
 import dynamic from "next/dynamic";
@@ -63,13 +62,7 @@ export default function Home({ searchParams }: IProps) {
           subheading="Welcome to Glacier Treks And Adventure"
         />
 
-        <div
-          // variants={fadeUpVarient(0.0)}
-          // initial="hidden"
-          // whileInView="visible"
-          // viewport={{ once: true }}
-          className="grid grid-cols-4 gap-6 max-sm:grid-cols-2 max-sm:gap-y-10"
-        >
+        <div className="grid grid-cols-4 gap-6 max-sm:grid-cols-2 max-sm:gap-y-10">
           <AboutStatsCard
             number="150+"
             text="Guided Treks"
@@ -99,24 +92,12 @@ export default function Home({ searchParams }: IProps) {
           <div className="grid grid-cols-2 gap-14 max-sm:grid-cols-1">
             <div className="flex flex-col justify-between gap-6">
               <div className="space-y-2.5">
-                <h2
-                  // variants={fadeUpVarient(0.05)}
-                  // initial="hidden"
-                  // whileInView="visible"
-                  // viewport={{ once: true }}
-                  className="text-2xl font-semibold max-sm:text-xl"
-                >
+                <h2 className="text-2xl font-semibold max-sm:text-xl">
                   Glacier Treks And Adventure is the most diverse, creative, and
                   realistic tour trekking adventure service provider in India
                 </h2>
 
-                <div
-                  // variants={fadeUpVarient(0.15)}
-                  // initial="hidden"
-                  // whileInView="visible"
-                  // viewport={{ once: true }}
-                  className="space-y-2.5 text-justify text-sm leading-6 tracking-wide"
-                >
+                <div className="space-y-2.5 text-justify text-sm leading-6 tracking-wide">
                   <p>Welcome to Glacier Treks And Adventure</p>
                   <p>
                     Let me introduce you to about the Glacier Treks & Adventure
@@ -151,12 +132,7 @@ export default function Home({ searchParams }: IProps) {
                   </ReadMoreContent>
                 </div>
               </div>
-              <div
-              // variants={fadeUpVarient(0.2)}
-              // initial="hidden"
-              // whileInView="visible"
-              // viewport={{ once: true }}
-              >
+              <div>
                 <ReadMoreToggle type="OPEN" key="open">
                   <Button className="space-x-3.5 !bg-accent text-white">
                     Read More
@@ -196,47 +172,18 @@ export default function Home({ searchParams }: IProps) {
         <div className="size-full fade-gradient-left absolute inset-0 flex items-center justify-start z-10">
           <div className="!font-primary max-w-[90%] mx-auto w-full">
             <div className="space-y-5">
-              <span
-                // variants={fadeUpVarient(0.05)}
-                // initial="hidden"
-                // whileInView="visible"
-                // viewport={{ once: true }}
-                className="inline-block bg-accent text-white text-sm uppercase font-semibold px-3 py-1 rounded-full mb-4"
-                // className="bg-accent inline-block bg-fixed text-white text-xs px-3 py-1.5 tracking-widest"
-              >
+              <span className="inline-block bg-accent text-white text-sm uppercase font-semibold px-3 py-1 rounded-full mb-4">
                 HOW WE WORK
               </span>
-              <span
-                // variants={fadeUpVarient(0.08)}
-                // initial="hidden"
-                // whileInView="visible"
-                // viewport={{ once: true }}
-                className="text-4xl block font-medium text-white max-w-[40rem] max-sm:text-2xl"
-              >
+              <span className="text-4xl block font-medium text-white max-w-[40rem] max-sm:text-2xl">
                 Book a trek easily with just a few steps
               </span>
 
-              <ul
-                // variants={{
-                //   hidden: { opacity: 0 },
-                //   visible: {
-                //     opacity: 1,
-                //     transition: {
-                //       staggerChildren: 0.3, // Delay between each child animation
-                //     },
-                //   },
-                // }}
-                // initial="hidden"
-                // whileInView="visible"
-                // viewport={{ once: true, amount: 0.2 }}
-                className="flex items-center gap-7 flex-wrap"
-              >
+              <ul className="flex items-center gap-7 flex-wrap">
                 {HOW_WE_WORK.map((item, index) => (
                   <li
-                    // variants={childVariant}
                     key={index}
                     className="px-5 py-2 border space-x-1.5 border-emerald-500 rounded-full text-sm font-medium hover:bg-emerald-500 text-white"
-                    // className="border-accent border rounded-tr-2xl rounded-bl-2xl space-x-1.5 inline-block bg-fixed text-white text-xs py-1.5 px-5 tracking-widest"
                   >
                     <span>{index + 1} .</span>
                     <span>{item}</span>
@@ -244,20 +191,9 @@ export default function Home({ searchParams }: IProps) {
                 ))}
               </ul>
 
-              <div
-                // variants={fadeUpVarient(0.14)}
-                // initial="hidden"
-                // whileInView="visible"
-                // viewport={{ once: true }}
-                className="border-t border-dashed border-gray-400 w-[40%]"
-              ></div>
+              <div className="border-t border-dashed border-gray-400 w-[40%]"></div>
 
-              <div
-              // variants={fadeUpVarient(0.17)}
-              // initial="hidden"
-              // whileInView="visible"
-              // viewport={{ once: true }}
-              >
+              <div>
                 <Link href="#our-packages-section">
                   <Button className="min-w-[10rem] transition-all duration-1000 max-sm:min-[8rem] max-sm:pl-3 !bg-accent !text-white">
                     <BiBookContent />
@@ -283,22 +219,10 @@ export default function Home({ searchParams }: IProps) {
       <section className="wrapper space-y-5">
         <div className="grid grid-cols-2 max-sm:grid-cols-1">
           <div className="space-y-1.5">
-            <h2
-              // variants={fadeUpVarient(0.05)}
-              // initial="hidden"
-              // whileInView="visible"
-              // viewport={{ once: true }}
-              className="font-semibold font-primary text-4xl max-sm:text-3xl text-accent-2"
-            >
+            <h2 className="font-semibold font-primary text-4xl max-sm:text-3xl text-accent-2">
               Our Latest Stories
             </h2>
-            <p
-              // variants={fadeUpVarient(0.06)}
-              // initial="hidden"
-              // whileInView="visible"
-              // viewport={{ once: true }}
-              className="text-sm text-accent-2"
-            >
+            <p className="text-sm text-accent-2">
               Discover the experiences of our Trekkers
             </p>
           </div>
@@ -317,22 +241,10 @@ export default function Home({ searchParams }: IProps) {
       <section className="wrapper space-y-5">
         <div className="grid grid-cols-2 font-primary max-sm:grid-cols-1">
           <div className="space-y-1.5">
-            <h2
-              // variants={fadeUpVarient(0.05)}
-              // initial="hidden"
-              // whileInView="visible"
-              // viewport={{ once: true }}
-              className="font-semibold font-primary text-4xl max-sm:text-3xl text-accent-2"
-            >
+            <h2 className="font-semibold font-primary text-4xl max-sm:text-3xl text-accent-2">
               Our Latest Articles
             </h2>
-            <p
-              // variants={fadeUpVarient(0.06)}
-              // initial="hidden"
-              // whileInView="visible"
-              // viewport={{ once: true }}
-              className="text-sm text-accent-2"
-            >
+            <p className="text-sm text-accent-2">
               Our latest articles and guides to help you plan your next trek.
             </p>
           </div>

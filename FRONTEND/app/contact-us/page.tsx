@@ -24,23 +24,23 @@ export default function page() {
 
             <div className="flex flex-col gap-5">
               <Info
-                iconBefore={<Phone size={15} />}
+                iconbefore={<Phone size={15} />}
                 label="PHONE"
                 text="+917407248200"
               />
               <Info
-                iconBefore={<Mail size={15} />}
+                iconbefore={<Mail size={15} />}
                 label="EMAIL"
                 text="kiran.yuksom@gmail.com"
               />
               <Info
-                iconBefore={<RiWhatsappLine size={15} />}
+                iconbefore={<RiWhatsappLine size={15} />}
                 label="WHATSAPP"
                 text="+917407248200"
               />
 
               <Info
-                iconBefore={<MapPinned size={15} />}
+                iconbefore={<MapPinned size={15} />}
                 label="ADDRESS"
                 text="Yuksom Bazar Main Road Near Hotel Yangri Gang, West Sikkim, Pin no - 737113"
               />

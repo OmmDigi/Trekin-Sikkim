@@ -159,13 +159,12 @@ export default function AiHeader() {
                       <nav>
                         <ul className="space-y-1">
                           {NAV_OPTIONS.map((option, index) => (
-                            <li key={option.id}>
-                              <NavItem
-                                index={index}
-                                className="!text-base !text-gray-700 hover:!text-emerald-600 hover:!bg-emerald-50 py-3 px-4 rounded-lg transition-all duration-200 border-b border-gray-200 last:border-b-0 !flex w-full"
-                                option={option}
-                              />
-                            </li>
+                            <NavItem
+                              key={option.id}
+                              index={index}
+                              className="!text-base !text-gray-700 hover:!text-emerald-600 hover:!bg-emerald-50 py-3 px-4 rounded-lg transition-all duration-200 border-b border-gray-200 last:border-b-0 !flex w-full"
+                              option={option}
+                            />
                           ))}
                         </ul>
                       </nav>

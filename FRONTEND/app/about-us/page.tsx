@@ -12,9 +12,7 @@ import {
   WalletMinimal,
 } from "lucide-react";
 import React from "react";
-// import * as motion from "motion/react-client";
 import HeadingSubHeding from "@/components/HeadingSubHeding";
-// import { fadeUpVarient } from "@/utils/animations";
 import ImageSlider from "@/components/Utils/ImageSlider";
 import ReadMoreToggle from "@/components/Utils/ReadMoreToggle";
 import Button from "@/components/Button";
@@ -24,10 +22,9 @@ import ReadMore from "@/components/Utils/ReadMore";
 import MissionVision from "@/components/MissionVision";
 
 const ABOUT_US_IMAGES = [
-  "/about/about-image-1.jpg",
-  "/about/about-image-2.webp",
-  "/about/about-image-3.webp",
-  "/about/about-image-4.webp",
+  "/about/about-new-1.webp",
+  "/about/about-new-2.webp",
+  "/about/about-new-3.avif",
 ];
 
 const WHY_CHOOSE_US = [

@@ -8,30 +8,34 @@ interface IProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   loading?: boolean;
 }
 
-function Button(props: IProps) {
+function Button({
+  icon,
+  theme,
+  loading,
+  children,
+  className,
+  ...rest
+}: IProps) {
   return (
     <button
-      {...props}
+      {...rest}
       className={cn(
         "flex items-center justify-center gap-1.5",
-        props.icon ? "pr-5 max-sm:py-2" : "px-5 max-sm:py-3",
+        icon ? "pr-5 max-sm:py-2" : "px-5 max-sm:py-3",
         "text-body py-2.5 rounded-full cursor-pointer transition-all duration-300",
-        props.className,
-        props.theme === "black"
+        theme === "black"
           ? "bg-primary text-secondary"
-          : props.theme === "white"
+          : theme === "white"
           ? "bg-secondary"
-          : props.theme === "accent"
+          : theme === "accent"
           ? "bg-accent font-semibold text-white"
           : "bg-light-gray",
-        "text-sm active:scale-90"
-        //hover:scale-105
+        "text-sm active:scale-90",
+        className
       )}
     >
-      {props.icon ? (
-        <div className="p-1 bg-white rounded-full">{props.icon}</div>
-      ) : null}
-      {props.loading ? <SpinnerSvg size="18px" /> : props.children}
+      {icon ? <div className="p-1 bg-white rounded-full">{icon}</div> : null}
+      {loading ? <SpinnerSvg size="18px" /> : children}
     </button>
   );
 }

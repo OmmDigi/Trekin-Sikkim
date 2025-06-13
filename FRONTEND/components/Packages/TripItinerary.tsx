@@ -1,6 +1,7 @@
 import api from "@/lib/axios";
 import { IResponse } from "@/types";
 import React from "react";
+import ViewFromHtml from "../ViewFromHtml";
 
 interface IProps {
   package_id: number;
@@ -32,11 +33,10 @@ export default async function TripItinerary({ package_id }: IProps) {
           <h3 className="text-lg font-semibold text-gray-900">
             {itinerary.itinerary_subheading}
           </h3>
-          <p
-            dangerouslySetInnerHTML={{ __html: itinerary.itinerary_details }}
-            // className="mb-4 font-normal text-gray-500 text-sm leading-7"
+          <ViewFromHtml
+            html={itinerary.itinerary_details}
             className="prose min-w-full"
-          ></p>
+          />
         </li>
       ))}
     </ol>

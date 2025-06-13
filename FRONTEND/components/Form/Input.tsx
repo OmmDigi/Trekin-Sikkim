@@ -6,7 +6,7 @@ interface IProps
     HTMLInputElement
   > {
   label?: string;
-  iconBefore?: React.ReactNode;
+  iconbefore?: React.ReactNode;
 }
 
 export default function Input(props: IProps) {
@@ -16,7 +16,7 @@ export default function Input(props: IProps) {
         <h2 className="font-semibold text-sm">{props.label}</h2>
       ) : null}
       <div className="bg-white w-full  border border-gray-200 py-2 px-2 overflow-hidden flex items-center gap-2">
-        {props.iconBefore ? props.iconBefore : null}
+        {props.iconbefore ? props.iconbefore : null}
         <input className="text-[0.80rem] outline-none w-full" {...props} />
       </div>
     </div>

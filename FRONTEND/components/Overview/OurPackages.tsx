@@ -1,16 +1,8 @@
-// import { childVariant, fadeUpVarient, parentVariant } from "@/utils/animations";
-// import * as motion from "motion/react-client";
 import Tabs from "../Tabs";
 import PackageItem from "../PackageItem";
 import api from "@/lib/axios";
 import { ICategories, IPackageListInfo, IResponse } from "@/types";
 import { randomUUID } from "crypto";
-// import dynamic from "next/dynamic";
-
-// const Mul = dynamic(() => import("motion/react-client").then((mod) => mod.ul));
-// const Mli = dynamic(() => import("motion/react-client").then((mod) => mod.li));
-// const Mh2 = dynamic(() => import("motion/react-client").then((mod) => mod.h2));
-// const Mh3 = dynamic(() => import("motion/react-client").then((mod) => mod.h3));
 
 interface IProps {
   searchParams: Promise<{ category: string }>;
@@ -39,22 +31,10 @@ export default async function OurPackages({ searchParams }: IProps) {
     <section id="our-packages-section" className="wrapper space-y-10">
       <div className="grid grid-cols-2 font-primary max-sm:grid-cols-1">
         <div className="space-y-1.5">
-          <h2
-            // variants={fadeUpVarient(0.05)}
-            // initial="hidden"
-            // whileInView="visible"
-            // viewport={{ once: true }}
-            className="font-semibold font-primary text-4xl max-sm:text-3xl text-accent-2"
-          >
+          <h2 className="font-semibold font-primary text-4xl max-sm:text-3xl text-accent-2">
             Our Affordable Packages
           </h2>
-          <h3
-            // variants={fadeUpVarient(0.06)}
-            // initial="hidden"
-            // whileInView="visible"
-            // viewport={{ once: true }}
-            className="text-sm text-accent-2"
-          >
+          <h3 className="text-sm text-accent-2">
             Explore The Most Popular & Affordable Packages
           </h3>
         </div>
@@ -77,30 +57,15 @@ export default async function OurPackages({ searchParams }: IProps) {
       ) : (
         <ul
           key={keyForMotionList}
-          // variants={parentVariant}
-          // initial="visible"
-          // whileInView="visible"
-          // viewport={{ amount: 0.2, once: true }}
           className="grid grid-cols-4 gap-5 w-full max-sm:grid-cols-1"
         >
           {packageinfo.data.map((packageInfo) => (
-            <li
-              key={packageInfo.id}
-            // variants={childVariant}
-            // className="w-full h-80 overflow-hidden rounded-[.8rem] relative shadow-2xl group/item max-sm:h-[17rem]"
-            >
+            <li key={packageInfo.id}>
               <PackageItem fromWhere="normal" singlePackageInfo={packageInfo} />
             </li>
           ))}
         </ul>
       )}
-
-      {/* <div className="flex items-center justify-center">
-        <Button theme="accent">
-          Load More
-          <FaCaretDown />
-        </Button>
-      </div> */}
     </section>
   );
 }

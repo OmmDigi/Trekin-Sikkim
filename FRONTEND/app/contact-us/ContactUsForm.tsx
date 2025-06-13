@@ -44,14 +44,14 @@ export default function ContactUsForm() {
       <div className="grid grid-cols-2 gap-4 max-sm:grid-cols-1">
         <Input
           required
-          iconBefore={<User size={15} />}
+          iconbefore={<User size={15} />}
           label="NAME"
           name="name"
           placeholder="Enter your name"
         />
         <Input
           required
-          iconBefore={<Phone size={15} />}
+          iconbefore={<Phone size={15} />}
           name="contact_number"
           label="PHONE NUMBER"
           placeholder="Enter your contact number"
@@ -60,7 +60,7 @@ export default function ContactUsForm() {
 
       <Input
         required
-        iconBefore={<Mail size={15} />}
+        iconbefore={<Mail size={15} />}
         type="email"
         name="email"
         label="EMAIL"

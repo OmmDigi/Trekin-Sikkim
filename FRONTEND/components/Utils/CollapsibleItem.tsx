@@ -37,14 +37,14 @@ export const CollapsibleItem: React.FC<CollapsibleItemProps> = ({
             "transition-all duration-300"
           )}
         >
-          <p
+          <div
             onClick={(e) => {
               e.stopPropagation();
             }}
             className="text-sm text-gray-700 mt-2 leading-7"
           >
             {children}
-          </p>
+          </div>
         </div>
       </div>
     </li>

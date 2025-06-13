@@ -61,7 +61,7 @@ export default function PackageItem({ fromWhere, singlePackageInfo }: IProps) {
               className="w-full"
             >
               <Button
-                className="w-full !bg-red-500 text-xl font-semibold"
+                className="w-full !bg-red-500 font-semibold"
                 theme="black"
               >
                 View & Book
