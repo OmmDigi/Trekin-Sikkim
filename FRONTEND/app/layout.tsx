@@ -61,7 +61,7 @@ export default function RootLayout({
           type="image/jpeg"
           fetchPriority="high"
         />
-        <link
+        {/* <link
           rel="preload"
           as="image"
           href="/images/banner_2.jpg"
@@ -74,7 +74,7 @@ export default function RootLayout({
           href="/images/banner_3.jpg"
           type="image/jpeg"
           fetchPriority="high"
-        />
+        /> */}
       </Head>
       <body
         className={cn(poppins.variable, montserrat.variable, "antialiased")}
@@ -89,26 +89,26 @@ export default function RootLayout({
         >
           <ArrowUp size={18} color="#fff" />
         </Link>
+
         <ReduxProvider>
+          <HeaderHolder>
+            <AiHeader />
+          </HeaderHolder>
           <DialogWrapper
             id="enquiry-form"
             className="flex justify-center items-start"
           >
             <EnquireDialog />
           </DialogWrapper>
-
-          <HeaderHolder>
-            <AiHeader />
-          </HeaderHolder>
-
-          <BottomNavWrapper />
           <ChildrenHolder>{children}</ChildrenHolder>
-          <React.Suspense fallback={<Loading />}>
-            <FooterHolder>
-              <Footer />
-            </FooterHolder>
-          </React.Suspense>
+          <BottomNavWrapper />
         </ReduxProvider>
+
+        <React.Suspense fallback={<Loading />}>
+          <FooterHolder>
+            <Footer />
+          </FooterHolder>
+        </React.Suspense>
       </body>
     </html>
   );

@@ -92,7 +92,7 @@ export default function ImageSlider({
               height={1280}
               width={720}
               sizes="(max-width: 768px) 100vw, 700px"
-              loading="eager"
+              // loading="eager"
             />
           </li>
         ))}

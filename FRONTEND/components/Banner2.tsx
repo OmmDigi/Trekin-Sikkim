@@ -37,12 +37,6 @@ export default function Banner2() {
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
 
-  const [loaded, setLoaded] = useState<number[]>([]);
-
-  const markLoaded = (index: number) => {
-    setLoaded((prev) => [...new Set([...prev, index])]);
-  };
-
   const onNextBannerClick = () => {
     setCurrentBannerIndex((prev) => {
       if (prev >= banner_info.length - 1) return 0;
@@ -93,7 +87,6 @@ export default function Banner2() {
     >
       <div className="w-full relative flex overflow-hidden min-h-[33rem] max-h-[33rem] max-sm:min-h-[19rem] max-sm:max-h-[19rem]">
         {banner_info.map((item, index) => {
-          const isLoaded = loaded.includes(index);
           return (
             <div
               key={item.id}
@@ -101,23 +94,16 @@ export default function Banner2() {
               className="size-full relative transform duration-500  flex-grow shrink-0 min-h-[33rem] max-h-[33rem] max-sm:min-h-[19rem] max-sm:max-h-[19rem]"
             >
               <Image
-                className={cn(
-                  isLoaded ? "opacity-100" : "opacity-0",
-                  "min-h-[33rem] max-h-[33rem] max-sm:min-h-[19rem] max-sm:max-h-[19rem] w-full object-cover"
-                )}
+                className="min-h-[33rem] max-h-[33rem] max-sm:min-h-[19rem] max-sm:max-h-[19rem] w-full object-cover"
                 src={item.image}
                 alt={item.title}
                 height={1280}
                 width={620}
                 priority={index === 0}
                 fetchPriority={index === 0 ? "high" : "auto"}
+                loading={index === 0 ? "eager" : "lazy"}
                 sizes="100vw"
-                onLoad={() => markLoaded(index)}
               />
-
-              {isLoaded ? null : (
-                <div className="absolute inset-0 bg-gray-200 animate-pulse"></div>
-              )}
 
               <div className="absolute inset-0 bg-[#00000094] z-50">
                 <div className="max-w-3xl font-montserrat size-full mx-auto flex items-center justify-center flex-col space-y-5 mt-5 max-sm:max-w-[90%] max-sm:mt-0">
