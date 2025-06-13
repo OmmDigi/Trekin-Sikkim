@@ -6,7 +6,6 @@ import { useRef, useState } from "react";
 import { BiBookContent } from "react-icons/bi";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import Button from "./Button";
-import { cn } from "@/lib/utils";
 
 const banner_info = [
   {
