@@ -8,50 +8,71 @@ import {
   UpcomingTrekPackage,
 } from "@/types";
 import { serverApi } from "@/lib/serverApi";
+import { LogIn, UserRound } from "lucide-react";
 
 export default async function AiNavItemList() {
   const api = await serverApi();
-  const [categoriesInfo, upcomingPackageInfo] = await Promise.all([
-    api.get<IResponse<ICategories[]>>("/api/v1/category"),
-    api.get<IResponse<UpcomingTrekPackage[]>>("/api/v1/upcoming")
-    // api.get<IResponse>("/api/v1/users/is-login")
-  ]);
-
+  const [categoriesInfo, upcomingPackageInfo, loginInfo] =
+    await Promise.allSettled([
+      api.get<IResponse<ICategories[]>>("/api/v1/category"),
+      api.get<IResponse<UpcomingTrekPackage[]>>("/api/v1/upcoming"),
+      api.get<IResponse>("/api/v1/users/is-login"),
+    ]);
 
   const upcomingPackage: NavOptions[] = [];
   const trekHeadings: NavOptions[] = [];
   const tourHeadings: NavOptions[] = [];
   const expeditionHeadings: NavOptions[] = [];
 
-  categoriesInfo.data.data.forEach((item) => {
-    if (item.category_type === "Tour") {
-      tourHeadings.push({
-        id: item.category_id,
-        pathname: `/${item.slug}`,
-        text: item.category_name,
-      });
-    } else if (item.category_type === "Trek") {
-      trekHeadings.push({
-        id: item.category_id,
-        pathname: `/${item.slug}`,
-        text: item.category_name,
-      });
-    } else {
-      expeditionHeadings.push({
-        id: item.category_id,
-        pathname: `/${item.slug}`,
-        text: item.category_name,
-      });
-    }
-  });
-
-  upcomingPackageInfo.data.data.forEach((item) => {
-    upcomingPackage.push({
-      id: item.id,
-      pathname: `/${item.category_slug}/${item.package_slug}`,
-      text: item.package_name,
+  if (categoriesInfo.status === "fulfilled") {
+    categoriesInfo.value.data.data.forEach((item) => {
+      if (item.category_type === "Tour") {
+        tourHeadings.push({
+          id: item.category_id,
+          pathname: `/${item.slug}`,
+          text: item.category_name,
+        });
+      } else if (item.category_type === "Trek") {
+        trekHeadings.push({
+          id: item.category_id,
+          pathname: `/${item.slug}`,
+          text: item.category_name,
+        });
+      } else {
+        expeditionHeadings.push({
+          id: item.category_id,
+          pathname: `/${item.slug}`,
+          text: item.category_name,
+        });
+      }
     });
-  });
+  }
+
+  if (upcomingPackageInfo.status === "fulfilled") {
+    upcomingPackageInfo.value.data.data.forEach((item) => {
+      upcomingPackage.push({
+        id: item.id,
+        pathname: `/${item.category_slug}/${item.package_slug}`,
+        text: item.package_name,
+      });
+    });
+  }
+
+  if (loginInfo.status === "fulfilled") {
+    NAV_OPTIONS[8] = {
+      id: 8,
+      pathname: "/account",
+      text: "Account",
+      icon: <UserRound size={15} />,
+    };
+  } else {
+    NAV_OPTIONS[8] = {
+      id: 8,
+      icon: <LogIn size={14} />,
+      text: "Sign In",
+      pathname: "/auth/login",
+    };
+  }
 
   if (trekHeadings.length !== 0) {
     NAV_OPTIONS[2].submenu = trekHeadings;

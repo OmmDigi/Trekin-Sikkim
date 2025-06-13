@@ -89,30 +89,26 @@ export default function RootLayout({
         >
           <ArrowUp size={18} color="#fff" />
         </Link>
-        {/* <React.Suspense fallback={<ShimmerLoading />}> */}
-          {/* <AuthProvider> */}
-          <ReduxProvider>
-            <DialogWrapper
-              id="enquiry-form"
-              className="flex justify-center items-start"
-            >
-              <EnquireDialog />
-            </DialogWrapper>
+        <ReduxProvider>
+          <DialogWrapper
+            id="enquiry-form"
+            className="flex justify-center items-start"
+          >
+            <EnquireDialog />
+          </DialogWrapper>
 
-            <HeaderHolder>
-              <AiHeader />
-            </HeaderHolder>
+          <HeaderHolder>
+            <AiHeader />
+          </HeaderHolder>
 
-            <BottomNavWrapper />
-            <ChildrenHolder>{children}</ChildrenHolder>
-            <React.Suspense fallback={<Loading />}>
-              <FooterHolder>
-                <Footer />
-              </FooterHolder>
-            </React.Suspense>
-          </ReduxProvider>
-          {/* </AuthProvider> */}
-        {/* </React.Suspense> */}
+          <BottomNavWrapper />
+          <ChildrenHolder>{children}</ChildrenHolder>
+          <React.Suspense fallback={<Loading />}>
+            <FooterHolder>
+              <Footer />
+            </FooterHolder>
+          </React.Suspense>
+        </ReduxProvider>
       </body>
     </html>
   );
