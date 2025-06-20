@@ -8,7 +8,12 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 interface IProps {
-  images: { url: string; alt_tag: string }[];
+  images: {
+    url: string;
+    alt_tag: string;
+    imageloading?: "eager" | "lazy";
+    imagepriority?: boolean;
+  }[];
   sliderPreview: number;
   className?: string;
   controllerPosition?: "bottom" | "middle" | "top";
@@ -89,10 +94,12 @@ export default function ImageSlider({
               className="size-full object-cover"
               src={info.url}
               alt={info.alt_tag}
-              height={1280}
-              width={720}
+              loading={info.imageloading}
+              priority={info.imagepriority}
+              fill
               sizes="(max-width: 768px) 100vw, 700px"
-              // loading="eager"
+              // height={1280}
+              // width={720}
             />
           </li>
         ))}

@@ -104,7 +104,7 @@ const OVERVIEW_POINTS = [
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ ["page-name"]: string;["package-slug"]: string }>;
+  params: Promise<{ ["page-name"]: string; ["package-slug"]: string }>;
 }): Promise<Metadata> {
   const categoryPageParam = (await params)["page-name"];
   const packageSlug = (await params)["package-slug"];
@@ -121,7 +121,7 @@ export async function generateMetadata({
       description: singlePackageInfo.data?.meta_description,
       images: [
         singlePackageInfo.data?.banner_info?.[0]?.item_link ||
-        "/placeholder_background.jpg",
+          "/placeholder_background.jpg",
       ],
       url: `/${categoryPageParam}/${packageSlug}`,
       type: "website",
@@ -187,10 +187,11 @@ export default async function page({ params, searchParams }: IProps) {
           <div className="relative group/package_banner rounded-3xl overflow-hidden aspect-[2.8/1] max-sm:aspect-video">
             {data.data.banner_info && data.data.banner_info.length !== 0 ? (
               <ImageSlider
-                // wrapperCss="relative"
-                images={data.data.banner_info.map((item) => ({
+                images={data.data.banner_info.map((item, index) => ({
                   url: item.item_link,
                   alt_tag: item.alt_tag || "",
+                  imageloading: index === 0 ? "eager" : "lazy",
+                  imagepriority: index === 0 ? true : false,
                 }))}
                 sliderPreview={1}
                 className="h-full w-full overflow-hidden rounded-2xl aspect-[2.8/1] max-sm:aspect-video"
@@ -325,11 +326,11 @@ export default async function page({ params, searchParams }: IProps) {
               scroll={true}
               options={[
                 ...BOTTOM_NAV_OTHER_OPTIONS,
-                ...data.data.other_option_names.map(other => ({
+                ...data.data.other_option_names.map((other) => ({
                   id: other.id,
                   slug: `#${other.option_name}`,
-                  text: other.option_name
-                }))
+                  text: other.option_name,
+                })),
               ]}
             />
           </div>
