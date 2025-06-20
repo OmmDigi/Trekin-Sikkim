@@ -14,6 +14,7 @@ export default async function OurPackages({ searchParams }: IProps) {
   ).category;
 
   const newUrlSearchParams = new URLSearchParams();
+  newUrlSearchParams.set("limit", "12");
   if (currentCateogry && currentCateogry !== "all") {
     newUrlSearchParams.set("category_slug", currentCateogry);
   }

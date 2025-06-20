@@ -299,11 +299,10 @@ export const getSiteMapList = asyncErrorHandler(async (req, res) => {
         c.slug || '/' || p.slug
        AS slug FROM packages p
 
-       LEFT JOIN category_and_packages cap
-       ON cap.package_id = p.id
-
        LEFT JOIN category c
-       ON cap.category_id = c.category_id
+       ON c.category_id = p.p_category_id
+
+       WHERE p.p_category_id IS NOT NULL
       `
     );
     const { rows: blogs } = await client.query(

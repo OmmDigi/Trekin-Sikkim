@@ -373,3 +373,10 @@ CREATE TABLE category_and_packages (
 );
 
 ALTER TABLE blogs ADD COLUMN sub_heading TEXT;
+
+ALTER TABLE packages
+ADD COLUMN p_category_id INTEGER;
+
+ALTER TABLE packages
+ADD CONSTRAINT fk_p_category
+FOREIGN KEY (p_category_id) REFERENCES category(category_id) ON DELETE CASCADE;

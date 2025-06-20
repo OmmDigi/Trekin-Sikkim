@@ -42,6 +42,8 @@ const formSchema = z.object({
     })
     .max(255),
 
+  p_category_id: z.number().min(1, { message: "Choode Parent Category" }),
+
   slug: z.string().min(1, { message: "Package Slug Is Required" }),
 
   duration: z.string().min(1, {
@@ -147,7 +149,7 @@ function BasicInfoFunc({ packageId, currentStep }: IBasicInfoFunc) {
       region: "",
       suitable_for: "",
       trek_distance: "",
-      // category_id: 0,
+      p_category_id: 0,
       is_active: 1,
       additionals: [],
     },
@@ -167,8 +169,8 @@ function BasicInfoFunc({ packageId, currentStep }: IBasicInfoFunc) {
   const apiResult = useQueries<
     [
       UseQueryResult<IResponse<IBasicInfoResponse>, AxiosError<IResponse>>,
-      // UseQueryResult<IResponse<ICategories[]>, AxiosError<IResponse>>,
-      UseQueryResult<IResponse<IAddition[]>, AxiosError<IResponse>>
+      UseQueryResult<IResponse<IAddition[]>, AxiosError<IResponse>>,
+      UseQueryResult<IResponse<ICategories[]>, AxiosError<IResponse>>
     ]
   >({
     queries: [
@@ -179,14 +181,14 @@ function BasicInfoFunc({ packageId, currentStep }: IBasicInfoFunc) {
         queryFn: () => getSingleBasicInfo(packageId),
       },
 
-      // {
-      //   queryKey: ["package-categories", packageId],
-      //   queryFn: () => getAllCategories(),
-      // },
-
       {
         queryKey: ["get-additionals", packageId],
         queryFn: getAdditionalList,
+      },
+
+      {
+        queryKey: ["package-categories", packageId],
+        queryFn: () => getAllCategories(),
       },
     ],
   });
@@ -246,9 +248,10 @@ function BasicInfoFunc({ packageId, currentStep }: IBasicInfoFunc) {
         is_active: data.is_active,
         additionals: data.additionals,
         slug: data.slug,
+        p_category_id: data.p_category_id ?? 0,
       });
     }
-  }, [apiResult[0].isSuccess, apiResult[1].isSuccess]);
+  }, [apiResult[0].isSuccess, apiResult[1].isSuccess, apiResult[2].isSuccess]);
 
   return (
     <LoadingHandler
@@ -263,7 +266,8 @@ function BasicInfoFunc({ packageId, currentStep }: IBasicInfoFunc) {
               if (
                 // key === "category_id" ||
                 key === "is_active" ||
-                key === "additionals"
+                key === "additionals" ||
+                key === "p_category_id"
               )
                 return null;
               const keyName = key.replace(/_/g, " ");
@@ -284,50 +288,6 @@ function BasicInfoFunc({ packageId, currentStep }: IBasicInfoFunc) {
                 />
               );
             })}
-
-            {/* <LoadingHandler
-              loading={apiResult[1].isFetching}
-              error={apiResult[1].error}
-              length={apiResult[1].data?.data.length}
-            >
-              <FormField
-                control={form.control}
-                name="category_id"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>CATEGORY</FormLabel>
-                    <FormControl>
-                      <Select
-                        onValueChange={(value) =>
-                          field.onChange(parseInt(value))
-                        }
-                        defaultValue={field.value.toString()}
-                      >
-                        <SelectTrigger className="w-full">
-                          <SelectValue
-                            className="w-full"
-                            placeholder="Choose Your Pacakge Category"
-                          />
-                        </SelectTrigger>
-
-                        <SelectContent>
-                          {apiResult[1].data?.data.map((category) => (
-                            <SelectItem
-                              key={category.category_id}
-                              value={category.category_id.toString()}
-                            >
-                              {category.category_name} ({category.category_type}
-                              )
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </LoadingHandler> */}
 
             <FormField
               control={form.control}
@@ -384,6 +344,50 @@ function BasicInfoFunc({ packageId, currentStep }: IBasicInfoFunc) {
                         }}
                         defaultValue={field?.value || []}
                       />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </LoadingHandler>
+
+            <LoadingHandler
+              loading={apiResult[2].isFetching}
+              error={apiResult[2].error}
+              length={apiResult[2].data?.data.length}
+              noDataMsg="No Category Found"
+            >
+              <FormField
+                control={form.control}
+                name="p_category_id"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>CHOOSE PARENT CATEGORY *</FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={(value) =>
+                          field.onChange(parseInt(value))
+                        }
+                        defaultValue={field.value?.toString()}
+                      >
+                        <SelectTrigger className="w-full">
+                          <SelectValue
+                            className="w-full"
+                            placeholder="Choose Parent Category"
+                          />
+                        </SelectTrigger>
+
+                        <SelectContent>
+                          {apiResult[2].data?.data.map((category) => (
+                            <SelectItem
+                              key={category.category_id}
+                              value={category.category_id.toString()}
+                            >
+                              {category.category_name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </FormControl>
                     <FormMessage />
                   </FormItem>

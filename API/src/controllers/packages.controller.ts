@@ -114,9 +114,9 @@ export const getPackageList = asyncErrorHandler(
 
     if (value.category_slug) {
       if (filters === "") {
-        filters = `WHERE c.slug = $${placeholdernum}`;
+        filters = `WHERE (c2.slug = $${placeholdernum} OR c.slug = $${placeholdernum})`;
       } else {
-        filters += ` AND c.slug = $${placeholdernum}`;
+        filters += ` AND (c2.slug = $${placeholdernum} OR c.slug = $${placeholdernum})`;
       }
       filterValues.push(value.category_slug);
       placeholdernum++;
@@ -124,9 +124,9 @@ export const getPackageList = asyncErrorHandler(
 
     if (value.category_type) {
       if (filters === "") {
-        filters = `WHERE c.type_id = $${placeholdernum}`;
+        filters = `WHERE (c2.type_id = $${placeholdernum} OR c.type_id = $${placeholdernum})`;
       } else {
-        filters += ` AND c.type_id = $${placeholdernum}`;
+        filters += ` AND (c2.type_id = $${placeholdernum} OR c.type_id = $${placeholdernum})`;
       }
       filterValues.push(value.category_type);
       placeholdernum++;
@@ -134,9 +134,9 @@ export const getPackageList = asyncErrorHandler(
 
     if (value.category_id) {
       if (filters === "") {
-        filters = `WHERE c.category_id = $${placeholdernum}`;
+        filters = `WHERE (c2.category_id = $${placeholdernum} OR c.category_id = $${placeholdernum})`;
       } else {
-        filters += ` AND c.category_id = $${placeholdernum}`;
+        filters += ` AND (c2.category_id = $${placeholdernum} OR c.category_id = $${placeholdernum})`;
       }
       filterValues.push(value.category_id);
       placeholdernum++;
@@ -145,32 +145,23 @@ export const getPackageList = asyncErrorHandler(
     const { rows: countRows } = await pool.query(
       `
           SELECT 
-            COUNT(pkg.id) AS total_package
+            COUNT(DISTINCT pkg.id) AS total_package
           FROM packages pkg
-
-          LEFT JOIN LATERAL (
-            SELECT pam.*
-            FROM package_and_media pam
-            WHERE pam.package_id = pkg.id
-              AND pam.where_to_use = 'thumbnail'
-            ORDER BY pam.id
-            LIMIT 1
-          ) pam ON true
-
-          LEFT JOIN media_item mi
-          ON mi.media_item_id = pam.media_item_id AND mi.media_type = 'image'
 
           LEFT JOIN category_and_packages cp ON cp.package_id = pkg.id
 
+          LEFT JOIN category c2
+          ON c2.category_id = cp.category_id
+
           LEFT JOIN category c
-          ON c.category_id = cp.category_id
+          ON c.category_id = pkg.p_category_id
 
          ${filters}
        `,
       filterValues
     );
 
-    const totalPackages = countRows[0].total_package;
+    const totalPackages = countRows[0]?.total_package || 1;
 
     const { LIMIT, OFFSET } = parsePagination(req, value.limit);
 
@@ -204,10 +195,15 @@ export const getPackageList = asyncErrorHandler(
 
         LEFT JOIN category_and_packages cp ON cp.package_id = pkg.id
 
+        LEFT JOIN category c2
+        ON c2.category_id = cp.category_id
+
         LEFT JOIN category c
-        ON c.category_id = cp.category_id
+        ON c.category_id = pkg.p_category_id
 
         ${filters}
+
+        GROUP BY pkg.id, mi.media_item_id, c.category_id
 
         ORDER BY pkg.id DESC
 

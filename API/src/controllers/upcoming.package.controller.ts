@@ -27,8 +27,11 @@ export const getUpcomingPackageList = asyncErrorHandler(async (req, res) => {
          LEFT JOIN category_and_packages cp
          ON cp.package_id = p.id
 
+         LEFT JOIN category c2
+         ON c2.category_id = cp.category_id
+
          LEFT JOIN category c
-         ON c.category_id = cp.category_id
+         ON c.category_id = p.p_category_id
 
         LEFT JOIN LATERAL (
             SELECT pam.*
@@ -41,6 +44,8 @@ export const getUpcomingPackageList = asyncErrorHandler(async (req, res) => {
 
          LEFT JOIN media_item mi
          ON mi.media_item_id = pam.media_item_id
+
+        GROUP BY p.id, c.category_id, mi.media_item_id
         `
   );
 
@@ -62,7 +67,7 @@ export const getPackageChooseList = asyncErrorHandler(async (req, res) => {
          FROM packages p
 
          LEFT JOIN category c
-         ON c.category_id = p.category_id
+         ON c.category_id = p.p_category_id
 
         LEFT JOIN LATERAL (
             SELECT pam.*

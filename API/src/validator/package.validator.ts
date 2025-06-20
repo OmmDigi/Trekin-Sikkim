@@ -3,9 +3,9 @@ import Joi from "joi";
 export const VGetPackageList = Joi.object({
   category_slug: Joi.string().optional(),
   category_type: Joi.string().optional(),
-  category_id : Joi.number().optional(),
+  category_id: Joi.number().optional(),
   page: Joi.number().optional(),
-  limit : Joi.number().optional()
+  limit: Joi.number().optional(),
 });
 
 export const VAddPackageBasicInfo = Joi.object({
@@ -18,6 +18,8 @@ export const VAddPackageBasicInfo = Joi.object({
     .required(),
 
   slug: Joi.string().required(),
+
+  p_category_id: Joi.number().required(),
 
   duration: Joi.string()
     .min(1)
@@ -121,6 +123,8 @@ export const VUpdatePackageBasicInfo = Joi.object({
       "string.min": "Package Name must be at least 2 characters.",
     })
     .required(),
+
+  p_category_id: Joi.number().required(),
 
   slug: Joi.string().required(),
 
@@ -306,8 +310,8 @@ export const VUpdatePackageItinerary = Joi.object({
 
 export const VUpdateItineraryPdf = Joi.object({
   package_id: Joi.number().required(),
-  file_link : Joi.string().required()
-})
+  file_link: Joi.string().required(),
+});
 
 //package overview
 export const VPackageOverview = Joi.object({

@@ -66,7 +66,7 @@ export default function NavItem({ option, className, index }: IProps) {
       {option.submenu && submenuVisibility ? (
         <div className="absolute top-[2rem] font-primary max-sm:static text-sm max-sm:text-base">
           <div className="min-w-60 relative top-[2rem] max-sm:top-[0.30rem]">
-            <ul className="bg-accent backdrop-blur-xl shadow-2xl rounded-b-xl max-sm:rounded-none max-sm:shadow-none overflow-hidden">
+            <ul className="bg-gradient-to-r from-emerald-500 to-teal-500 h-full backdrop-blur-xl shadow-2xl rounded-b-xl max-sm:rounded-none max-sm:shadow-none overflow-hidden">
               {option.submenu.map((eSubmenu) => (
                 <li key={eSubmenu.id}>
                   <Link
