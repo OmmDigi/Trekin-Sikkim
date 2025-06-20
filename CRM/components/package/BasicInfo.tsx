@@ -42,7 +42,7 @@ const formSchema = z.object({
     })
     .max(255),
 
-  p_category_id: z.number().min(1, { message: "Choode Parent Category" }),
+  p_category_id: z.number().min(1, { message: "Choose Parent Category" }),
 
   slug: z.string().min(1, { message: "Package Slug Is Required" }),
 
