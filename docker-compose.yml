@@ -86,12 +86,74 @@ services:
       --agree-tos
       --no-eff-email
       --non-interactive
-      -d frontend.trekinsikkim.in
+      -d trekinsikkim.in
+      -d www.trekinsikkim.in
       -d crm.trekinsikkim.in
       -d api.trekinsikkim.in
       -d upload.trekinsikkim.in
+      -d mail.trekinsikkim.in
     depends_on:
       - nginx
 
+    # ---------------- Mail Server Starts Here ---------------- #
+
+    mailu-front:
+      image: mailu/nginx:2.0
+      container_name: mailu-front
+      restart: always
+      env_file: ./mailu.env
+      ports:
+        - "25:25" # SMTP
+        - "465:465" # SMTPS
+        - "587:587" # Submission
+        - "143:143" # IMAP
+        - "993:993" # IMAPS
+        - "110:110" # POP3
+        - "995:995" # POP3S
+      volumes:
+        - mailu-data:/data
+      depends_on:
+        - mailu-admin
+        - mailu-smtp
+        - mailu-imap
+        - mailu-antispam
+        - mailu-webmail
+
+  mailu-admin:
+    image: mailu/admin:2.0
+    restart: always
+    env_file: ./mailu.env
+    volumes:
+      - mailu-data:/data
+
+  mailu-smtp:
+    image: mailu/postfix:2.0
+    restart: always
+    env_file: ./mailu.env
+    volumes:
+      - mailu-data:/data
+
+  mailu-imap:
+    image: mailu/dovecot:2.0
+    restart: always
+    env_file: ./mailu.env
+    volumes:
+      - mailu-data:/data
+
+  mailu-antispam:
+    image: mailu/rspamd:2.0
+    restart: always
+    env_file: ./mailu.env
+    volumes:
+      - mailu-data:/data
+
+  mailu-webmail:
+    image: mailu/rainloop:2.0
+    restart: always
+    env_file: ./mailu.env
+    volumes:
+      - mailu-data:/data
+
 volumes:
   db_data:
+  mailu-data:
