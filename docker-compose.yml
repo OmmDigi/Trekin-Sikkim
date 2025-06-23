@@ -79,19 +79,20 @@ services:
     volumes:
       - ./certbot/conf:/etc/letsencrypt
       - ./certbot/www:/var/www/certbot
-    entrypoint: >
-      certbot certonly --webroot
-      --webroot-path=/var/www/certbot
-      --email treksikkim.ommdigitalsoluction@gmail.com
-      --agree-tos
-      --no-eff-email
-      --non-interactive
-      -d trekinsikkim.in
-      -d www.trekinsikkim.in
-      -d crm.trekinsikkim.in
-      -d api.trekinsikkim.in
-      -d upload.trekinsikkim.in
-      -d mail.trekinsikkim.in
+    entrypoint: [
+      "certbot", "certonly", "--webroot",
+      "--webroot-path=/var/www/certbot",
+      "--force-renewal",
+      "--email", "treksikkim.ommdigitalsoluction@gmail.com",
+      "--agree-tos",
+      "--no-eff-email",
+      "-d", "trekinsikkim.in",
+      "-d", "www.trekinsikkim.in",
+      "-d", "crm.trekinsikkim.in",
+      "-d", "api.trekinsikkim.in",
+      "-d", "upload.trekinsikkim.in",
+      "-d", "mail.trekinsikkim.in"
+    ]
     depends_on:
       - nginx
 
