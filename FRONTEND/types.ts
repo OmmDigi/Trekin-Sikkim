@@ -257,3 +257,4 @@ export interface GalleryDialogProps {
   onClose: () => void;
   initialIndex?: number;
 }
+

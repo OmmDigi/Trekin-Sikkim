@@ -13,6 +13,7 @@ import { cache } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { serverApi } from "@/lib/serverApi";
+import "@/app/rich-text-content.css"
 
 const getCategoryPageInfo = cache(async (slug: string) => {
   const api = await serverApi();
@@ -148,8 +149,7 @@ export default async function CategoryPage({ params, searchParams }: IProps) {
           </div>
           {categoryPageInfo.data?.page_content ? (
             <article
-              // className="!font-primary"
-              className="prose min-w-full"
+              className="rich-text-content"
               dangerouslySetInnerHTML={{
                 __html: categoryPageInfo.data.page_content,
               }}
@@ -194,7 +194,7 @@ export default async function CategoryPage({ params, searchParams }: IProps) {
                   index={index}
                 >
                   <span
-                    className="prose min-w-full"
+                    className="rich-text-content"
                     dangerouslySetInnerHTML={{ __html: faq.faq_detail }}
                   ></span>
                 </CollapsibleItem>

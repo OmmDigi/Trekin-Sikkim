@@ -1,5 +1,6 @@
 import MainWrapper from "@/components/MainWrapper";
 import React from "react";
+import "@/app/rich-text-content.css"
 
 export default function page() {
   return (
@@ -12,7 +13,7 @@ export default function page() {
       </h3>
 
       <div
-        className="prose"
+        className="rich-text-content"
         dangerouslySetInnerHTML={{
           __html: `<p><strong>Terms and Conditions &nbsp;of Glaciers Treks and Adventure.&nbsp;</strong></p>
                     <p>At Glaciers Trek and Adventure Company, we are looking forward to the great opportunity to become the travel booking agent for all your travel related needs. The below mentioned ,</p>

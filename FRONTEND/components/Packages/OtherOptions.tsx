@@ -1,6 +1,7 @@
 import api from "@/lib/axios";
 import { IResponse } from "@/types";
 import React from "react";
+import "@/app/rich-text-content.css"
 
 interface IProps {
   package_id: number;
@@ -30,9 +31,9 @@ export default async function OtherOptions({ package_id }: IProps) {
       </h3>
 
       <p
+        className="rich-text-content"
         dangerouslySetInnerHTML={{ __html: other.option_content }}
         // className="text-sm leading-7 mt-4"
-        className="prose min-w-full"
       ></p>
     </section>
   ));
@@ -51,7 +52,7 @@ export default async function OtherOptions({ package_id }: IProps) {
   //     </h3>
 
   //     <div
-  //       className="prose min-w-full"
+  //       className="rich-text-content"
   //       dangerouslySetInnerHTML={{ __html: other.option_content }}
   //     ></div>
   //   </section>

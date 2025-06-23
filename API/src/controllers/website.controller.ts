@@ -214,10 +214,12 @@ export const updateSingleBlog = asyncErrorHandler(async (req, res) => {
     );
   }
 
-  const { rows } = await pool.query(
+  const { rows, rowCount : mediaRowCount } = await pool.query(
     "SELECT * FROM media_item WHERE media_item_id = $1",
     [value.media_id]
   );
+
+  if(mediaRowCount === 0) throw new ErrorHandler(400, "Media Item Not Found. Please Try To Upload New Blog Image");
 
   value.thumbnail = rows[0].item_link;
   value.thumbnail_alt_tag = rows[0].alt_tag;

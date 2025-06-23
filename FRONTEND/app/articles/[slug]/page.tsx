@@ -6,6 +6,7 @@ import { IResponse, ISingleBlog } from "@/types";
 import { Metadata } from "next";
 import Image from "next/image";
 import React, { cache } from "react";
+import "@/app/rich-text-content.css"
 
 const getSingleBlogInfo = cache(async (slug: string) => {
   const api = await serverApi();
@@ -88,9 +89,9 @@ export default async function page({ params }: IProps) {
       </div> */}
 
       <article
+        className="rich-text-content"
         dangerouslySetInnerHTML={{ __html: singleBlog.data.blog_content }}
         // className="!prose leading-8 tracking-wider text-sm font-primary space-y-8 bg-light-gray rounded-4xl p-10 pt-10 pb-10 max-sm:pb-8 max-sm:space-y-8 max-sm:px-2.5 max-sm:bg-transparent max-sm:pt-3.5"
-        className="prose min-w-full"
       ></article>
 
       {/* <div className="flex items-center justify-between">

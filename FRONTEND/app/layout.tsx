@@ -6,7 +6,7 @@ import Constant from "@/constant";
 import ReduxProvider from "@/redux/ReduxProvider";
 import HeaderHolder from "@/components/HeaderHolder";
 import FooterHolder from "@/components/FooterHolder";
-// import AuthProvider from "@/components/AuthProvider";
+
 import Link from "next/link";
 import { ArrowUp } from "lucide-react";
 import AiHeader from "@/components/AiComponents/AiHeader";
@@ -18,7 +18,6 @@ import dynamic from "next/dynamic";
 import Loading from "@/components/Loading";
 import ScrollProgress from "@/components/ScrollProgress";
 import BottomNavWrapper from "@/components/Wrappers/BottomNavWrapper";
-// import ShimmerLoading from "@/components/ShimmerLoading";
 import Head from "next/head";
 
 const DialogWrapper = dynamic(

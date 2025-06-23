@@ -3,6 +3,7 @@ import { Collapsible } from "../Utils/Collapsible";
 import api from "@/lib/axios";
 import { IFaq, IResponse } from "@/types";
 import { CollapsibleItem } from "../Utils/CollapsibleItem";
+import "@/app/rich-text-content.css"
 
 interface IProps {
   package_id: number;
@@ -20,8 +21,8 @@ export default async function Faqs({ package_id }: IProps) {
       {faqs.data.map((faq, index) => (
         <CollapsibleItem key={faq.id} index={index} heading={faq.faq_heading}>
           <span
+            className="rich-text-content"
             dangerouslySetInnerHTML={{ __html: faq.faq_detail || "no" }}
-            className="prose min-w-full"
           ></span>
         </CollapsibleItem>
       ))}
