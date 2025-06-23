@@ -56,6 +56,35 @@ services:
     ports:
       - "5432:5432"
 
+  mailserver:
+    image: docker.io/mailserver/docker-mailserver:latest
+    hostname: mail
+    domainname: example.com  # Replace with your domain
+    container_name: mailserver
+    ports:
+      - "25:25"    # SMTP
+      - "143:143"  # IMAP
+      - "587:587"  # Submission
+      - "993:993"  # IMAPS
+    volumes:
+      - ./mailserver/data:/var/mail
+      - ./mailserver/state:/var/mail-state
+      - ./mailserver/logs:/var/log/mail
+      - ./mailserver/config:/tmp/docker-mailserver
+      - ./nginx/letsencrypt:/etc/letsencrypt  # Shared certs
+    environment:
+      - SSL_TYPE=letsencrypt
+      - SSL_DOMAIN=mail.trekinsikkim.in  # Your mail domain
+      - ENABLE_SPAMASSASSIN=1
+      - ENABLE_CLAMAV=1
+      - ENABLE_FAIL2BAN=1
+      - ONE_DIR=1
+      - PERMIT_DOCKER=connected-networks
+    cap_add:
+      - NET_ADMIN
+      - SYS_PTRACE
+
+
   nginx:
     image: nginx:latest
     container_name: nginx
@@ -96,65 +125,16 @@ services:
     depends_on:
       - nginx
 
-    # ---------------- Mail Server Starts Here ---------------- #
-
-  mailu-front:
-    image: ghcr.io/mailu/nginx:1.9
-    container_name: mailu-front
-    restart: always
-    env_file: ./mailu.env
-    ports:
-      - "25:25" # SMTP
-      - "465:465" # SMTPS
-      - "587:587" # Submission
-      - "143:143" # IMAP
-      - "993:993" # IMAPS
-      - "110:110" # POP3
-      - "995:995" # POP3S
+  webmail:
+    image: roundcube/roundcubemail:latest
+    container_name: roundcube
+    environment:
+      - ROUNDCUBEMAIL_DEFAULT_HOST=mailserver
+      - ROUNDCUBEMAIL_SMTP_SERVER=mailserver
     volumes:
-      - mailu-data:/data
-    depends_on:
-      - mailu-admin
-      - mailu-smtp
-      - mailu-imap
-      - mailu-antispam
-      - mailu-webmail
-
-  mailu-admin:
-    image: ghcr.io/mailu/admin:1.9
-    restart: always
-    env_file: ./mailu.env
-    volumes:
-      - mailu-data:/data
-
-  mailu-smtp:
-    image: ghcr.io/mailu/postfix:1.9
-    restart: always
-    env_file: ./mailu.env
-    volumes:
-      - mailu-data:/data
-
-  mailu-imap:
-    image: ghcr.io/mailu/dovecot:1.9
-    restart: always
-    env_file: ./mailu.env
-    volumes:
-      - mailu-data:/data
-
-  mailu-antispam:
-    image: ghcr.io/mailu/rspamd:1.9
-    restart: always
-    env_file: ./mailu.env
-    volumes:
-      - mailu-data:/data
-
-  mailu-webmail:
-    image: ghcr.io/mailu/rainloop:1.9
-    restart: always
-    env_file: ./mailu.env
-    volumes:
-      - mailu-data:/data
+      - ./webmail:/var/www/html
+    networks:
+      - mail-network
 
 volumes:
   db_data:
-  mailu-data:
