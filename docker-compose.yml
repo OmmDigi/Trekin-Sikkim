@@ -133,8 +133,6 @@ services:
       - ROUNDCUBEMAIL_SMTP_SERVER=mailserver
     volumes:
       - ./webmail:/var/www/html
-    networks:
-      - mail-network
 
 volumes:
   db_data:
