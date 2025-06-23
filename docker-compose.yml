@@ -98,7 +98,7 @@ services:
     # ---------------- Mail Server Starts Here ---------------- #
 
   mailu-front:
-    image: mailu/nginx:1.9
+    image: ghcr.io/mailu/nginx:1.9
     container_name: mailu-front
     restart: always
     env_file: ./mailu.env
@@ -120,35 +120,35 @@ services:
       - mailu-webmail
 
   mailu-admin:
-    image: mailu/admin:1.9
+    image: ghcr.io/mailu/admin:1.9
     restart: always
     env_file: ./mailu.env
     volumes:
       - mailu-data:/data
 
   mailu-smtp:
-    image: mailu/postfix:1.9
+    image: ghcr.io/mailu/postfix:1.9
     restart: always
     env_file: ./mailu.env
     volumes:
       - mailu-data:/data
 
   mailu-imap:
-    image: mailu/dovecot:1.9.48
+    image: ghcr.io/mailu/dovecot:1.9
     restart: always
     env_file: ./mailu.env
     volumes:
       - mailu-data:/data
 
   mailu-antispam:
-    image: mailu/rspamd:1.9
+    image: ghcr.io/mailu/rspamd:1.9
     restart: always
     env_file: ./mailu.env
     volumes:
       - mailu-data:/data
 
   mailu-webmail:
-    image: mailu/rainloop:2.0
+    image: ghcr.io/mailu/rainloop:1.9
     restart: always
     env_file: ./mailu.env
     volumes:
