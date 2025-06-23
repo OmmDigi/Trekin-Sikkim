@@ -134,7 +134,7 @@ services:
       - mailu-data:/data
 
   mailu-imap:
-    image: mailu/dovecot:1.9
+    image: mailu/dovecot:1.9.48
     restart: always
     env_file: ./mailu.env
     volumes:
@@ -148,7 +148,7 @@ services:
       - mailu-data:/data
 
   mailu-webmail:
-    image: mailu/rainloop:1.9
+    image: mailu/rainloop:2.0
     restart: always
     env_file: ./mailu.env
     volumes:
