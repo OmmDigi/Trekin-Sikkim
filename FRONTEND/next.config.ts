@@ -90,7 +90,7 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
-        source: "/sandakphu-trek/",
+        source: "/sandakphu-trek",
         destination: "/trek-in-sikkim/sandakphu-phalut",
         permanent: true,
       },
