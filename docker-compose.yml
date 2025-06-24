@@ -62,22 +62,22 @@ services:
       hostname: mail
       domainname: trekinsikkim.in
       ports:
-        - "25:25"      # SMTP
-        - "143:143"    # IMAP
-        - "587:587"    # Submission
-        - "993:993"    # Secure IMAP
+        - "25:25" # SMTP
+        - "143:143" # IMAP
+        - "587:587" # Submission
+        - "993:993" # Secure IMAP
       volumes:
         - ./mailserver/data:/var/mail
         - ./mailserver/state:/var/mail-state
         - ./mailserver/logs:/var/log/mail
         - ./mailserver/config:/tmp/docker-mailserver
-        - ./certbot/conf:/etc/letsencrypt  # ✅ Corrected this path
+        - ./certbot/conf:/etc/letsencrypt # ✅ Corrected this path
       environment:
         - ENABLE_SPAMASSASSIN=1
         - ENABLE_CLAMAV=1
         - ENABLE_FAIL2BAN=1
         - SSL_TYPE=letsencrypt
-        - SSL_DOMAIN=trekinsikkim.in       # ✅ This must match cert directory
+        - SSL_DOMAIN=trekinsikkim.in # ✅ This must match cert directory
         - PERMIT_DOCKER=connected-networks
         - ONE_DIR=1
         - LOG_LEVEL=info
@@ -85,7 +85,6 @@ services:
         - NET_ADMIN
         - SYS_PTRACE
       restart: always
-
 
   webmail:
     image: roundcube/roundcubemail:latest
@@ -127,20 +126,30 @@ services:
     volumes:
       - ./certbot/conf:/etc/letsencrypt
       - ./certbot/www:/var/www/certbot
-    entrypoint: [
-      "certbot", "certonly", "--webroot",
-      "--webroot-path=/var/www/certbot",
-      "--force-renewal",
-      "--email", "treksikkim.ommdigitalsoluction@gmail.com",
-      "--agree-tos",
-      "--no-eff-email",
-      "-d", "trekinsikkim.in",
-      "-d", "www.trekinsikkim.in",
-      "-d", "crm.trekinsikkim.in",
-      "-d", "api.trekinsikkim.in",
-      "-d", "upload.trekinsikkim.in",
-      "-d", "mail.trekinsikkim.in"
-    ]
+    entrypoint:
+      [
+        "certbot",
+        "certonly",
+        "--webroot",
+        "--webroot-path=/var/www/certbot",
+        "--force-renewal",
+        "--email",
+        "treksikkim.ommdigitalsoluction@gmail.com",
+        "--agree-tos",
+        "--no-eff-email",
+        "-d",
+        "trekinsikkim.in",
+        "-d",
+        "www.trekinsikkim.in",
+        "-d",
+        "crm.trekinsikkim.in",
+        "-d",
+        "api.trekinsikkim.in",
+        "-d",
+        "upload.trekinsikkim.in",
+        "-d",
+        "mail.trekinsikkim.in",
+      ]
     depends_on:
       - nginx
 
