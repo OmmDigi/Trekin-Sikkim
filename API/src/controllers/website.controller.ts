@@ -330,7 +330,7 @@ export const getSiteMapList = asyncErrorHandler(async (req, res) => {
     });
 
     const blogsSlug = blogs.map((row) => {
-      return `<url><loc>${frontendDomain}/articles/${row.slug}</loc></url>\n`;
+      return `<url><loc>${frontendDomain}/article/${row.slug}</loc></url>\n`;
     });
 
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>

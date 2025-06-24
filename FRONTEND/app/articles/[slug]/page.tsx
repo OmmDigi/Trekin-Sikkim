@@ -39,7 +39,7 @@ export async function generateMetadata({
       images: [
         categoryPageInfo?.data?.thumbnail || "/placeholder_background.jpg",
       ],
-      url: `/articles/${blogSlug}`,
+      url: `/article/${blogSlug}`,
       type: "website",
       locale: "en_US",
       siteName: "Glacier Treks And Adventure",

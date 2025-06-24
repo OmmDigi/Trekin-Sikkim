@@ -66,12 +66,32 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/article-list.php",
-        destination: "/articles",
+        destination: "/article",
         permanent: true,
       },
       {
         source: "/page/about-us",
         destination: "/about-us",
+        permanent: true,
+      },
+      {
+        source: "/goechala-trek",
+        destination: "/trek-in-sikkim/goechala-trek",
+        permanent: true,
+      },
+      {
+        source: "/tour-package/goechala-trek",
+        destination: "/trek-in-sikkim/goechala",
+        permanent: true,
+      },
+      {
+        source: "/tour-package/sandakphu-trek",
+        destination: "/trek-in-sikkim/sandakphu-trek",
+        permanent: true,
+      },
+      {
+        source: "/sandakphu-trek/",
+        destination: "/trek-in-sikkim/sandakphu-phalut",
         permanent: true,
       },
     ];

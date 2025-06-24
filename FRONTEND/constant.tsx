@@ -72,7 +72,7 @@ export const NAV_OPTIONS: NavOptions[] = [
     ],
   },
   { id: 6, icon: <TiContacts />, text: "Contact Us", pathname: "/contact-us" },
-  { id: 7, icon: <Rss size={14} />, text: "Articles", pathname: "/articles" },
+  { id: 7, icon: <Rss size={14} />, text: "Articles", pathname: "/article" },
   {
     id: 8,
     icon: <LogIn size={14} />,
