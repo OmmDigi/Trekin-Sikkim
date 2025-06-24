@@ -56,51 +56,51 @@ services:
     ports:
       - "5432:5432"
 
-  mailserver:
-    image: mailserver/docker-mailserver:latest
-    container_name: mailserver
-    hostname: mail
-    domainname: trekinsikkim.in
-    ports:
-      - "25:25"    # SMTP
-      - "143:143"  # IMAP
-      - "587:587"  # Submission
-      - "993:993"  # Secure IMAP
-    volumes:
-      - ./mailserver/data:/var/mail
-      - ./mailserver/state:/var/mail-state
-      - ./mailserver/logs:/var/log/mail
-      - ./mailserver/config:/tmp/docker-mailserver
-      - ./certbot/conf:/etc/letsencrypt
-    environment:
-      - ENABLE_SPAMASSASSIN=1
-      - ENABLE_CLAMAV=1
-      - ENABLE_FAIL2BAN=1
-      - SSL_TYPE=letsencrypt
-      - SSL_DOMAIN=trekinsikkim.in
-      - PERMIT_DOCKER=connected-networks
-      - ONE_DIR=1
-      - LOG_LEVEL=info
-    cap_add:
-      - NET_ADMIN
-      - SYS_PTRACE
-    restart: always
+  # mailserver:
+  #   image: mailserver/docker-mailserver:latest
+  #   container_name: mailserver
+  #   hostname: mail
+  #   domainname: trekinsikkim.in
+  #   ports:
+  #     - "25:25"    # SMTP
+  #     - "143:143"  # IMAP
+  #     - "587:587"  # Submission
+  #     - "993:993"  # Secure IMAP
+  #   volumes:
+  #     - ./mailserver/data:/var/mail
+  #     - ./mailserver/state:/var/mail-state
+  #     - ./mailserver/logs:/var/log/mail
+  #     - ./mailserver/config:/tmp/docker-mailserver
+  #     - ./certbot/conf:/etc/letsencrypt
+  #   environment:
+  #     - ENABLE_SPAMASSASSIN=1
+  #     - ENABLE_CLAMAV=1
+  #     - ENABLE_FAIL2BAN=1
+  #     - SSL_TYPE=letsencrypt
+  #     - SSL_DOMAIN=trekinsikkim.in
+  #     - PERMIT_DOCKER=connected-networks
+  #     - ONE_DIR=1
+  #     - LOG_LEVEL=info
+  #   cap_add:
+  #     - NET_ADMIN
+  #     - SYS_PTRACE
+  #   restart: always
 
-  webmail:
-    image: roundcube/roundcubemail:latest
-    container_name: roundcube
-    environment:
-      - ROUNDCUBEMAIL_DEFAULT_HOST=mailserver
-      - ROUNDCUBEMAIL_DEFAULT_PORT=143
-      - ROUNDCUBEMAIL_SMTP_SERVER=mailserver
-      - ROUNDCUBEMAIL_SMTP_PORT=587
-      - ROUNDCUBEMAIL_SMTP_USER=user@trekinsikkim.in
-      - ROUNDCUBEMAIL_SMTP_PASS=12345
-    volumes:
-      - ./webmail:/var/www/html
-    depends_on:
-      - mailserver
-    restart: always
+  # webmail:
+  #   image: roundcube/roundcubemail:latest
+  #   container_name: roundcube
+  #   environment:
+  #     - ROUNDCUBEMAIL_DEFAULT_HOST=mailserver
+  #     - ROUNDCUBEMAIL_DEFAULT_PORT=143
+  #     - ROUNDCUBEMAIL_SMTP_SERVER=mailserver
+  #     - ROUNDCUBEMAIL_SMTP_PORT=587
+  #     - ROUNDCUBEMAIL_SMTP_USER=user@trekinsikkim.in
+  #     - ROUNDCUBEMAIL_SMTP_PASS=12345
+  #   volumes:
+  #     - ./webmail:/var/www/html
+  #   depends_on:
+  #     - mailserver
+  #   restart: always
 
   nginx:
     image: nginx:latest
@@ -149,6 +149,6 @@ services:
 volumes:
   db_data:
 
-networks:
-  default:
-    name: trekinsikkim-network
+# networks:
+#   default:
+#     name: trekinsikkim-network
