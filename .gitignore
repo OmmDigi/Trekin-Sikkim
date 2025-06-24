@@ -1,3 +1,6 @@
 RESOURCE
 uploaded-files/
 mailu.env
+certbot
+mailserver
+webmail
