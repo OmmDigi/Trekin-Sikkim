@@ -90,9 +90,11 @@ services:
     container_name: roundcube
     environment:
       - ROUNDCUBEMAIL_DEFAULT_HOST=mailserver
+      - ROUNDCUBEMAIL_DEFAULT_PORT=143
       - ROUNDCUBEMAIL_SMTP_SERVER=mailserver
       - ROUNDCUBEMAIL_SMTP_PORT=587
-      - ROUNDCUBEMAIL_DEFAULT_PORT=993
+      - ROUNDCUBEMAIL_SMTP_USER=user@trekinsikkim.in
+      - ROUNDCUBEMAIL_SMTP_PASS=12345
     volumes:
       - ./webmail:/var/www/html
     depends_on:
