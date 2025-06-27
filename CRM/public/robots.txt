@@ -1,2 +1,3 @@
 User-agent: *
-Disallow: /
+Disallow: https://crm.trekinsikkim.in
+Disallow: https://crm.trekinsikkim.in/dashboard

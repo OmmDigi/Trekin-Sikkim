@@ -94,6 +94,71 @@ const nextConfig: NextConfig = {
         destination: "/trek-in-sikkim/sandakphu-phalut",
         permanent: true,
       },
+      {
+        source: "/articles",
+        destination: "/article",
+        permanent: true,
+      },
+      {
+        source: "/articals/:slug*",
+        destination: "/artical/:slug*",
+        permanent: true,
+      },
+      {
+        source: "/trek-in-sikim",
+        destination: "/trek-in-sikkim",
+        permanent: true,
+      },
+      {
+        source: "/trekking-in-sikkim",
+        destination: "/trek-in-sikkim",
+        permanent: true,
+      },
+      {
+        source: "/tour/Trek-in-Sikkim",
+        destination: "/trek-in-sikkim",
+        permanent: true,
+      },
+      {
+        source: "/tour/Tour-in-Sikkim",
+        destination: "/trek-in-sikkim",
+        permanent: true,
+      },
+      {
+        source: "/tour/Tour-in-Sikkkim",
+        destination: "/sikkim-tour",
+        permanent: true,
+      },
+      {
+        source: "/tour/Ladakh-Tour",
+        destination: "/ladakh-package-tour/ladakh-package-tours",
+        permanent: true,
+      },
+      {
+        source: "/sikkim-package-tour",
+        destination: "/sikkim-tour",
+        permanent: true,
+      },
+      {
+        source: "/tour-package/sikkim-package-tour",
+        destination: "/sikkim-tour",
+        permanent: true,
+      },
+      {
+        source: "/tour/expedition",
+        destination: "/expedition-in-sikkim-himalaya",
+        permanent: true,
+      },
+      {
+        source: "/tour/expedition-in-sikkim",
+        destination: "/expedition-in-sikkim-himalaya",
+        permanent: true,
+      },
+      {
+        source: "/tour-type/Tour",
+        destination: "/",
+        permanent: true,
+      },
     ];
   },
 };
