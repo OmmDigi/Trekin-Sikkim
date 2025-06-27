@@ -101,7 +101,7 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/articles/:slug*",
-        destination: "/artical/:slug*",
+        destination: "/article/:slug*",
         permanent: true,
       },
       {
