@@ -261,20 +261,20 @@ export const POLICY_LIST: NavOptions[] = [
     text: "Terms & Conditions",
     pathname: "/Booking-And-Cancellation",
   },
-  {
-    id: "dic1",
-    text: "Disclaimer",
-    pathname: "/",
-  },
+  // {
+  //   id: "dic1",
+  //   text: "Disclaimer",
+  //   pathname: "/",
+  // },
   {
     id: "pp1",
     text: "Privacy Policy",
-    pathname: "/",
+    pathname: "/privacy-policy",
   },
   {
     id: "rp1",
     text: "Refund Policy",
-    pathname: "/",
+    pathname: "/refund-policy",
   },
 ];
 
