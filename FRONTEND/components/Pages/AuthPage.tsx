@@ -16,6 +16,7 @@ import { useTransition } from "react";
 import CustomLink from "../CustomLink";
 import { toast } from "react-toastify";
 import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 interface IProps {
   type: "login" | "signup";
@@ -91,13 +92,20 @@ export default function AuthPage({ type }: IProps) {
             {type === "signup" ? "Create Account" : "Login Account"}
           </h2>
 
-          <Button
-            type="button"
-            className="border border-gray-400 flex items-center gap-3.5 !rounded-md font-semibold"
+          <Link
+            href={`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/login/google`}
+            target="__blank"
           >
-            <FcGoogle size={20} />
-            <span>{type === "signup" ? "Sign up" : "Log in"} with Google</span>
-          </Button>
+            <Button
+              type="button"
+              className="border border-gray-400 flex items-center gap-3.5 !rounded-md font-semibold"
+            >
+              <FcGoogle size={20} />
+              <span>
+                {type === "signup" ? "Sign up" : "Log in"} with Google
+              </span>
+            </Button>
+          </Link>
 
           <div className="flex items-center gap-4">
             <div className="grow h-[1px] bg-gray-400 opacity-30"></div>
