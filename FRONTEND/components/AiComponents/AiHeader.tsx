@@ -145,11 +145,11 @@ export default function AiHeader() {
                       <div className="space-y-2 text-sm">
                         <div className="flex items-center gap-2">
                           <Phone size={14} />
-                          <span>+91 9876543210</span>
+                          <span>+91 7407248200</span>
                         </div>
                         <div className="flex items-center gap-2">
                           <Mail size={14} />
-                          <span>info@glaciertreks.com</span>
+                          <span>kiran.yuksom@gmail.com</span>
                         </div>
                       </div>
                     </div>

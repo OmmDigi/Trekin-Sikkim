@@ -109,7 +109,7 @@ export default async function AiNavItemList() {
             <div className="text-right">
               <div className="text-xs text-gray-500">Call:</div>
               <div className="text-sm font-semibold text-emerald-600">
-                +91 9876543210
+                +91 7407248200
               </div>
             </div>
           </div>
