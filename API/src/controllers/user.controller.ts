@@ -362,8 +362,9 @@ export const verifyGoogleLogin = asyncErrorHandler(async (req, res) => {
   res.cookie("refreshToken", token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "strict", // or "Lax"
+    sameSite: process.env.NODE_ENV === "production" ? "lax" : "lax",
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    domain: process.env.DOMAIN,
   });
 
   // res.status(200).json(new ApiResponse(200, "Login completed", token));
