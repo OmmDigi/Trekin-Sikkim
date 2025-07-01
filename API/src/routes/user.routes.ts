@@ -27,7 +27,7 @@ userRoute
   .post("/create-admin", createAdmin)
   .post("/signup", signupUser)
   .get("/verify-email/:token", verifyEmail)
-  .get("/logout", logout)
+  .get("/logout", isAuthenticated, logout)
   .post("/reset-password/send", sendResetPasswordLink)
   .get("/reset-password/page/:token", getResetPasswordPage)
   .post("/change-password", changePassword)

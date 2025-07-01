@@ -94,11 +94,11 @@ export default function AuthPage({ type }: IProps) {
 
           <Link
             href={`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/login/google`}
-            target="__blank"
+            className="block"
           >
             <Button
               type="button"
-              className="border border-gray-400 flex items-center gap-3.5 !rounded-md font-semibold"
+              className="border w-full border-gray-400 flex items-center gap-3.5 !rounded-md font-semibold"
             >
               <FcGoogle size={20} />
               <span>

@@ -72,7 +72,6 @@ export const loginUser = asyncErrorHandler(async (req, res) => {
   });
 
   res.cookie("refreshToken", token, {
-    // path: "/",
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: process.env.NODE_ENV === "production" ? "lax" : "lax",
@@ -183,9 +182,15 @@ export const verifyEmail = asyncErrorHandler(async (req, res) => {
   });
 });
 
-export const logout = asyncErrorHandler(async (req, res) => {
+export const logout = asyncErrorHandler(async (req: CustomRequest, res) => {
   res
-    .clearCookie("refreshToken")
+    .clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "lax" : "lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      domain: process.env.DOMAIN,
+    })
     .status(200)
     .json(new ApiResponse(200, "Successfully logout"));
 });
