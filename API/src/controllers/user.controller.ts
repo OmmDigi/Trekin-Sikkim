@@ -187,9 +187,9 @@ export const logout = asyncErrorHandler(async (req: CustomRequest, res) => {
     .clearCookie("refreshToken", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "lax" : "lax",
+      sameSite: "none",
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-      // domain: process.env.DOMAIN,
+      domain: process.env.DOMAIN,
     })
     .status(200)
     .json(new ApiResponse(200, "Successfully logout"));
