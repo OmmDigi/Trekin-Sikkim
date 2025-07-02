@@ -76,7 +76,7 @@ export const loginUser = asyncErrorHandler(async (req, res) => {
     secure: process.env.NODE_ENV === "production",
     sameSite: process.env.NODE_ENV === "production" ? "lax" : "lax",
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    // domain: process.env.DOMAIN,
+    domain: process.env.DOMAIN,
   });
 
   //update last login
@@ -392,7 +392,7 @@ export const verifyGoogleLogin = asyncErrorHandler(async (req, res) => {
     secure: process.env.NODE_ENV === "production",
     sameSite: process.env.NODE_ENV === "production" ? "lax" : "lax",
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    // domain: process.env.DOMAIN,
+    domain: process.env.DOMAIN,
   });
 
   // res.status(200).json(new ApiResponse(200, "Login completed", token));
