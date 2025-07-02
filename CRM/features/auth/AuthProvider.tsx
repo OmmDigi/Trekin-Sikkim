@@ -29,7 +29,11 @@ function AuthProvider({ children }: IProps) {
       </div>
     );
 
-  if (error?.status === 401 && pathname !== "/auth/login" && pathname !== "/auth/forgot-password")
+  if (
+    (error?.status === 401 || error?.status === 403) &&
+    pathname !== "/auth/login" &&
+    pathname !== "/auth/forgot-password"
+  )
     return (
       <div className="w-full h-screen flex items-center gap-3 flex-col justify-center">
         <ShieldOff size={25} />

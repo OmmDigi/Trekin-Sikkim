@@ -5,7 +5,7 @@ import CustomLink from "./CustomLink";
 
 export default async function CategoryFooterListView() {
   const { data: categories } = await api.get<IResponse<ICategories[]>>(
-    "/api/v1/category"
+    "/api/v1/category?category_types=Trek,Tour,Expedition&add_to_footer=true"
   );
 
   return (

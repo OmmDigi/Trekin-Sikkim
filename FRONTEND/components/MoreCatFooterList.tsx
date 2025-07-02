@@ -9,7 +9,7 @@ export default async function MoreCatFooterList() {
   try {
     const response = await (
       await api.get<IResponse<ICategories[]>>(
-        "/api/v1/category?add_to_footer=true"
+        "/api/v1/category?add_to_footer=true&category_type=4"
       )
     ).data;
     if (response.data) {

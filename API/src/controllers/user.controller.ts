@@ -76,7 +76,7 @@ export const loginUser = asyncErrorHandler(async (req, res) => {
     secure: process.env.NODE_ENV === "production",
     sameSite: process.env.NODE_ENV === "production" ? "lax" : "lax",
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    domain: process.env.DOMAIN,
+    // domain: process.env.DOMAIN,
   });
 
   //update last login
@@ -189,7 +189,7 @@ export const logout = asyncErrorHandler(async (req: CustomRequest, res) => {
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "lax" : "lax",
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-      domain: process.env.DOMAIN,
+      // domain: process.env.DOMAIN,
     })
     .status(200)
     .json(new ApiResponse(200, "Successfully logout"));
@@ -281,15 +281,21 @@ export const changePassword = asyncErrorHandler(async (req, res) => {
 
 //login with google
 export const loginWithGoogle = asyncErrorHandler(async (req, res) => {
-  const redirectAfterLogin = req.query.redirect || process.env.REDIRECT_URL;
-  const state = Buffer.from(JSON.stringify({ redirectAfterLogin })).toString(
-    "base64"
-  );
+  let state: string | null = null;
+
+  if (req.query.redirect) {
+    state = Buffer.from(
+      JSON.stringify({ redirectAfterLogin: req.query.redirect })
+    ).toString("base64");
+  }
+
   const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${
     process.env.CLIENT_ID
   }&redirect_uri=${
     process.env.REDIRECT_URL
-  }&response_type=code&scope=profile email&state=${encodeURIComponent(state)}`;
+  }&response_type=code&scope=profile email${
+    state !== null ? `&state=${encodeURIComponent(state)}` : ""
+  }`;
 
   res.status(307).redirect(url);
 });
@@ -386,7 +392,7 @@ export const verifyGoogleLogin = asyncErrorHandler(async (req, res) => {
     secure: process.env.NODE_ENV === "production",
     sameSite: process.env.NODE_ENV === "production" ? "lax" : "lax",
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    domain: process.env.DOMAIN,
+    // domain: process.env.DOMAIN,
   });
 
   // res.status(200).json(new ApiResponse(200, "Login completed", token));

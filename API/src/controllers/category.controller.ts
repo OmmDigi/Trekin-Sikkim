@@ -95,6 +95,7 @@ export const getAllCategories = asyncErrorHandler(async (req, res) => {
   const category_type = req.query.category_type?.toString();
   const inhome = req.query.inhome === "true";
   const showInfooter = req.query.add_to_footer === "true";
+  const categoryTypes = req.query.category_types?.toString().split(",");
 
   let filter = "";
   const filterValues: string[] = [];
@@ -123,6 +124,22 @@ export const getAllCategories = asyncErrorHandler(async (req, res) => {
     }
   }
 
+  if (categoryTypes && categoryTypes.length >= 1) {
+    const orFiltersArr: string[] = [];
+
+    for (const type of categoryTypes) {
+      orFiltersArr.push(`t.type_name = $${placeholdernum}`);
+      placeholdernum++;
+      filterValues.push(type);
+    }
+
+    if (filter === "") {
+      filter = `WHERE (${orFiltersArr.join(" OR ")})`;
+    } else {
+      filter += ` AND (${orFiltersArr.join(" OR ")})`;
+    }
+  }
+  
   const { rows } = await pool.query(
     `
     SELECT c.category_id, c.category_name, t.type_id AS category_type_id, t.type_name AS category_type, c.slug  FROM category c
@@ -132,6 +149,7 @@ export const getAllCategories = asyncErrorHandler(async (req, res) => {
       `,
     filterValues
   );
+
   res.status(200).json(new ApiResponse(200, "Package Categories", rows));
 });
 
