@@ -18,6 +18,13 @@ import { ApiResponse } from "./utils/ApiResponse";
 import fs from "fs";
 import { upcomingPackageRoutes } from "./routes/upcoming.package.routes";
 
+import {
+  StandardCheckoutClient,
+  Env,
+  StandardCheckoutPayRequest,
+} from "pg-sdk-node";
+import { randomUUID } from "crypto";
+
 const app: Application = express();
 
 // Load environment variables based on NODE_ENV
@@ -56,7 +63,7 @@ app.use("/api/v1/package", packageRoute);
 app.use("/api/v1/payment", paymentRouter);
 app.use("/api/v1/booking", bookingRoute);
 app.use("/api/v1/website", websiteRoute);
-app.use("/api/v1/upcoming", upcomingPackageRoutes)
+app.use("/api/v1/upcoming", upcomingPackageRoutes);
 
 app.post(
   "/init-db",
@@ -66,11 +73,52 @@ app.post(
       res.status(400).json(new ApiResponse(400, "password is wrong"));
       return;
     }
-    const sql = fs.readFileSync(path.join(__dirname, "../database.sql"), "utf-8");
+    const sql = fs.readFileSync(
+      path.join(__dirname, "../database.sql"),
+      "utf-8"
+    );
 
     await pool.query(sql);
 
     res.status(200).json(new ApiResponse(200, "Sql Successfully Init"));
+  })
+);
+
+app.get(
+  "/phone",
+  asyncErrorHandler(async (req, res) => {
+    // const clientId = "TEST-M23MM5WJFVU2M_25063";
+    // const clientSecret = "ZjRiMzIwY2QtOTY1MC00YTQyLTg3YjEtYmI3NzlmNDVjZTZi";
+    const clientId = process.env.PHONEPE_MERCHANT_ID!;
+    const clientSecret = process.env.PHONEPE_MERCHANT_KEY!;
+    const clientVersion = 1; //insert your client version here
+    const env = Env.SANDBOX; //change to Env.PRODUCTION when you go live
+
+    const client = StandardCheckoutClient.getInstance(
+      clientId,
+      clientSecret,
+      clientVersion,
+      env
+    );
+
+    const merchantOrderId = randomUUID();
+    const amount = 100;
+    const redirectUrl = "https://www.merchant.com/redirect";
+
+    const request = StandardCheckoutPayRequest.builder()
+      .merchantOrderId(merchantOrderId)
+      .amount(amount)
+      .redirectUrl(redirectUrl)
+      .build();
+
+    // client.pay(request).then((response) => {
+    //   const checkoutPageUrl = response.redirectUrl;
+    //   console.log(checkoutPageUrl);
+    //   res.send(checkoutPageUrl);
+    // });
+
+    const response = await client.pay(request);
+    res.send(response);
   })
 );
 

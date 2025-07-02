@@ -212,7 +212,7 @@ export default function Bookings() {
                   </TableCell>
                   <TableCell>
                     {booking.booking_dates?.map((eachDate, index) => (
-                      <span>
+                      <span key={index}>
                         {index !== 0 ? ", " : ""}
                         {formatDateToReadable(eachDate.from_date)} -{" "}
                         {formatDateToReadable(eachDate.to_date)}

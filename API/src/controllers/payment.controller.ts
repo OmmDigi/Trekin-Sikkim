@@ -75,11 +75,11 @@ export const createPhonepeOrder = asyncErrorHandler(
       );
 
       await client.query("COMMIT");
-      client.release();
     } catch (error: any) {
       await client.query("ROLLBACK");
-      client.release();
       throw new ErrorHandler(400, error.message);
+    } finally {
+      client.release();
     }
 
     if (finalPrice === 0)
@@ -97,17 +97,17 @@ export const createPhonepeOrder = asyncErrorHandler(
       },
     });
 
-    if (!success) throw new ErrorHandler(400, "Unable to create order");
+    if (!success) {
+      throw new ErrorHandler(400, "Unable to create order");
+    }
 
-    res
-      .status(201)
-      .json(
-        new ApiResponse(
-          201,
-          "Order successfully created",
-          data.instrumentResponse.redirectInfo.url
-        )
-      );
+    res.status(201).json(
+      new ApiResponse(
+        201,
+        "Order successfully created",
+        data.instrumentResponse.redirectInfo.url
+      )
+    );
   }
 );
 
@@ -275,7 +275,7 @@ export const checkPhonepePaymentStatus = asyncErrorHandler(async (req, res) => {
       failedAmount: `₹${paymentInfo.data.amount / 100}`,
       purchaseDate: formattedDate,
     });
-    console.log(error)
+    console.log(error);
   } finally {
     client.release();
   }
