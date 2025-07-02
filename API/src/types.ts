@@ -1,4 +1,5 @@
 import { Request } from "express";
+import { PaymentDetail } from "pg-sdk-node";
 
 export interface IError extends Error {
   code?: number;
@@ -41,23 +42,13 @@ export interface CustomRequest extends Request {
 // phone pe types
 
 interface PaymentData {
-  merchantId: string;
-  merchantTransactionId: string;
+  // merchantId: string;
+  orderId: string;
   transactionId: string;
   amount: number;
   state: string;
   responseCode: string;
-  paymentInstrument: PaymentInstrument;
-}
-
-interface PaymentInstrument {
-  type: string;
-  cardType: string;
-  bankTransactionId: string | null;
-  arn: string;
-  authRefId: string;
-  bankId: string | null;
-  brn: string;
+  paymentInstrument: PaymentDetail[];
 }
 
 export interface PaymentResponse {

@@ -281,12 +281,34 @@ export const changePassword = asyncErrorHandler(async (req, res) => {
 
 //login with google
 export const loginWithGoogle = asyncErrorHandler(async (req, res) => {
-  const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URL}&response_type=code&scope=profile email`;
+  const redirectAfterLogin = req.query.redirect || process.env.REDIRECT_URL;
+  const state = Buffer.from(JSON.stringify({ redirectAfterLogin })).toString(
+    "base64"
+  );
+  const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${
+    process.env.CLIENT_ID
+  }&redirect_uri=${
+    process.env.REDIRECT_URL
+  }&response_type=code&scope=profile email&state=${encodeURIComponent(state)}`;
+
   res.status(307).redirect(url);
 });
 
 export const verifyGoogleLogin = asyncErrorHandler(async (req, res) => {
-  const { code } = req.query;
+  const { code, state } = req.query;
+
+  let redirectAfterLogin = process.env.FRONTEND_HOST_URL;
+  if (state) {
+    try {
+      const decoded = JSON.parse(
+        Buffer.from(state.toString(), "base64").toString("utf-8")
+      );
+      if (decoded.redirectAfterLogin)
+        redirectAfterLogin = decoded.redirectAfterLogin;
+    } catch (err) {
+      console.error("Invalid state param:", err);
+    }
+  }
 
   const response = await fetch("https://oauth2.googleapis.com/token", {
     method: "POST",
@@ -368,7 +390,7 @@ export const verifyGoogleLogin = asyncErrorHandler(async (req, res) => {
   });
 
   // res.status(200).json(new ApiResponse(200, "Login completed", token));
-  res.redirect(process.env.FRONTEND_HOST_URL || "");
+  res.redirect(redirectAfterLogin || "");
 });
 
 // account

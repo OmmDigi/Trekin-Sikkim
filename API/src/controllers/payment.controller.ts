@@ -27,7 +27,7 @@ export const createPhonepeOrder = asyncErrorHandler(
         `Number of people is ${value.number_of_people} and you are not providing proper "Participant Info"`
       );
 
-    const orderId = uuidv4();
+    const merchant_order_id = uuidv4();
     const currentUserId = req.user_info?.id;
     const currentPackageId = value.package_id;
 
@@ -63,15 +63,18 @@ export const createPhonepeOrder = asyncErrorHandler(
 
         // add addon price with final price
         finalPrice += parseFloat(rows[0].total);
-
-        //now add the gst
-        finalPrice += finalPrice * (5 / 100);
       }
+
+      //now add the gst
+      finalPrice += finalPrice * (5 / 100);
 
       // store the body data to database to use it later
       await client.query(
-        "INSERT INTO temp_create_order_info (order_id, info) VALUES ($1, $2)",
-        [orderId, JSON.stringify({ user_id: currentUserId, ...value })]
+        "INSERT INTO temp_create_order_info (merchant_order_id, info) VALUES ($1, $2)",
+        [
+          merchant_order_id,
+          JSON.stringify({ user_id: currentUserId, ...value }),
+        ]
       );
 
       await client.query("COMMIT");
@@ -89,8 +92,8 @@ export const createPhonepeOrder = asyncErrorHandler(
       merchantUserId: value.full_name,
       mobileNumber: value.contact_number,
       amount: finalPrice * 100,
-      merchantTransactionId: orderId,
-      redirectUrl: `${process.env.API_HOST_URL}/api/v1/payment/phonepe/status?order_id=${orderId}`,
+      merchantTransactionId: merchant_order_id,
+      redirectUrl: `${process.env.API_HOST_URL}/api/v1/payment/phonepe/status?merchant_order_id=${merchant_order_id}`,
       redirectMode: "POST",
       paymentInstrument: {
         type: "PAY_PAGE",
@@ -101,13 +104,15 @@ export const createPhonepeOrder = asyncErrorHandler(
       throw new ErrorHandler(400, "Unable to create order");
     }
 
-    res.status(201).json(
-      new ApiResponse(
-        201,
-        "Order successfully created",
-        data.instrumentResponse.redirectInfo.url
-      )
-    );
+    res
+      .status(201)
+      .json(
+        new ApiResponse(
+          201,
+          "Order successfully created",
+          data.instrumentResponse.redirectInfo.url
+        )
+      );
   }
 );
 
@@ -115,8 +120,12 @@ export const checkPhonepePaymentStatus = asyncErrorHandler(async (req, res) => {
   const { error, value } = VCheckPhonePeStatus.validate(req.query);
   if (error) throw new ErrorHandler(400, error.message);
 
-  const paymentInfo = await phonePe().checkStatus(value.order_id);
+  const merchantOrderId = value.merchant_order_id;
+
+  const paymentInfo = await phonePe().checkStatus(merchantOrderId);
   if (!paymentInfo.success) throw new ErrorHandler(400, paymentInfo.message);
+
+  const orderId = paymentInfo.data.orderId;
 
   const formattedDate = new Date().toLocaleDateString("en-US", {
     year: "numeric",
@@ -130,11 +139,11 @@ export const checkPhonepePaymentStatus = asyncErrorHandler(async (req, res) => {
     await client.query("BEGIN");
 
     const { rows, rowCount } = await client.query(
-      "SELECT * FROM temp_create_order_info WHERE order_id = $1",
-      [value.order_id]
+      "SELECT * FROM temp_create_order_info WHERE merchant_order_id = $1",
+      [merchantOrderId]
     );
 
-    if (rowCount === 0) throw new ErrorHandler(400, "No order found");
+    if (rowCount === 0) throw new ErrorHandler(404, "No order found");
     const orderInfo = JSON.parse(rows[0].info);
 
     const currentPackageId = orderInfo.package_id;
@@ -183,7 +192,7 @@ export const checkPhonepePaymentStatus = asyncErrorHandler(async (req, res) => {
         ENROLLMENT_COLUMNS
       );
       enrollmentData = rows.flatMap((item) => [
-        value.order_id,
+        orderId,
         item.user_id,
         currentPackageId,
         1,
@@ -191,7 +200,7 @@ export const checkPhonepePaymentStatus = asyncErrorHandler(async (req, res) => {
       ]); // 1 mean as-participants;
 
       enrollmentData.push(
-        value.order_id,
+        orderId,
         currentUserId,
         currentPackageId,
         2,
@@ -203,7 +212,7 @@ export const checkPhonepePaymentStatus = asyncErrorHandler(async (req, res) => {
         ENROLLMENT_COLUMNS
       );
       enrollmentData.push(
-        value.order_id,
+        orderId,
         currentUserId,
         currentPackageId,
         2,
@@ -223,7 +232,7 @@ export const checkPhonepePaymentStatus = asyncErrorHandler(async (req, res) => {
       );
       await client.query(
         `INSERT INTO order_id_and_additional (order_id, additional_id) VALUES ${createAddonPlaceholder}`,
-        orderInfo.addon_ids.flatMap((item: number) => [value.order_id, item])
+        orderInfo.addon_ids.flatMap((item: number) => [orderId, item])
       );
     }
 
@@ -231,7 +240,7 @@ export const checkPhonepePaymentStatus = asyncErrorHandler(async (req, res) => {
     if (orderInfo?.departure_date_id) {
       await client.query(
         "INSERT INTO order_id_and_date (order_id, departure_date_id) VALUES ($1, $2)",
-        [value.order_id, orderInfo.departure_date_id]
+        [orderId, orderInfo.departure_date_id]
       );
 
       await client.query(
@@ -244,14 +253,14 @@ export const checkPhonepePaymentStatus = asyncErrorHandler(async (req, res) => {
     if (orderInfo?.from_date && orderInfo?.to_date) {
       await client.query(
         "INSERT INTO order_id_and_date (order_id, from_date, to_date) VALUES ($1, $2, $3)",
-        [value.order_id, orderInfo.from_date, orderInfo.to_date]
+        [orderId, orderInfo.from_date, orderInfo.to_date]
       );
     }
 
     await client.query(
       "INSERT INTO payments (order_id, transactionId, amount, state, paymentInstrument) VALUES ($1, $2, $3, $4, $5)",
       [
-        paymentInfo.data.merchantTransactionId,
+        paymentInfo.data.orderId,
         paymentInfo.data.transactionId,
         paymentInfo.data.amount / 100,
         paymentInfo.data.state,
@@ -259,23 +268,32 @@ export const checkPhonepePaymentStatus = asyncErrorHandler(async (req, res) => {
       ]
     );
 
+    await client.query(
+      "DELETE FROM temp_create_order_info WHERE merchant_order_id = $1",
+      [merchantOrderId]
+    );
+
     await client.query("COMMIT");
 
     sendBookingConfirmationEmail(orderInfo, paymentInfo);
 
     res.render("payment-success.ejs", {
-      orderId: value.order_id,
+      orderId: orderId,
       paidAmount: `₹${paymentInfo.data.amount / 100}`,
       purchaseDate: formattedDate,
       frontendPageLink: `${process.env.FRONTEND_HOST_URL}/account`,
     });
   } catch (error: any) {
     await client.query("ROLLBACK");
-    res.render("payment-failed.ejs", {
-      failedAmount: `₹${paymentInfo.data.amount / 100}`,
-      purchaseDate: formattedDate,
-    });
-    console.log(error);
+
+    if (error?.statusCode === 404) {
+      res.redirect(`${process.env.FRONTEND_HOST_URL}/account`);
+    } else {
+      res.render("payment-failed.ejs", {
+        failedAmount: `₹${paymentInfo.data.amount / 100}`,
+        purchaseDate: formattedDate,
+      });
+    }
   } finally {
     client.release();
   }

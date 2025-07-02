@@ -10,4 +10,4 @@ export const paymentRouter = Router();
 
 paymentRouter
   .post("/phonepe/create-order", isAuthenticated, createPhonepeOrder)
-  .post("/phonepe/status", checkPhonepePaymentStatus); //
+  .get("/phonepe/status", checkPhonepePaymentStatus); //

@@ -37,25 +37,11 @@ interface ICreateOrderResponse {
   };
 }
 
-// export function buildXVerify(
-//   payload: object,
-//   endpointPath: string,
-//   saltKey: string,
-//   saltIndex: string
-// ): string {
-//   const base64Body = Buffer.from(JSON.stringify(payload)).toString("base64");
-//   const hash = createHash("sha256")
-//     .update(base64Body + endpointPath + saltKey)
-//     .digest("hex");
-//   return `${hash}###${saltIndex}`;
-// }
-
 export class PhonePe {
   private MERCHANT_KEY: string | null = null;
   private MERCHANT_ID: string | null = null;
   private PHONEPE_MERCHANT_BASE_URL: string | null = null;
-  private PHONEPE_MERCHANT_STATUS_URL: string | null = null;
-  private TYPE: Env = Env.SANDBOX;
+  private ENV_TYPE: Env = Env.SANDBOX;
 
   constructor(
     merchant_key: string,
@@ -73,8 +59,7 @@ export class PhonePe {
     this.MERCHANT_KEY = merchant_key;
     this.MERCHANT_ID = merchant_id;
     this.PHONEPE_MERCHANT_BASE_URL = merchant_base_url;
-    this.PHONEPE_MERCHANT_STATUS_URL = merchant_status_url;
-    this.TYPE =
+    this.ENV_TYPE =
       process.env.NODE_ENV === "development" ? Env.SANDBOX : Env.PRODUCTION;
   }
 
@@ -83,40 +68,48 @@ export class PhonePe {
   ): Promise<ICreateOrderResponse> => {
     if (this.MERCHANT_KEY === null)
       throw new Error("PHONEPE_MERCHANT_KEY is required");
+    if (this.MERCHANT_ID === null)
+      throw new Error("PHONEPE_MERCHANT_ID is required");
     if (this.PHONEPE_MERCHANT_BASE_URL === null)
       throw new Error("PHONEPE_MERCHANT_BASE_URL is required");
 
-    const newPaymentPayload = {
-      merchantId: this.MERCHANT_ID,
-      ...paymentPayload,
-    };
+    if (this.ENV_TYPE === null)
+      throw new Error("PHONEPE_MERCHANT_TYPE is required");
 
-    const payload = Buffer.from(JSON.stringify(newPaymentPayload)).toString(
-      "base64"
+    const client = StandardCheckoutClient.getInstance(
+      this.MERCHANT_ID,
+      this.MERCHANT_KEY,
+      1,
+      this.ENV_TYPE
     );
-    const keyIndex = 1;
-    const string = payload + "/pg/v1/pay" + this.MERCHANT_KEY;
-    crypto.SHA256(string);
-    // const sha256 = crypto.createHash('sha256').update(string).digest('hex')
-    const sha256 = crypto.SHA256(string).toString();
-    const checksum = sha256 + "###" + keyIndex;
 
-    const axiosOptions = {
-      method: "POST",
-      url: this.PHONEPE_MERCHANT_BASE_URL,
-      headers: {
-        accept: "application/json",
-        "Content-Type": "application/json",
-        "X-VERIFY": checksum,
-      },
+    const merchantOrderId = paymentPayload.merchantTransactionId;
+    const amount = paymentPayload.amount;
+    const redirectUrl = paymentPayload.redirectUrl;
+
+    const request = StandardCheckoutPayRequest.builder()
+      .merchantOrderId(merchantOrderId)
+      .amount(amount)
+      .redirectUrl(redirectUrl)
+      .build();
+
+    const response = await client.pay(request);
+    return {
+      success: true,
+      code: "200",
+      message: "Phonepe Payment Page",
       data: {
-        request: payload,
+        merchantId: this.MERCHANT_ID,
+        merchantTransactionId: response.orderId,
+        instrumentResponse: {
+          type: "payment",
+          redirectInfo: {
+            url: response.redirectUrl,
+            method: "GET",
+          },
+        },
       },
     };
-
-    const response = await axios.request(axiosOptions);
-    // return response.data.data.instrumentResponse.redirectInfo.url;
-    return response.data;
   };
 
   // createOrder = async (
@@ -187,34 +180,70 @@ export class PhonePe {
   //   return response.data;
   // };
 
+  // checkStatus = async (
+  //   merchantTransactionId: string
+  // ): Promise<PaymentResponse> => {
+  //   if (this.MERCHANT_KEY === null)
+  //     throw new Error("PHONEPE_MERCHANT_KEY is required");
+  //   if (this.MERCHANT_ID === null) throw new Error("MERCHANT_ID is required");
+  //   if (this.PHONEPE_MERCHANT_STATUS_URL === null)
+  //     throw new Error("PHONEPE_MERCHANT_STATUS_URL is required");
+
+  //   const keyIndex = 1;
+  //   const string =
+  //     `/pg/v1/status/${this.MERCHANT_ID}/${merchantTransactionId}` +
+  //     this.MERCHANT_KEY;
+  //   // const sha256 = crypto.createHash('sha256').update(string).digest('hex')
+  //   const sha256 = crypto.SHA256(string).toString();
+  //   const checksum = sha256 + "###" + keyIndex;
+
+  //   const option = {
+  //     method: "GET",
+  //     url: `${this.PHONEPE_MERCHANT_STATUS_URL}/${this.MERCHANT_ID}/${merchantTransactionId}`,
+  //     headers: {
+  //       accept: "application/json",
+  //       "Content-Type": "application/json",
+  //       "X-VERIFY": checksum,
+  //       "X-MERCHANT-ID": this.MERCHANT_ID,
+  //     },
+  //   };
+
+  //   return (await axios.request(option)).data;
+  // };
+
   checkStatus = async (
-    merchantTransactionId: string
+    merchantOrderId: string
   ): Promise<PaymentResponse> => {
     if (this.MERCHANT_KEY === null)
       throw new Error("PHONEPE_MERCHANT_KEY is required");
-    if (this.MERCHANT_ID === null) throw new Error("MERCHANT_ID is required");
-    if (this.PHONEPE_MERCHANT_STATUS_URL === null)
-      throw new Error("PHONEPE_MERCHANT_STATUS_URL is required");
+    if (this.MERCHANT_ID === null)
+      throw new Error("PHONEPE_MERCHANT_ID is required");
+    if (this.PHONEPE_MERCHANT_BASE_URL === null)
+      throw new Error("PHONEPE_MERCHANT_BASE_URL is required");
 
-    const keyIndex = 1;
-    const string =
-      `/pg/v1/status/${this.MERCHANT_ID}/${merchantTransactionId}` +
-      this.MERCHANT_KEY;
-    // const sha256 = crypto.createHash('sha256').update(string).digest('hex')
-    const sha256 = crypto.SHA256(string).toString();
-    const checksum = sha256 + "###" + keyIndex;
+    if (this.ENV_TYPE === null)
+      throw new Error("PHONEPE_MERCHANT_TYPE is required");
 
-    const option = {
-      method: "GET",
-      url: `${this.PHONEPE_MERCHANT_STATUS_URL}/${this.MERCHANT_ID}/${merchantTransactionId}`,
-      headers: {
-        accept: "application/json",
-        "Content-Type": "application/json",
-        "X-VERIFY": checksum,
-        "X-MERCHANT-ID": this.MERCHANT_ID,
+    const client = StandardCheckoutClient.getInstance(
+      this.MERCHANT_ID,
+      this.MERCHANT_KEY,
+      1,
+      this.ENV_TYPE
+    );
+
+    const response = await client.getOrderStatus(merchantOrderId);
+    return {
+      success: true,
+      code: "200",
+      message: response.state,
+      data: {
+        amount: response.amount,
+        orderId: response.orderId!,
+        state: response.state,
+        transactionId: response.paymentDetails[0].transactionId,
+        responseCode: "200",
+        paymentInstrument: response.paymentDetails,
       },
     };
-
-    return (await axios.request(option)).data;
   };
 }

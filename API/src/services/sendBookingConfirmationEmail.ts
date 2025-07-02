@@ -43,7 +43,7 @@ export const sendBookingConfirmationEmail = async (
       customerName: orderInfo.full_name,
       totalParticipants: orderInfo.number_of_people,
       amountPaid: paymentInfo.data.amount / 100,
-      orderId: paymentInfo.data.merchantTransactionId,
+      orderId: paymentInfo.data.orderId,
       transactionId: paymentInfo.data.transactionId,
       groupType: orderInfo.group_type,
       tripDate: `${formatDateToReadable(

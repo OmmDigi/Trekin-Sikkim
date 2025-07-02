@@ -93,7 +93,7 @@ export default function AuthPage({ type }: IProps) {
           </h2>
 
           <Link
-            href={`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/login/google`}
+            href={`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/login/google${redirectUrl !== null ? `?redirect=${redirectUrl}` : ""}`}
             className="block"
           >
             <Button

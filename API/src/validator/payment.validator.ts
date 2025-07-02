@@ -32,5 +32,5 @@ export const VPayToPackage = Joi.object({
 });
 
 export const VCheckPhonePeStatus = Joi.object({
-  order_id: Joi.string().required(),
+  merchant_order_id: Joi.string().required(),
 });

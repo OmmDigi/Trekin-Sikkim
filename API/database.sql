@@ -380,3 +380,17 @@ ADD COLUMN p_category_id INTEGER;
 ALTER TABLE packages
 ADD CONSTRAINT fk_p_category
 FOREIGN KEY (p_category_id) REFERENCES category(category_id) ON DELETE CASCADE;
+
+-- 2025-07-02
+
+ALTER TABLE temp_create_order_info DROP COLUMN order_id;
+
+ALTER TABLE temp_create_order_info ADD COLUMN merchant_order_id VARCHAR(255);
+
+CREATE INDEX idx_temp_create_order_info_merchant_order_id 
+ON temp_create_order_info(merchant_order_id);
+
+ALTER TABLE payments ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+
+ALTER TABLE payments
+ADD CONSTRAINT unique_order_id  UNIQUE (order_id);

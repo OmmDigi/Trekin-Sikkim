@@ -23,6 +23,7 @@ import {
   Env,
   StandardCheckoutPayRequest,
 } from "pg-sdk-node";
+
 import { randomUUID } from "crypto";
 
 const app: Application = express();
@@ -81,44 +82,6 @@ app.post(
     await pool.query(sql);
 
     res.status(200).json(new ApiResponse(200, "Sql Successfully Init"));
-  })
-);
-
-app.get(
-  "/phone",
-  asyncErrorHandler(async (req, res) => {
-    // const clientId = "TEST-M23MM5WJFVU2M_25063";
-    // const clientSecret = "ZjRiMzIwY2QtOTY1MC00YTQyLTg3YjEtYmI3NzlmNDVjZTZi";
-    const clientId = process.env.PHONEPE_MERCHANT_ID!;
-    const clientSecret = process.env.PHONEPE_MERCHANT_KEY!;
-    const clientVersion = 1; //insert your client version here
-    const env = Env.SANDBOX; //change to Env.PRODUCTION when you go live
-
-    const client = StandardCheckoutClient.getInstance(
-      clientId,
-      clientSecret,
-      clientVersion,
-      env
-    );
-
-    const merchantOrderId = randomUUID();
-    const amount = 100;
-    const redirectUrl = "https://www.merchant.com/redirect";
-
-    const request = StandardCheckoutPayRequest.builder()
-      .merchantOrderId(merchantOrderId)
-      .amount(amount)
-      .redirectUrl(redirectUrl)
-      .build();
-
-    // client.pay(request).then((response) => {
-    //   const checkoutPageUrl = response.redirectUrl;
-    //   console.log(checkoutPageUrl);
-    //   res.send(checkoutPageUrl);
-    // });
-
-    const response = await client.pay(request);
-    res.send(response);
   })
 );
 
