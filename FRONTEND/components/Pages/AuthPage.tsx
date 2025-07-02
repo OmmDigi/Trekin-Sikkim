@@ -54,7 +54,10 @@ export default function AuthPage({ type }: IProps) {
       type === "login" ? "/api/v1/users/login" : "/api/v1/users/signup";
     startTransition(async () => {
       try {
-        const { data } = await api.post<IResponse<string>>(apiEndpoint, values);
+        const { data } = await api.post<IResponse<string>>(
+          apiEndpoint,
+          values
+        );
         toast.success(data.message);
         startTransition(() => {
           if (data.statusCode === 200) {
@@ -93,7 +96,11 @@ export default function AuthPage({ type }: IProps) {
           </h2>
 
           <Link
-            href={`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/login/google${redirectUrl !== null ? `?redirect=${redirectUrl}` : ""}`}
+            href={`${
+              process.env.NEXT_PUBLIC_API_BASE_URL
+            }/api/v1/users/login/google${
+              redirectUrl !== null ? `?redirect=${redirectUrl}` : ""
+            }`}
             className="block"
           >
             <Button

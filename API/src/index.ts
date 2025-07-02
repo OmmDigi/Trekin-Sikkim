@@ -39,15 +39,21 @@ const PORT = process.env.PORT || 8080;
 
 const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS
   ? process.env.ALLOWED_ORIGINS.split(",")
-  : ["http://localhost:3000", "http://localhost:3001"]; // Default to localhost:3000
+  : ["http://localhost:3000", "http://localhost:3001"];
 
-// Middleware
 app.use(
   cors({
-    origin: ALLOWED_ORIGINS, // Frontend URL
-    credentials: true, // Required for cookies
+    origin: (origin, callback) => {
+      if (!origin || ALLOWED_ORIGINS.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
   })
 );
+
 app.use(express.static("public"));
 app.set("view engine", "ejs");
 app.set("views", path.resolve(__dirname, "../public/views"));
