@@ -74,7 +74,7 @@ export const loginUser = asyncErrorHandler(async (req, res) => {
   res.cookie("refreshToken", token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "none",
+    sameSite: process.env.NODE_ENV === "development" ? "lax" : "lax",
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     domain: process.env.DOMAIN,
   });
@@ -187,7 +187,7 @@ export const logout = asyncErrorHandler(async (req: CustomRequest, res) => {
     .clearCookie("refreshToken", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "none",
+      sameSite: process.env.NODE_ENV === "development" ? "lax" : "lax",
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       domain: process.env.DOMAIN,
     })
@@ -390,7 +390,7 @@ export const verifyGoogleLogin = asyncErrorHandler(async (req, res) => {
   res.cookie("refreshToken", token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "none",
+    sameSite: process.env.NODE_ENV === "development" ? "lax" : "lax",
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     domain: process.env.DOMAIN,
   });

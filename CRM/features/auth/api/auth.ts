@@ -12,7 +12,7 @@ export const requestResetPassword = async (payload: TForgotPassword) => {
 };
 
 export const checkLogIn = async () => {
-  const response = await api.get("/api/v1/users/account/is-login-crm");
+  const response = await api.get("/api/v1/users/is-login-crm");
   return response.data;
 };
 
