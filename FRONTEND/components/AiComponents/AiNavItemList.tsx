@@ -14,7 +14,7 @@ export default async function AiNavItemList() {
   const api = await serverApi();
   const [categoriesInfo, upcomingPackageInfo, loginInfo] =
     await Promise.allSettled([
-      api.get<IResponse<ICategories[]>>("/api/v1/category"),
+      api.get<IResponse<ICategories[]>>("/api/v1/category?category_types=Trek,Tour,Expedition"),
       api.get<IResponse<UpcomingTrekPackage[]>>("/api/v1/upcoming"),
       api.get<IResponse>("/api/v1/users/is-login"),
     ]);
