@@ -17,7 +17,7 @@ interface IProps {
 function AuthProvider({ children }: IProps) {
   const pathname = usePathname();
   const { error, isFetching } = useQuery<IResponse, AxiosError<IResponse>>({
-    queryKey: ["is-login", pathname],
+    queryKey: ["is-login-crm", pathname],
     queryFn: checkLogIn,
   });
 

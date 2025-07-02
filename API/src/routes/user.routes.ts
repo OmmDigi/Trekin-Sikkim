@@ -16,11 +16,19 @@ import {
 } from "../controllers/user.controller";
 import { isAuthenticated } from "../middlewares/isAuthenticated";
 import { ApiResponse } from "../utils/ApiResponse";
+import { CustomRequest } from "../types";
+import { ErrorHandler } from "../utils/ErrorHandler";
 
 export const userRoute = Router();
 
 userRoute
   .get("/is-login", isAuthenticated, (req, res) => {
+    res.status(200).json(new ApiResponse(200, "", true));
+  })
+  .get("/is-login-crm", isAuthenticated, (req: CustomRequest, res) => {
+    if (req.user_info?.role !== "Admin") {
+      throw new ErrorHandler(401, "Unauthorize");
+    }
     res.status(200).json(new ApiResponse(200, "", true));
   })
   .post("/login", loginUser)
