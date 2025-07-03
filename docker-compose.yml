@@ -104,6 +104,7 @@ services:
 
   wordpress:
     image: wordpress:latest
+    container_name: wordpress
     restart: always
     depends_on:
       - mysql
@@ -121,6 +122,7 @@ services:
   mysql:
     image: mysql:5.7
     restart: always
+    container_name: mysql
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
@@ -168,7 +170,8 @@ services:
         "-d", "crm.trekinsikkim.in",
         "-d", "api.trekinsikkim.in",
         "-d", "upload.trekinsikkim.in",
-        "-d", "mail.trekinsikkim.in"
+        "-d", "mail.trekinsikkim.in",
+        "-d", "blog.trekinsikkim.in"
       ]
     depends_on:
       - nginx
