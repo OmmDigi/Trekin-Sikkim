@@ -109,7 +109,7 @@ services:
     depends_on:
       - mysql
     ports:
-        - "8000:3000"
+        - "8080:3000"
     environment:
       WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
       WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
