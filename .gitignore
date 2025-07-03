@@ -4,3 +4,4 @@ mailu.env
 certbot
 mailserver
 webmail
+.env

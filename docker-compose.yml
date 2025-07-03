@@ -102,6 +102,33 @@ services:
   #     - mailserver
   #   restart: always
 
+  wordpress:
+    image: wordpress:latest
+    restart: always
+    depends_on:
+      - mysql
+    ports:
+        - "8000:3000"
+    environment:
+      WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
+      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
+      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
+      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+      WORDPRESS_TABLE_PREFIX: ${WORDPRESS_TABLE_PREFIX}
+    volumes:
+      - wordpress_data:/var/www/html
+
+  mysql:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - mysql_data:/var/lib/mysql
+
   nginx:
     image: nginx:latest
     container_name: nginx
@@ -148,6 +175,8 @@ services:
 
 volumes:
   db_data:
+  mysql_data:
+  wordpress_data:
 
 # networks:
 #   default:
