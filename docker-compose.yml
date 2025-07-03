@@ -109,7 +109,7 @@ services:
     depends_on:
       - mysql
     ports:
-        - "8080:3000"
+        - "8080:80"
     environment:
       WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
       WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
@@ -180,7 +180,3 @@ volumes:
   db_data:
   mysql_data:
   wordpress_data:
-
-# networks:
-#   default:
-#     name: trekinsikkim-network
