@@ -28,7 +28,7 @@ export default async function RelatedBlogs({
   const response = await api.get(
     `/wp-json/wp/v2/posts?categories=${categories.join(
       ","
-    )}&_fields=id,title,slug,excerpt,date,yoast_head_json&exclude=${current_blog_id}&per_page=12`
+    )}&_fields=id,title,slug,excerpt,date,yoast_head_json,meta&exclude=${current_blog_id}&per_page=12`
   );
 
   if (response.data.length === 0)

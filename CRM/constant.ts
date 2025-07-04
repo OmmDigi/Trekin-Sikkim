@@ -52,7 +52,9 @@ export const SIDEBAR_DATA = {
         },
         {
           title: "Article Management",
-          url: "/dashboard/articles",
+          // url: "/dashboard/articles",
+          url: "https://blog.trekinsikkim.in/wp-admin",
+          open_new_tab : true
         },
       ],
     },

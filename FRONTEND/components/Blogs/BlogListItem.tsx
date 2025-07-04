@@ -12,8 +12,15 @@ interface IProps {
 // from-cyan-500 to-blue-500
 
 export default function BlogListItem({ blog }: IProps) {
-  const imageUrl = blog.yoast_head_json.og_image[0].url;
+  let imageUrl = "/placeholder_background.jpg";
+
+  // const imageUrl = blog.meta.custom_thumbnail blog.yoast_head_json.og_image[0].url;
     // blog._embedded?.["wp:featuredmedia"]?.[0]?.source_url ?? null;
+  if(blog.meta.custom_thumbnail !== "") {
+    imageUrl = blog.meta.custom_thumbnail
+  } else if (blog.yoast_head_json.og_image?.[0]?.url) {
+    imageUrl = blog.yoast_head_json.og_image[0].url
+  }
 
   return (
     // <li className="space-y-2 card-shdow rounded-2xl overflow-hidden">
@@ -68,7 +75,7 @@ export default function BlogListItem({ blog }: IProps) {
       </div>
 
       <div className="space-y-2 p-4">
-        <h2 className="font-semibold line-clamp-2">{blog.title.rendered}</h2>
+        <h2 className="font-semibold line-clamp-1">{blog.title.rendered}</h2>
         <span
           dangerouslySetInnerHTML={{ __html: blog.excerpt.rendered }}
           className="text-sm text-gray-600 line-clamp-2"

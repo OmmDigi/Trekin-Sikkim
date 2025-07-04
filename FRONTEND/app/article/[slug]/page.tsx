@@ -27,7 +27,7 @@ const getSingleBlogInfo = cache(async (slug: string) => {
 
 interface IProps {
   params: Promise<{ slug: string }>;
-  searchParams : Promise<IBlogSearchParams>;
+  searchParams: Promise<IBlogSearchParams>;
 }
 
 export async function generateMetadata({
@@ -37,18 +37,44 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const blogSlug = (await params)["slug"];
   const categoryPageInfo = await getSingleBlogInfo(blogSlug);
+
+  let metaTitle = "";
+  let metaDescription = "";
+  let metaKeywords = "";
+  let ogTitle = "";
+  let ogDescription = "";
+  let ogType = "article";
+  const images: string[] = [];
+
+  if (categoryPageInfo.meta.blog_type === "OLD-DB-DATA") {
+    metaTitle = categoryPageInfo.meta.meta_title;
+    metaDescription = categoryPageInfo.meta.meta_description;
+    metaKeywords = categoryPageInfo.meta.meta_keywords;
+    images.push(categoryPageInfo.meta.custom_thumbnail);
+  } else {
+    metaTitle = categoryPageInfo.yoast_head_json.title;
+    metaDescription = categoryPageInfo.yoast_head_json.description;
+    metaKeywords = categoryPageInfo.tags.join(", ");
+    images.push(
+      categoryPageInfo?.yoast_head_json?.og_image?.[0]?.url ||
+        "/placeholder_background.jpg"
+    );
+  }
+
+  ogTitle = categoryPageInfo.yoast_head_json.og_title;
+  ogDescription = categoryPageInfo.yoast_head_json.og_description;
+  ogType = categoryPageInfo.yoast_head_json.og_type;
+
   return {
-    title: categoryPageInfo.yoast_head_json.title,
-    description: categoryPageInfo.yoast_head_json.description,
+    title: metaTitle,
+    description: metaDescription,
+    keywords: metaKeywords,
     openGraph: {
-      title: categoryPageInfo.yoast_head_json.og_title,
-      description: categoryPageInfo.yoast_head_json.og_description,
-      images: [
-        categoryPageInfo?.yoast_head_json?.og_image[0]?.url ||
-          "/placeholder_background.jpg",
-      ],
+      title: ogTitle,
+      description: ogDescription,
+      images: images,
       url: `/article/${blogSlug}`,
-      type: categoryPageInfo.yoast_head_json.og_type,
+      type: ogType as any,
       locale: "en_US",
       siteName: "Glacier Treks And Adventure",
     },
@@ -77,9 +103,17 @@ export async function generateMetadata({
 export default async function page({ params, searchParams }: IProps) {
   const { slug } = await params;
 
-  const newSearchParams = (await searchParams);
+  const newSearchParams = await searchParams;
 
   const singleBlog = await getSingleBlogInfo(slug);
+
+  let fetcherImage = "/placeholder_background.jpg";
+
+  if (singleBlog.meta.custom_thumbnail !== "") {
+    fetcherImage = singleBlog.meta.custom_thumbnail;
+  } else if (singleBlog._embedded?.["wp:featuredmedia"]?.[0].source_url) {
+    fetcherImage = singleBlog._embedded?.["wp:featuredmedia"]?.[0].source_url;
+  }
 
   return (
     // <main className="wrapper py-10 space-y-5 pt-3.5">
@@ -177,9 +211,7 @@ export default async function page({ params, searchParams }: IProps) {
       <div>
         <Image
           className="aspect-video object-cover rounded-3xl"
-          src={
-            singleBlog._embedded?.["wp:featuredmedia"]?.[0]?.source_url ?? null
-          }
+          src={fetcherImage}
           alt="Blog 1"
           height={1200}
           width={1200}
@@ -217,7 +249,11 @@ export default async function page({ params, searchParams }: IProps) {
       </div> */}
 
       <React.Suspense fallback={<Loading />}>
-        <BlogComments key={newSearchParams.comment_id} blog_id={singleBlog.id} searchParams={newSearchParams}/>
+        <BlogComments
+          key={newSearchParams.comment_id}
+          blog_id={singleBlog.id}
+          searchParams={newSearchParams}
+        />
       </React.Suspense>
 
       <div className="font-primary space-y-8">

@@ -14,7 +14,7 @@ export default async function LatestBlogs() {
   // );
 
   const response = await api.get(
-    `/wp-json/wp/v2/posts?_fields=id,title,slug,excerpt,date,yoast_head_json&per_page=4`
+    `/wp-json/wp/v2/posts?_fields=id,title,slug,excerpt,date,yoast_head_json,meta&per_page=4`
   );
   const blogs = response.data;
   // const totlaPages = Number(response.headers["x-wp-totalpages"]);

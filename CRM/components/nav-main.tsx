@@ -31,6 +31,7 @@ export function NavMain({
     items?: {
       title: string;
       url: string;
+      open_new_tab?: boolean;
     }[];
   }[];
 }) {
@@ -60,7 +61,15 @@ export function NavMain({
                       {item.items?.map((subItem) => (
                         <SidebarMenuSubItem key={subItem.title}>
                           <SidebarMenuSubButton asChild>
-                            <CustomLink href={subItem.url}>
+                            <CustomLink
+                              onClick={(e) => {
+                                if (subItem.open_new_tab) {
+                                  e.preventDefault();
+                                  window.open(subItem.url);
+                                }
+                              }}
+                              href={subItem.url}
+                            >
                               <span>{subItem.title}</span>
                             </CustomLink>
                           </SidebarMenuSubButton>

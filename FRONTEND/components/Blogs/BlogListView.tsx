@@ -22,7 +22,7 @@ export default async function BlogListView({ searchParams }: IProps) {
   const currentPage = parseInt(searchParams?.page || "1");
 
   const response = await api.get(
-    `/wp-json/wp/v2/posts?_fields=id,title,slug,excerpt,date,yoast_head_json&per_page=12&page=${currentPage}`
+    `/wp-json/wp/v2/posts?_fields=id,title,slug,excerpt,date,yoast_head_json,meta&per_page=12&page=${currentPage}`
   );
   const blogList = response.data;
   const totlaPages = Number(response.headers["x-wp-totalpages"]);
