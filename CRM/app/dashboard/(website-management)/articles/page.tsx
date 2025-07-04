@@ -145,7 +145,7 @@ export default function Articles() {
   return (
     <iframe
       className="size-full h-svh"
-      src="https://blog.trekinsikkim.in/wp-admin"
+      src="https://blog.trekinsikkim.in/wp-admin/"
       title="W3Schools Free Online Web Tutorials"
     ></iframe>
   );
