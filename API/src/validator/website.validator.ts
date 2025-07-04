@@ -47,6 +47,21 @@ export const VRelatedBlogs = Joi.object({
   current_blog_id: Joi.number().required(),
 });
 
+// Comments
+export const VPostBlogComment = Joi.object({
+  blog_id: Joi.number().required(),
+  content: Joi.string().required(),
+});
+
+export const VUpdateBlogComment = Joi.object({
+  comment_id: Joi.number().required(),
+  content: Joi.string().required(),
+});
+
+export const VDeleteBlogComment = Joi.object({
+  comment_id: Joi.number().required(),
+});
+
 //Enquiry
 export const VAddEnquiry = Joi.object({
   name: Joi.string().required(),

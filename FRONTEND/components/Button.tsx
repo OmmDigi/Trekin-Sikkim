@@ -19,6 +19,7 @@ function Button({
   return (
     <button
       {...rest}
+      disabled = {loading}
       className={cn(
         "flex items-center justify-center gap-1.5",
         icon ? "pr-5 max-sm:py-2" : "px-5 max-sm:py-3",

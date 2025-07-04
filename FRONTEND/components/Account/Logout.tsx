@@ -21,6 +21,7 @@ const LogoutContext = createContext<LogoutContextType | undefined>(undefined);
 function Logout({ children }: IProps) {
   const [isPending, startTransition] = useTransition();
   const route = useRouter();
+
   const handleLogout = () => {
     if (isPending) return;
 
@@ -39,6 +40,7 @@ function Logout({ children }: IProps) {
       }
     });
   };
+  
   return (
     <LogoutContext.Provider value={{ isPrograssing: isPending }}>
       <span

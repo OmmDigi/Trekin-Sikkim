@@ -258,3 +258,14 @@ export interface GalleryDialogProps {
   initialIndex?: number;
 }
 
+export interface IBlogSearchParams {
+  comment_id : number;
+  per_page? : string;
+}
+
+export interface IUserToken {
+  role: string;
+  name: string;
+  id: number;
+  google_oauth_access_token?: string;
+}

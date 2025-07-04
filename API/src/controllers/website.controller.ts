@@ -1,3 +1,4 @@
+import axios, { AxiosError } from "axios";
 import { pool } from "../config/db";
 import asyncErrorHandler from "../middlewares/asyncErrorHandler";
 import { CustomRequest } from "../types";
@@ -12,11 +13,15 @@ import { parsePagination } from "../utils/parsePagination";
 import { sendEmail } from "../utils/sendEmail";
 import {
   VAddEnquiry,
+  VDeleteBlogComment,
+  VPostBlogComment,
   VPostNewBlog,
   VRelatedBlogs,
   VSingleBlog,
+  VUpdateBlogComment,
   VUpdateSingleBlog,
 } from "../validator/website.validator";
+import { getAuthToken } from "../utils/getAuthToken";
 
 export const getBlogsList = asyncErrorHandler(
   async (req: CustomRequest, res) => {
@@ -214,12 +219,16 @@ export const updateSingleBlog = asyncErrorHandler(async (req, res) => {
     );
   }
 
-  const { rows, rowCount : mediaRowCount } = await pool.query(
+  const { rows, rowCount: mediaRowCount } = await pool.query(
     "SELECT * FROM media_item WHERE media_item_id = $1",
     [value.media_id]
   );
 
-  if(mediaRowCount === 0) throw new ErrorHandler(400, "Media Item Not Found. Please Try To Upload New Blog Image");
+  if (mediaRowCount === 0)
+    throw new ErrorHandler(
+      400,
+      "Media Item Not Found. Please Try To Upload New Blog Image"
+    );
 
   value.thumbnail = rows[0].item_link;
   value.thumbnail_alt_tag = rows[0].alt_tag;
@@ -251,6 +260,111 @@ export const deleteBlog = asyncErrorHandler(async (req, res) => {
 
   res.status(200).json(new ApiResponse(200, "Blog Remove"));
 });
+
+// comments
+export const postBlogComment = asyncErrorHandler(async (req, res) => {
+  const { error, value } = VPostBlogComment.validate({
+    ...req.body,
+    ...req.params,
+  });
+  if (error) throw new ErrorHandler(400, error.message);
+
+  const token = getAuthToken(req);
+
+  const { data } = await axios.post<{ success: boolean; comment_id: number }>(
+    `${process.env.WORDPRESS_HOST}/wp-json/custom/v1/add-comment`,
+    {
+      post_id: value.blog_id,
+      content: value.content,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  if (!data.success) {
+    throw new ErrorHandler(
+      400,
+      "Unable to add comment please try again later!"
+    );
+  }
+
+  res
+    .status(201)
+    .json(
+      new ApiResponse(201, "Comment Added", { comment_id: data.comment_id })
+    );
+});
+
+export const editBlogComment = asyncErrorHandler(
+  async (req: CustomRequest, res) => {
+    const { error, value } = VUpdateBlogComment.validate({
+      ...req.body,
+      ...req.params,
+    });
+    if (error) throw new ErrorHandler(400, error.message);
+
+    const { data } = await axios.put<{ success: boolean; comment_id: number }>(
+      `${process.env.WORDPRESS_HOST}/wp-json/custom/v1/edit-comment/${value.comment_id}`,
+      {
+        user_id: req.user_info?.id,
+        content: value.content,
+      }
+    );
+
+    if (!data.success) {
+      throw new ErrorHandler(
+        400,
+        "Unable to edit comment please try again later!"
+      );
+    }
+
+    res
+      .status(200)
+      .json(
+        new ApiResponse(200, "Comment Updated", { comment_id: data.comment_id })
+      );
+  }
+);
+
+export const deleteBlogComment = asyncErrorHandler(
+  async (req: CustomRequest, res) => {
+    const { error, value } = VDeleteBlogComment.validate(req.params);
+    if (error) throw new ErrorHandler(400, error.message);
+
+    try {
+      const { data } = await axios.delete<{
+        success: boolean;
+        comment_id: number;
+      }>(
+        `${process.env.WORDPRESS_HOST}/wp-json/custom/v1/delete-comment/${value.comment_id}`,
+        {
+          data: {
+            user_id: req.user_info?.id,
+          },
+        }
+      );
+
+      if (!data.success) {
+        throw new ErrorHandler(
+          400,
+          "Unable to edit comment please try again later!"
+        );
+      }
+
+      res.status(200).json(
+        new ApiResponse(200, "Comment Deleted Successfully", {
+          comment_id: data.comment_id,
+        })
+      );
+    } catch (error: any) {
+      console.log(error);
+      throw new ErrorHandler(400, error.message);
+    }
+  }
+);
 
 //Enquiry
 

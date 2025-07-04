@@ -45,4 +45,4 @@ userRoute
 
   .get("/account", isAuthenticated, getAccountInfo)
   .get("/account/is-login", isAuthenticated, checkIsLogin)
-  .put("/account", isAuthenticated, updateAccountInfo);
+  .put("/account", isAuthenticated, updateAccountInfo)

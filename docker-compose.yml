@@ -118,6 +118,7 @@ services:
       WORDPRESS_TABLE_PREFIX: ${WORDPRESS_TABLE_PREFIX}
     volumes:
       - wordpress_data:/var/www/html
+      - ./custom.conf:/etc/apache2/sites-available/000-default.conf
 
   mysql:
     image: mysql:5.7
