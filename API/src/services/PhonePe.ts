@@ -233,7 +233,7 @@ export class PhonePe {
 
     const response = await client.getOrderStatus(merchantOrderId);
     return {
-      success: true,
+      success: response.paymentDetails[0].state === "COMPLETED",
       code: "200",
       message: response.state,
       data: {
