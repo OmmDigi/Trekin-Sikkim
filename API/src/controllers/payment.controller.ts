@@ -122,16 +122,23 @@ export const checkPhonepePaymentStatus = asyncErrorHandler(async (req, res) => {
 
   const merchantOrderId = value.merchant_order_id;
 
-  const paymentInfo = await phonePe().checkStatus(merchantOrderId);
-  if (!paymentInfo.success) throw new ErrorHandler(400, paymentInfo.message);
-
-  const orderId = paymentInfo.data.orderId;
-
   const formattedDate = new Date().toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
     day: "numeric",
   });
+
+  const paymentInfo = await phonePe().checkStatus(merchantOrderId);
+  // if (!paymentInfo.success) throw new ErrorHandler(400, paymentInfo.message);
+  if (!paymentInfo.success) {
+    res.render("payment-failed.ejs", {
+      failedAmount: `₹${paymentInfo.data.amount / 100}`,
+      purchaseDate: formattedDate,
+    });
+    return;
+  }
+
+  const orderId = paymentInfo.data.orderId;
 
   const client = await pool.connect();
 
