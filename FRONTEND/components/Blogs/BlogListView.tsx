@@ -5,6 +5,7 @@ import BlogListItem from "./BlogListItem";
 // import Pagination from "../Pagination";
 import Pagination from "../Pagination";
 import { wordpressApi } from "@/lib/wordpressApi";
+import { IBlogList } from "@/types";
 
 interface IProps {
   searchParams: { page?: string };
@@ -20,9 +21,8 @@ export default async function BlogListView({ searchParams }: IProps) {
   // ).data;
 
   const currentPage = parseInt(searchParams?.page || "1");
-
-  const response = await api.get(
-    `/wp-json/wp/v2/posts?_fields=id,title,slug,excerpt,date,yoast_head_json,meta&per_page=12&page=${currentPage}`
+  const response = await api.get<IBlogList[]>(
+    `/wp-json/custom/v1/posts?page=${currentPage}&per_page=12`
   );
   const blogList = response.data;
   const totlaPages = Number(response.headers["x-wp-totalpages"]);
@@ -34,7 +34,7 @@ export default async function BlogListView({ searchParams }: IProps) {
           <BlogListItem key={blog.blog_id} blog={blog} />
         ))} */}
 
-        {blogList.map((blog: any) => (
+        {blogList.map((blog) => (
           <BlogListItem key={blog.id} blog={blog} />
         ))}
       </ul>

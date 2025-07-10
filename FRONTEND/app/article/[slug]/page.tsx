@@ -9,11 +9,43 @@ import React, { cache } from "react";
 import "@/app/rich-text-content.css";
 // import axios from "axios";
 import { wordpressApi } from "@/lib/wordpressApi";
-import HeadingSubHeding from "@/components/HeadingSubHeding";
+// import HeadingSubHeding from "@/components/HeadingSubHeding";
 import Loading from "@/components/Loading";
-import RelatedBlogs from "@/components/Blogs/RelatedBlogs";
+// import RelatedBlogs from "@/components/Blogs/RelatedBlogs";
 import BlogComments from "@/components/Blogs/BlogComments";
 import { IBlogSearchParams } from "@/types";
+import HeadingSubHeding from "@/components/HeadingSubHeding";
+import RelatedBlogs from "@/components/Blogs/RelatedBlogs";
+
+interface ISingleBlogPost {
+  id: number;
+  title: string;
+  slug: string;
+  content: {
+    rendered: string;
+  };
+  thumbnail: string;
+  categories: number[];
+  tags: string[];
+  rankmath_meta: {
+    focus_keyword: string;
+    seo_title: string;
+    seo_description: string;
+    canonical_url: string;
+    robots_meta: string[];
+    advanced_robots: string;
+    og_title: string;
+    og_description: string;
+    og_image: string;
+    twitter_title: string;
+    twitter_description: string;
+    twitter_image: string;
+    breadcrumb_title: string;
+    pillar_content: string;
+    cornerstone_content: string;
+    meta_keywords: string;
+  };
+}
 
 const getSingleBlogInfo = cache(async (slug: string) => {
   // const api = await serverApi();
@@ -22,13 +54,84 @@ const getSingleBlogInfo = cache(async (slug: string) => {
   // ).data;
 
   const api = await wordpressApi();
-  return (await api.get(`/wp-json/wp/v2/posts?_embed&slug=${slug}`)).data[0];
+  return (await api.get<ISingleBlogPost>(`/wp-json/custom/v1/posts/${slug}`))
+    .data;
 });
 
 interface IProps {
   params: Promise<{ slug: string }>;
   searchParams: Promise<IBlogSearchParams>;
 }
+
+// export async function generateMetadata({
+//   params,
+// }: {
+//   params: Promise<{ ["slug"]: string }>;
+// }): Promise<Metadata> {
+//   const blogSlug = (await params)["slug"];
+//   const categoryPageInfo = await getSingleBlogInfo(blogSlug);
+
+//   let metaTitle = "";
+//   let metaDescription = "";
+//   let metaKeywords = "";
+//   let ogTitle = "";
+//   let ogDescription = "";
+//   let ogType = "article";
+//   const images: string[] = [];
+
+//   if (categoryPageInfo.meta.blog_type === "OLD-DB-DATA") {
+//     metaTitle = categoryPageInfo.meta.meta_title;
+//     metaDescription = categoryPageInfo.meta.meta_description;
+//     metaKeywords = categoryPageInfo.meta.meta_keywords;
+//     images.push(categoryPageInfo.meta.custom_thumbnail);
+//   } else {
+//     metaTitle = categoryPageInfo.yoast_head_json.title;
+//     metaDescription = categoryPageInfo.yoast_head_json.description;
+//     metaKeywords = categoryPageInfo.tags.join(", ");
+//     images.push(
+//       categoryPageInfo?.yoast_head_json?.og_image?.[0]?.url ||
+//         "/placeholder_background.jpg"
+//     );
+//   }
+
+//   ogTitle = categoryPageInfo.yoast_head_json.og_title;
+//   ogDescription = categoryPageInfo.yoast_head_json.og_description;
+//   ogType = categoryPageInfo.yoast_head_json.og_type;
+
+//   return {
+//     title: metaTitle,
+//     description: metaDescription,
+//     keywords: metaKeywords,
+//     openGraph: {
+//       title: ogTitle,
+//       description: ogDescription,
+//       images: images,
+//       url: `/article/${blogSlug}`,
+//       type: ogType as any,
+//       locale: "en_US",
+//       siteName: "Glacier Treks And Adventure",
+//     },
+//   };
+//   // return {
+//   //   title: categoryPageInfo.data.meta_title,
+//   //   description: categoryPageInfo.data.meta_description,
+//   //   keywords: categoryPageInfo.data.meta_keywords,
+//   //   alternates: {
+//   //     canonical: categoryPageInfo.data.meta_canonical_url,
+//   //   },
+//   //   openGraph: {
+//   //     title: categoryPageInfo.data.meta_title,
+//   //     description: categoryPageInfo.data.meta_description,
+//   //     images: [
+//   //       categoryPageInfo?.data?.thumbnail || "/placeholder_background.jpg",
+//   //     ],
+//   //     url: `/article/${blogSlug}`,
+//   //     type: "website",
+//   //     locale: "en_US",
+//   //     siteName: "Glacier Treks And Adventure",
+//   //   },
+//   // };
+// }
 
 export async function generateMetadata({
   params,
@@ -38,66 +141,20 @@ export async function generateMetadata({
   const blogSlug = (await params)["slug"];
   const categoryPageInfo = await getSingleBlogInfo(blogSlug);
 
-  let metaTitle = "";
-  let metaDescription = "";
-  let metaKeywords = "";
-  let ogTitle = "";
-  let ogDescription = "";
-  let ogType = "article";
-  const images: string[] = [];
-
-  if (categoryPageInfo.meta.blog_type === "OLD-DB-DATA") {
-    metaTitle = categoryPageInfo.meta.meta_title;
-    metaDescription = categoryPageInfo.meta.meta_description;
-    metaKeywords = categoryPageInfo.meta.meta_keywords;
-    images.push(categoryPageInfo.meta.custom_thumbnail);
-  } else {
-    metaTitle = categoryPageInfo.yoast_head_json.title;
-    metaDescription = categoryPageInfo.yoast_head_json.description;
-    metaKeywords = categoryPageInfo.tags.join(", ");
-    images.push(
-      categoryPageInfo?.yoast_head_json?.og_image?.[0]?.url ||
-        "/placeholder_background.jpg"
-    );
-  }
-
-  ogTitle = categoryPageInfo.yoast_head_json.og_title;
-  ogDescription = categoryPageInfo.yoast_head_json.og_description;
-  ogType = categoryPageInfo.yoast_head_json.og_type;
-
   return {
-    title: metaTitle,
-    description: metaDescription,
-    keywords: metaKeywords,
+    title: categoryPageInfo.rankmath_meta.seo_title,
+    description: categoryPageInfo.rankmath_meta.seo_description,
+    keywords: categoryPageInfo.rankmath_meta.meta_keywords,
     openGraph: {
-      title: ogTitle,
-      description: ogDescription,
-      images: images,
+      title: categoryPageInfo.rankmath_meta.og_title,
+      description: categoryPageInfo.rankmath_meta.og_description,
+      images: categoryPageInfo.rankmath_meta.og_image,
       url: `/article/${blogSlug}`,
-      type: ogType as any,
+      type: "article",
       locale: "en_US",
       siteName: "Glacier Treks And Adventure",
     },
   };
-  // return {
-  //   title: categoryPageInfo.data.meta_title,
-  //   description: categoryPageInfo.data.meta_description,
-  //   keywords: categoryPageInfo.data.meta_keywords,
-  //   alternates: {
-  //     canonical: categoryPageInfo.data.meta_canonical_url,
-  //   },
-  //   openGraph: {
-  //     title: categoryPageInfo.data.meta_title,
-  //     description: categoryPageInfo.data.meta_description,
-  //     images: [
-  //       categoryPageInfo?.data?.thumbnail || "/placeholder_background.jpg",
-  //     ],
-  //     url: `/article/${blogSlug}`,
-  //     type: "website",
-  //     locale: "en_US",
-  //     siteName: "Glacier Treks And Adventure",
-  //   },
-  // };
 }
 
 export default async function page({ params, searchParams }: IProps) {
@@ -106,14 +163,6 @@ export default async function page({ params, searchParams }: IProps) {
   const newSearchParams = await searchParams;
 
   const singleBlog = await getSingleBlogInfo(slug);
-
-  let fetcherImage = "/placeholder_background.jpg";
-
-  if (singleBlog.meta.custom_thumbnail !== "") {
-    fetcherImage = singleBlog.meta.custom_thumbnail;
-  } else if (singleBlog._embedded?.["wp:featuredmedia"]?.[0].source_url) {
-    fetcherImage = singleBlog._embedded?.["wp:featuredmedia"]?.[0].source_url;
-  }
 
   return (
     // <main className="wrapper py-10 space-y-5 pt-3.5">
@@ -202,16 +251,16 @@ export default async function page({ params, searchParams }: IProps) {
     // </main>
     <main className="max-w-4xl mx-auto py-10 space-y-5 pt-3.5">
       <div>
-        <h1 className="font-semibold text-2xl">{singleBlog.title.rendered}</h1>
+        <h1 className="font-semibold text-2xl">{singleBlog.title}</h1>
         <span
-          dangerouslySetInnerHTML={{ __html: singleBlog.excerpt.rendered }}
+          // dangerouslySetInnerHTML={{ __html: singleBlog.content.rendered }}
           className="text-sm text-gray-600 line-clamp-2"
         ></span>
       </div>
       <div>
         <Image
           className="aspect-video object-cover rounded-3xl"
-          src={fetcherImage}
+          src={singleBlog.thumbnail}
           alt="Blog 1"
           height={1200}
           width={1200}
@@ -263,8 +312,6 @@ export default async function page({ params, searchParams }: IProps) {
           <RelatedBlogs
             categories={singleBlog.categories}
             current_blog_id={singleBlog.id}
-            // keywords={singleBlog.data.meta_keywords}
-            // current_blog_id={singleBlog.data.blog_id}
           />
         </React.Suspense>
       </div>

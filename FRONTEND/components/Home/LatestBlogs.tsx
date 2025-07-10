@@ -3,6 +3,7 @@ import BlogListItem from "../Blogs/BlogListItem";
 // import { serverApi } from "@/lib/serverApi";
 // import { IBlog, IResponse } from "@/types";
 import { wordpressApi } from "@/lib/wordpressApi";
+import { IBlogList } from "@/types";
 
 export default async function LatestBlogs() {
   // const api = await serverApi();
@@ -13,15 +14,13 @@ export default async function LatestBlogs() {
   //   "/api/v1/website/blogs?limit=4"
   // );
 
-  const response = await api.get(
-    `/wp-json/wp/v2/posts?_fields=id,title,slug,excerpt,date,yoast_head_json,meta&per_page=4`
+  const response = await api.get<IBlogList[]>(
+    `/wp-json/custom/v1/posts?per_page=4`
   );
-  const blogs = response.data;
-  // const totlaPages = Number(response.headers["x-wp-totalpages"]);
-
+  
   return (
     <ul className="grid grid-cols-4 gap-5 max-sm:grid-cols-1">
-      {blogs.map((blog: any) => (
+      {response.data.map((blog) => (
         <BlogListItem key={blog.id} blog={blog} />
       ))}
     </ul>

@@ -259,8 +259,8 @@ export interface GalleryDialogProps {
 }
 
 export interface IBlogSearchParams {
-  comment_id : number;
-  per_page? : string;
+  comment_id: number;
+  per_page?: string;
 }
 
 export interface IUserToken {
@@ -268,4 +268,13 @@ export interface IUserToken {
   name: string;
   id: number;
   google_oauth_access_token?: string;
+}
+
+export interface IBlogList {
+  id: number;
+  title: string;
+  slug: string;
+  date: string;
+  thumbnail: string | null;
+  short_description: string;
 }
