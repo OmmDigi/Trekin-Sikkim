@@ -6,3 +6,4 @@ mailserver
 webmail
 .env
 migrate
+docker-data

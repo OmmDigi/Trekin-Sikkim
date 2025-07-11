@@ -88,7 +88,7 @@ services:
     image: roundcube/roundcubemail:latest
     container_name: roundcube
     ports:
-      - "8080:80"
+      - "8000:80"
     depends_on:
       - mailserver
     environment:
