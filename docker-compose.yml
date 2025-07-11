@@ -87,8 +87,8 @@ services:
   roundcube:
     image: roundcube/roundcubemail:latest
     container_name: roundcube
-    ports:
-      - "8000:80"
+    expose:
+      - "80"
     depends_on:
       - mailserver
     environment:
@@ -103,8 +103,8 @@ services:
     restart: always
     depends_on:
       - mysql
-    ports:
-      - "8080:80"
+    expose:
+      - "80"
     environment:
       WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
       WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
