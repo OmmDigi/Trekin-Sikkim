@@ -103,8 +103,8 @@ services:
     restart: always
     depends_on:
       - mysql
-    expose:
-      - "80"
+    ports:
+      - "80:8080"
     environment:
       WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
       WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
