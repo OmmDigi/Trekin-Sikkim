@@ -22,6 +22,7 @@ import {
   VUpdateSingleBlog,
 } from "../validator/website.validator";
 import { getAuthToken } from "../utils/getAuthToken";
+import { fetchAllBlogSlugs } from "../utils/fetchAllBlogSlugs";
 
 export const getBlogsList = asyncErrorHandler(
   async (req: CustomRequest, res) => {
@@ -421,15 +422,10 @@ export const getSiteMapList = asyncErrorHandler(async (req, res) => {
        WHERE p.p_category_id IS NOT NULL
       `
     );
-    const { rows: blogs } = await client.query(
-      `
-       SELECT 
-        slug
-       AS slug FROM blogs
-      `
-    );
 
     await client.query("COMMIT");
+
+    const blogs = await fetchAllBlogSlugs();
 
     const staticPages = ["", "about-us", "contact-us", "articles"].map(
       (slug) => `<url><loc>${frontendDomain}/${slug}</loc></url>\n`
@@ -443,8 +439,8 @@ export const getSiteMapList = asyncErrorHandler(async (req, res) => {
       return `<url><loc>${frontendDomain}/${row.slug}</loc></url>\n`;
     });
 
-    const blogsSlug = blogs.map((row) => {
-      return `<url><loc>${frontendDomain}/article/${row.slug}</loc></url>\n`;
+    const blogsSlug = blogs.map((slug) => {
+      return `<url><loc>${frontendDomain}/article/${slug}</loc></url>\n`;
     });
 
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>

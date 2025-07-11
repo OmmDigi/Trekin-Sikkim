@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BiBookContent } from "react-icons/bi";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import Button from "./Button";
