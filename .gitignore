@@ -7,3 +7,4 @@ webmail
 .env
 migrate
 docker-data
+setup-mail.sh
